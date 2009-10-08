@@ -1,13 +1,21 @@
+require 'lib/model'
+
 require 'date'
 require 'open-uri'
-
 require 'addressable/template'
 require 'addressable/uri'
 require 'nokogiri'
 
-require 'database'
+class Band < Sequel::Model
+  one_to_many :gigs
 
-class Band < Sequel::Model(:band)
+  create_schema do
+    primary_key(:id)
+    String(:myspace_name)
+    Integer(:friend_id)
+    String(:name)
+  end
+
   TIME_FORMAT = '%m-%d-%Y %H:%M'
 
   TEMPLATES = {
@@ -24,36 +32,38 @@ class Band < Sequel::Model(:band)
 
   TEMPLATES.each {|k, v| TEMPLATES[k] = Addressable::Template.new(v)}
 
-  def initialize(val)
-    super(:myspace_name => val)
-    load_band_info
+  def self.create_from_myspace(myspace_name)
+    Band.create(:myspace_name => myspace_name).load_band_info
   end
 
   def uri(s); Addressable::URI.parse(s); end
   def parse(s); Nokogiri::HTML(open(s)); end
 
   def page_uri
-    TEMPLATES[:band].expand(:myspace_name => myspace_name)
+    TEMPLATES[:band].expand('myspace_name' => myspace_name)
   end
 
   def gig_page_uri
-    TEMPLATES[:gig].expand(:friend_id => friend_id, :name => name)
+    TEMPLATES[:gig].expand(
+                           'friend_id' => friend_id.to_s,
+                           'name' => name
+                           )
   end
 
   def load_band_info
     band_page = parse(page_uri)
     gig_link = uri(band_page.at(SELECTORS[:gig_page])['href'])
 
-    update(
-           :name => band_page.at(SELECTORS[:band_name])['about'],
-           :friend_id => TEMPLATES[:gig].extract(gig_link)[:friend_id]
-           )
+    params = {
+      :name => band_page.at(SELECTORS[:band_name])['about'],
+      :friend_id => TEMPLATES[:gig].extract(gig_link)['friend_id'],
+    }
+
+    update(params)
   end
 
   def load_gigs
     def value(k, e); e.at(SELECTORS[:form_input] % k)['value']; end
-
-    gigs = []
 
     parse(gig_page_uri).search(SELECTORS[:gig_info]).each do |gig|
       time = DateTime.strptime(value('DateTime', gig), TIME_FORMAT)
@@ -64,12 +74,14 @@ class Band < Sequel::Model(:band)
         map {|k| value(k, gig)}.reject {|x| x.empty?}.
         join(', ')
 
-      gigs << {
+      params = {
         :time => time, :title => title, :location => location,
         :address => address,
       }
+
+      add_gig(Gig.create(params))
     end
+
+    gigs
   end
 end
-
-Band.unrestrict_primary_key
