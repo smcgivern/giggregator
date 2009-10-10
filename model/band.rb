@@ -11,7 +11,7 @@ class Band < Sequel::Model
 
   create_schema do
     primary_key(:id)
-    String(:myspace_name)
+    String(:myspace_name, :unique => true)
     Integer(:friend_id)
     String(:name)
   end
@@ -32,12 +32,16 @@ class Band < Sequel::Model
 
   TEMPLATES.each {|k, v| TEMPLATES[k] = Addressable::Template.new(v)}
 
-  def self.create_from_myspace(myspace_name)
-    Band.create(:myspace_name => myspace_name).load_band_info
+  def self.from_myspace(myspace_name)
+    Band.find_or_create(:myspace_name => myspace_name).load_band_info?
   end
 
   def uri(s); Addressable::URI.parse(s); end
   def parse(s); Nokogiri::HTML(open(s)); end
+
+  def load_band_info?; load_band_info! unless name; self; end
+  def load_gigs?; load_gigs! if gigs_dataset.empty?; end
+  def gigs; load_gigs?; super; end
 
   def page_uri
     TEMPLATES[:band].expand('myspace_name' => myspace_name)
@@ -50,7 +54,7 @@ class Band < Sequel::Model
                            )
   end
 
-  def load_band_info
+  def load_band_info!
     band_page = parse(page_uri)
     gig_link = uri(band_page.at(SELECTORS[:gig_page])['href'])
 
@@ -62,7 +66,7 @@ class Band < Sequel::Model
     update(params)
   end
 
-  def load_gigs
+  def load_gigs!
     def value(k, e); e.at(SELECTORS[:form_input] % k)['value']; end
 
     parse(gig_page_uri).search(SELECTORS[:gig_info]).each do |gig|
@@ -79,7 +83,7 @@ class Band < Sequel::Model
         :address => address,
       }
 
-      add_gig(Gig.create(params))
+      add_gig(Gig.find_or_create(params))
     end
 
     gigs
