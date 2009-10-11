@@ -2,6 +2,17 @@
 %html
   %head
     %title Giggregator
+    %link{:href => url_for_ts('style.css'),
+          :rel => 'stylesheet', :type => CONTENT_TYPES[:css]}
   %body
     %h1 Giggregator
-    %p Enter a list of bands:
+    %p Enter a list of band links on MySpace:
+    %form{:action => url_for('update-gig-list'), :method => 'POST'}
+      %p
+        %input{:type => 'text', :name => 'title'}
+        %label{:for => 'title'} (list title)
+      %p
+        %textarea{:name => 'band_list'}
+      %p
+        %input{:type => 'submit', :value => 'Create gig list'}
+    %h2 Upcoming gigs

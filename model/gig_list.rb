@@ -1,5 +1,42 @@
-class GigList
-  def <<(gigs); @gig_list + gigs; end
+require 'lib/model'
+
+require 'digest/md5'
+
+class GigList < Sequel::Model
+  many_to_many :bands
+
+  create_schema :no_timestamp do
+    primary_key(:id)
+    String(:title)
+    String(:link, :unique => true)
+  end
+
+  def slug
+    title.
+      downcase.
+      gsub(/([a-z0-9])(\.|'([a-z0-9]))/, '\1\3').
+      gsub(/[^a-z0-9]+/, '-')
+  end
+
+  def before_save
+    def slug_i(i); "#{slug}-#{i}"; end
+
+    attempted_link = slug
+    i = 0
+
+    while GigList[:link => attempted_link] do
+      attempted_link = slug_i(i += 1)
+    end
+
+    set(:link => attempted_link)
+  end
+
+  def myspace_urls; bands.map {|b| b.page_uri}.join("\n"); end
+  def gig_list; bands.map {|b| b.gigs}.flatten; end
+
+  def by_time
+    gig_list.sort_by {|g| g.time}
+  end
 
   def by_time_period
     # gigs.by_time_period returns a hash like:

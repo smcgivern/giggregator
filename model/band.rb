@@ -6,14 +6,17 @@ require 'addressable/template'
 require 'addressable/uri'
 require 'nokogiri'
 
+class NotABandError < Exception; end
+
 class Band < Sequel::Model
   one_to_many :gigs
+  many_to_many :gig_lists
 
   create_schema do
     primary_key(:id)
     String(:myspace_name, :unique => true)
     Integer(:friend_id)
-    String(:name)
+    String(:title)
   end
 
   TIME_FORMAT = '%m-%d-%Y %H:%M'
@@ -33,33 +36,41 @@ class Band < Sequel::Model
   TEMPLATES.each {|k, v| TEMPLATES[k] = Addressable::Template.new(v)}
 
   def self.from_myspace(myspace_name)
-    Band.find_or_create(:myspace_name => myspace_name).load_band_info?
+    params = {:myspace_name => myspace_name.split('/').last}
+
+    Band.find_or_create(params).load_band_info?
   end
 
   def uri(s); Addressable::URI.parse(s); end
-  def parse(s); Nokogiri::HTML(open(s)); end
+  def parse(s); Nokogiri::HTML(open(s).read); end
 
-  def load_band_info?; load_band_info! unless name; self; end
-  def load_gigs?; load_gigs! if gigs_dataset.empty?; end
+  def load_band_info?; load_band_info! unless title; self.save; end
+  def load_gigs?
+    load_gigs! if gigs_dataset.empty? and not @gigs_loaded
+  end
+
   def gigs; load_gigs?; super; end
+  def gig_list; GigList.new(self); end
 
   def page_uri
     TEMPLATES[:band].expand('myspace_name' => myspace_name)
   end
 
   def gig_page_uri
-    TEMPLATES[:gig].expand(
-                           'friend_id' => friend_id.to_s,
-                           'name' => name
-                           )
+    params = {'friend_id' => friend_id.to_s, 'name' => title}
+
+    TEMPLATES[:gig].expand(params)
   end
 
   def load_band_info!
     band_page = parse(page_uri)
-    gig_link = uri(band_page.at(SELECTORS[:gig_page])['href'])
+    gig_link = band_page.at(SELECTORS[:gig_page])
 
+    raise NotABandError unless gig_link
+
+    gig_link = uri(gig_link['href'])
     params = {
-      :name => band_page.at(SELECTORS[:band_name])['about'],
+      :title => band_page.at(SELECTORS[:band_name])['about'],
       :friend_id => TEMPLATES[:gig].extract(gig_link)['friend_id'],
     }
 
@@ -85,6 +96,8 @@ class Band < Sequel::Model
 
       add_gig(Gig.find_or_create(params))
     end
+
+    @gigs_loaded = true
 
     gigs
   end

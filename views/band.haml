@@ -1,7 +1,13 @@
 !!!
 %html
   %head
-    %title= @band.name
+  %head
+    %title= @band.title
+    %link{:href => url_for_ts('style.css'),
+          :rel => 'stylesheet', :type => CONTENT_TYPES[:css]}
   %body
-    %h1= @band.name
-    %p= @band.friend_id
+    %h1= @band.title
+    %p
+      %a{:href => @band.page_uri} Band page
+      /
+      %a{:href => @band.gig_page_uri} gig page

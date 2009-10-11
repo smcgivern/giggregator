@@ -1,0 +1,16 @@
+!!!
+%html
+  %head
+    %title= @gig_list.title
+    %link{:href => url_for_ts('style.css'),
+          :rel => 'stylesheet', :type => CONTENT_TYPES[:css]}
+    %link{:href => url_for('gig-list', @gig_list.link, 'feed'),
+          :rel => 'alternate', :type => CONTENT_TYPES[:atom]}
+  %body
+    %h1= @gig_list.title
+    %p= @gig_list.link
+    %p= @gig_list.id
+    %p= @gig_list.myspace_urls
+    %ul
+      - @gig_list.by_time.each do |gig|
+        %li= gig.title + ' - ' + gig.time.to_s

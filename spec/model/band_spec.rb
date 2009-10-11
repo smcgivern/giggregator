@@ -2,7 +2,7 @@ require 'model/band'
 
 def type(constant); lambda {|x| constant === x}; end
 
-describe 'Band.create_from_myspace' do
+describe 'Band.from_myspace' do
 end
 
 describe 'Band#uri' do
@@ -13,9 +13,14 @@ describe 'Band#uri' do
 end
 
 describe 'Band#parse' do
+  before {@doc = Band.new.parse('spec/fixture/nokogiri.html')}
+
   it 'should use Nokogiri to parse the filename given' do
-    Band.new.parse('Rakefile').
-      should.be.a type(Nokogiri::HTML::Document)
+    @doc.should.be.a type(Nokogiri::HTML::Document)
+  end
+
+  it 'should use UTF-8 encoding' do
+    @doc.at('title').inner_text.should.equal "The D\303\270"
   end
 end
 

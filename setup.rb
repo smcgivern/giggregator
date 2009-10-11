@@ -2,13 +2,21 @@ require 'fileutils'
 require 'logger'
 require 'sequel'
 
-LOG_DIR = File.join(File.dirname(__FILE__), 'log')
+ROOT_DIR = ''
+LOG_DIR = 'log'
 LOG_SQLITE = 'sqlite.log'
+DB_SQLITE = 'giggregator.db'
 
-DB = Sequel.sqlite
+CONTENT_TYPES = {
+  :atom => 'application/atom+xml',
+  :html => 'text/html',
+  :css => 'text/css',
+  :js => 'application/javascript',
+}
 
-require 'model/band'
-require 'model/gig'
+DB = Sequel.sqlite()
 
-FileUtils.mkdir(LOG_DIR) unless File.exist?(LOG_DIR)
-DB.logger = Logger.new(File.join(LOG_DIR, LOG_SQLITE))
+LOG_DIR_PATH = File.join(File.dirname(__FILE__), LOG_DIR)
+FileUtils.mkdir(LOG_DIR_PATH) unless File.exist?(LOG_DIR_PATH)
+DB.logger = Logger.new(File.join(LOG_DIR_PATH, LOG_SQLITE))
+Dir['model/*.rb'].each {|m| require m}
