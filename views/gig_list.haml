@@ -2,15 +2,25 @@
 %html
   %head
     %title= @gig_list.title
-    %link{:href => url_for_ts('style.css'),
+    %link{:href => url_for_f('style.css'),
           :rel => 'stylesheet', :type => CONTENT_TYPES[:css]}
     %link{:href => url_for('gig-list', @gig_list.link, 'feed'),
           :rel => 'alternate', :type => CONTENT_TYPES[:atom]}
   %body
-    %h1= @gig_list.title
-    %p= @gig_list.link
-    %p= @gig_list.id
-    %p= @gig_list.myspace_urls
-    %ul
-      - @gig_list.by_time.each do |gig|
-        %li= gig.title + ' - ' + gig.time.to_s
+    %div#header
+      %h1= @gig_list.title
+    %div#main
+      %ol
+        - @gig_list.group_by_time_period.each do |time_period|
+          %li
+            %h2= time_period.title
+            %ol
+              - time_period.gigs.each do |gig|
+                %li= gig.band.title + ' at ' + gig.location + ' on ' + gig.time_formatted
+    %div#bands
+      %h2 Bands
+      %ol
+        - @gig_list.bands.sort_by {|b| b.title}.each do |band|
+          %h3
+            %a{:href => url_for('band', band.myspace_name)}
+              = band.title

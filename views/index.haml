@@ -2,17 +2,29 @@
 %html
   %head
     %title Giggregator
-    %link{:href => url_for_ts('style.css'),
+    %link{:href => url_for_f('style.css'),
           :rel => 'stylesheet', :type => CONTENT_TYPES[:css]}
   %body
-    %h1 Giggregator
-    %p Enter a list of band links on MySpace:
-    %form{:action => url_for('update-gig-list'), :method => 'POST'}
-      %p
-        %input{:type => 'text', :name => 'title'}
-        %label{:for => 'title'} (list title)
-      %p
-        %textarea{:name => 'band_list'}
-      %p
-        %input{:type => 'submit', :value => 'Create gig list'}
-    %h2 Upcoming gigs
+    %div#header
+      %h1 Giggregator
+    %div#main
+      %p Enter a list of band links on MySpace:
+      %form{:action => url_for('update-gig-list'), :method => 'POST'}
+        %p
+          %input{:type => 'text', :name => 'title'}
+          %label{:for => 'title'} (list title)
+        %p
+          %textarea{:name => 'band_list', :rows => 12, :cols => 60}
+        %p
+          %input{:type => 'submit', :value => 'Create gig list'}
+    %div#upcoming-gigs
+      %h2 Upcoming gigs
+      %ol
+        - @gig_list.by_time[0..4].each do |gig|
+          %li
+            %h3= gig.title
+            %p
+              %a{:href => url_for('band', gig.band.myspace_name)}<
+                = gig.band.title
+              on
+              = gig.time_formatted

@@ -38,7 +38,11 @@ class GigList < Sequel::Model
     gig_list.sort_by {|g| g.time}
   end
 
-  def by_time_period
+  def group_by_band
+    bands.sort_by {|b| b.title}
+  end
+
+  def group_by_time_period
     # gigs.by_time_period returns a hash like:
     # {
     #   :next_week => [gig1, gig2],
@@ -48,13 +52,9 @@ class GigList < Sequel::Model
     #
     # Doesn't work -- there's no ordering, and no names for the time
     # periods.
-
-    gigs.keys.sort_by {|t| t.sort_index}.each do |time_period|
-      puts time_period.title
-
-      gigs[time_period].sort_by {|g| g.time}.each do |gig|
-        puts gig.title
-      end
+    TIME_PERIODS.dup.map do |t|
+      t.gigs = by_time.select {|g| t == g.time_period}
+      t
     end
   end
 end
