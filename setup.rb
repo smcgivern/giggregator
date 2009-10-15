@@ -1,15 +1,27 @@
 require 'fileutils'
 require 'logger'
+require 'timeout'
+
+require 'feed_tools'
+require 'haml'
+require 'rdiscount'
 require 'sequel'
+require 'sinatra'
+require 'uuidtools'
 
 def acquire(dir); Dir["#{dir}/*.rb"].each {|f| require f}; end
 
 acquire 'lib'
 
-ROOT_DIR = 'giggregator'
+FEED_DIR = 'tmp/feed'
 LOG_DIR = 'log'
 LOG_SQLITE = 'sqlite.log'
 DB_SQLITE = 'giggregator.db'
+ROOT_URL = 'http://giggregator.sean.mcgivern.me.uk'
+
+# Monkey patch to let FeedTools work with UUIDTools
+UUID_URL_NAMESPACE = UUIDTools::UUID_URL_NAMESPACE
+UUID = UUIDTools::UUID
 
 CONTENT_TYPES = {
   :atom => 'application/atom+xml',
@@ -27,8 +39,10 @@ TIME_PERIODS = [
 
 DB = Sequel.sqlite()
 
-LOG_DIR_PATH = File.join(File.dirname(__FILE__), LOG_DIR)
-FileUtils.mkdir(LOG_DIR_PATH) unless File.exist?(LOG_DIR_PATH)
-DB.logger = Logger.new(File.join(LOG_DIR_PATH, LOG_SQLITE))
+[FEED_DIR, LOG_DIR].each do |dir|
+  FileUtils.mkdir(dir) unless File.exist?(dir)
+end
+
+DB.logger = Logger.new(File.join(LOG_DIR, LOG_SQLITE))
 
 acquire 'model'
