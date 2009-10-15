@@ -4,7 +4,6 @@ require 'timeout'
 
 require 'feed_tools'
 require 'haml'
-require 'rdiscount'
 require 'sequel'
 require 'sinatra'
 require 'uuidtools'

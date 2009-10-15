@@ -1,7 +1,5 @@
 require 'lib/model'
 
-require 'rdiscount'
-
 class Gig < Sequel::Model
   many_to_one :band
 
@@ -27,7 +25,5 @@ class Gig < Sequel::Model
     format_fields([band.title, location, time_formatted])
   end
 
-  def format_fields(fields)
-    RDiscount.new(fields.join(' -- '), :smart).to_html
-  end
+  def format_fields(fields); fields.join(' &mdash; '); end
 end
