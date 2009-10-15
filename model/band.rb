@@ -17,6 +17,8 @@ class Band < Sequel::Model
     String(:myspace_name, :unique => true)
     Integer(:friend_id)
     String(:title)
+    DateTime(:band_info_updated)
+    DateTime(:gigs_updated)
   end
 
   TIME_FORMAT = '%m-%d-%Y %H:%M'
@@ -33,24 +35,47 @@ class Band < Sequel::Model
     :form_input => 'input[name="calEvt%s"]',
   }
 
+  TTLS = {
+    :gigs => 7,
+    :band_info => 30,
+  }
+
+  # Convert templates from string to URI template
   TEMPLATES.each {|k, v| TEMPLATES[k] = Addressable::Template.new(v)}
+
+  # TTLs are given in days
+  TTLS.each {|k, v| TTLS[k] = TTLS[k] * 86_400}
 
   def self.from_myspace(myspace_name)
     params = {:myspace_name => myspace_name.split('/').last}
 
-    Band.find_or_create(params).load_band_info?
+    band = Band.find_or_create(params)
+    band.load_band_info?
+    band
+  end
+
+  def expired?(type)
+    !((value = values["#{type}_updated".to_sym]) &&
+      Time.now <= value + TTLS[type])
   end
 
   def uri(s); Addressable::URI.parse(s); end
   def parse(s); Nokogiri::HTML(open(s).read); end
 
-  def load_band_info?; load_band_info! unless title; self.save; end
-  def load_gigs?
-    load_gigs! if gigs_dataset.empty? and not @gigs_loaded
-  end
-
+  def load_band_info?; load_band_info! if expired?(:band_info); end
+  def load_gigs?; load_gigs! if expired?(:gigs); end
   def gigs; load_gigs?; super; end
-  def gig_list; GigList.new(self); end
+
+  def gig_list
+    return @gig_list if @gig_list
+
+    @gig_list = GigList.find_or_create(:title => "__#{myspace_name}",
+                                       :system => true)
+
+    @gig_list.remove_all_bands
+    @gig_list.add_band(self)
+    @gig_list
+  end
 
   def page_uri
     TEMPLATES[:band].expand('myspace_name' => myspace_name)
@@ -72,9 +97,11 @@ class Band < Sequel::Model
     params = {
       :title => band_page.at(SELECTORS[:band_name])['about'],
       :friend_id => TEMPLATES[:gig].extract(gig_link)['friend_id'],
+      :band_info_updated => Time.now,
     }
 
     update(params)
+    save
   end
 
   def load_gigs!
@@ -97,8 +124,7 @@ class Band < Sequel::Model
       add_gig(Gig.find_or_create(params))
     end
 
-    @gigs_loaded = true
-
+    update(:gigs_updated => Time.now)
     gigs
   end
 end

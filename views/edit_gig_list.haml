@@ -3,18 +3,24 @@
   %head
   %head
     %title= 'Edit ' + @gig_list.title
-    %link{:href => url_for_f('style.css'),
-          :rel => 'stylesheet', :type => CONTENT_TYPES[:css]}
+    %link{:href => '/style.css', :rel => 'stylesheet',
+          :type => CONTENT_TYPES[:css]}
   %body
-    %h1= 'Edit ' + @gig_list.title
-    %form{:action => url_for('update-gig-list'), :method => 'POST'}
-      %p
-        %input{:type => 'hidden', :name => 'id',
-               :value => @gig_list.id}
-        %input{:type => 'text', :name => 'title',
-               :value => @gig_list.title}
-      %p
-        %textarea{:name => 'band_list', :rows => 12, :cols => 60}
-          = preserve @gig_list.myspace_urls
-      %p
-        %input{:type => 'submit', :value => 'Update gig list'}
+    %div#header
+      %h1= 'Edit ' + @gig_list.title
+      %p#subtitle
+        %a{:href => '/'} Giggregator
+        \/
+        %a{:href => "/gig-list/#{@gig_list.link}/"} view
+    %div#main
+      %form{:action => '/update-gig-list/', :method => 'POST'}
+        %p
+          %input{:type => 'hidden', :name => 'id',
+                 :value => @gig_list.id}
+          %input{:type => 'text', :name => 'title',
+                 :value => @gig_list.title}
+        %p
+          %textarea{:name => 'band_list', :rows => 12, :cols => 60}
+            = preserve @gig_list.myspace_urls
+        %p
+          %input{:type => 'submit', :value => 'Update gig list'}

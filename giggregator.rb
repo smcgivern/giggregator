@@ -11,11 +11,10 @@ before do
   content_type CONTENT_TYPES[request_type], :charset => 'utf-8'
 end
 
-def url_for_f(*cs); "#{ROOT_DIR}/#{cs.join('/')}"; end
-def url_for(*cs); "#{url_for_f(*cs)}/"; end
+get '/' do
+  @gig_list = GigList.find_or_create(:title => '__all',
+                                     :system => true)
 
-get url_for('/') do
-  @gig_list = GigList.find_or_create(:title => '__all')
   @gig_list.remove_all_bands
 
   Band.each {|b| @gig_list.add_band(b)}
@@ -36,6 +35,10 @@ get '/gig-list/:link/edit/?' do |link|
 end
 
 get '/gig-list/:link/feed/?' do |link|
+  gig_list = GigList[:link => link]
+  gig_list.generate_feed?
+
+  send_file gig_list.feed_filename
 end
 
 get '/band/:myspace_name/?' do |myspace_name|
@@ -60,5 +63,5 @@ post '/update-gig-list/?' do
     end
   end
 
-  redirect(url_for('gig-list', gig_list.link))
+  redirect("/gig-list/#{gig_list.link}/")
 end
