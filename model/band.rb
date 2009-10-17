@@ -49,9 +49,13 @@ class Band < Sequel::Model
   def self.from_myspace(myspace_name)
     params = {:myspace_name => myspace_name.split('/').last}
 
-    band = Band.find_or_create(params)
-    band.load_band_info?
-    band
+    begin
+      band = Band.find_or_create(params)
+      band.load_band_info?
+      band
+    rescue NotABandError, Timeout::Error
+      band.destroy if band
+    end
   end
 
   def expired?(type)
@@ -65,6 +69,7 @@ class Band < Sequel::Model
   def load_band_info?; load_band_info! if expired?(:band_info); end
   def load_gigs?; load_gigs! if expired?(:gigs); end
   def gigs; load_gigs?; super; end
+  def title; super.split.map {|w| w.capitalize}.join(' '); end
 
   def gig_list
     return @gig_list if @gig_list
