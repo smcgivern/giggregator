@@ -4,6 +4,7 @@ require 'timeout'
 
 require 'feed_tools'
 require 'haml'
+require 'sass'
 require 'sequel'
 require 'sinatra'
 require 'uuidtools'
@@ -36,7 +37,7 @@ TIME_PERIODS = [
   TimePeriod.new('Later', lambda {|t| true}),
 ]
 
-DB = Sequel.sqlite()
+DB = Sequel.sqlite(DB_SQLITE)
 
 [FEED_DIR, LOG_DIR].each do |dir|
   FileUtils.mkdir(dir) unless File.exist?(dir)

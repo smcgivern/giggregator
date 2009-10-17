@@ -11,7 +11,20 @@ before do
   content_type CONTENT_TYPES[request_type], :charset => 'utf-8'
 end
 
+helpers do
+  def show_breadcrumbs(breadcrumbs)
+    breadcrumbs.
+      map {|b| "<a href=\"#{b[:uri]}\">#{b[:title]}</a>"}.
+      join(' / ')
+  end
+
+  def default_breadcrumbs
+    [{:uri => '/', :title => 'Giggregator'}]
+  end
+end
+
 get '/' do
+  @page_title = 'Giggregator'
   @gig_list = GigList.find_or_create(:title => '__all',
                                      :system => true)
 
@@ -22,8 +35,19 @@ get '/' do
   haml :index
 end
 
+get '/style.css' do
+  sass :style
+end
+
 get '/gig-list/:link/?' do |link|
   @gig_list = GigList[:link => link]
+  @page_title = @gig_list.title
+  @page_feed = "/gig-list/#{link}/feed/"
+  @breadcrumbs = default_breadcrumbs +
+    [
+     {:uri => "/gig-list/#{link}/edit/", :title => 'edit'},
+     {:uri => "/gig-list/#{link}/feed/", :title => 'feed'},
+    ]
 
   haml :gig_list
 end
@@ -43,6 +67,12 @@ end
 
 get '/band/:myspace_name/?' do |myspace_name|
   @band = Band.from_myspace(myspace_name)
+  @page_title = @band.title
+  @breadcrumbs = default_breadcrumbs +
+    [
+     {:uri => @band.page_uri, :title => 'band page'},
+     {:uri => @band.gig_page_uri, :title => 'gig page'},
+    ]
 
   haml :band
 end
@@ -56,10 +86,7 @@ post '/update-gig-list/?' do
 
   params[:band_list].split.each do |myspace_url|
     Timeout::timeout(20) do
-      begin
-        gig_list.add_band(Band.from_myspace(myspace_url))
-      rescue NotABandError, Timeout::Error
-      end
+      gig_list.add_band(Band.from_myspace(myspace_url))
     end
   end
 
