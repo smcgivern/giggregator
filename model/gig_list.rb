@@ -42,14 +42,16 @@ class GigList < Sequel::Model
     TIME_PERIODS.dup.map do |period|
       period.gigs = by_time.select {|g| period == g.time_period}
       period
-    end
+    end.reject {|p| p.gigs.empty?}
   end
 
   def feed_filename; File.join(FEED_DIR, "#{link}.atom"); end
 
   def generate_feed?
     generate_feed! unless (File.exist?(feed_filename) &&
-                           File.stat(feed_filename).mtime < updated)
+                           File.size(feed_filename) > 0 &&
+                           File.stat(feed_filename).mtime < updated
+                           )
   end
 
   def generate_feed!
