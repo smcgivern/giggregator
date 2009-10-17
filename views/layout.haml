@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %title= @page_title
+    %link{:href => '/style.css', :rel => 'stylesheet',
+          :type => CONTENT_TYPES[:css]}
+    - if @page_feed
+      %link{:href => @page_feed, :rel => 'alternate',
+            :type => CONTENT_TYPES[:atom]}
+  %body
+    %div#header
+      %h1= @page_title
+      - if @breadcrumbs
+        %p#subtitle= show_breadcrumbs(@breadcrumbs)
+    = yield
+    %div#footer
+      %p
+        By
+        %a{:href => 'http://sean.mcgivern.me.uk'} Sean McGivern

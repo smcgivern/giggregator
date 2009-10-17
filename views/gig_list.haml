@@ -1,30 +1,15 @@
-!!!
-%html
-  %head
-    %title= @gig_list.title
-    %link{:href => '/style.css', :rel => 'stylesheet',
-          :type => CONTENT_TYPES[:css]}
-    %link{:href => "/gig-list/#{@gig_list.link}/feed/",
-          :rel => 'alternate', :type => CONTENT_TYPES[:atom]}
-  %body
-    %div#header
-      %h1= @gig_list.title
-      %p#subtitle
-        %a{:href => '/'} Giggregator
-        \/
-        %a{:href => "/gig-list/#{@gig_list.link}/edit/"} edit
-    %div#main
-      %ol
-        - @gig_list.group_by_time_period.each do |time_period|
-          %li
-            %h2= time_period.title
-            %ol
-              - time_period.gigs.each do |gig|
-                %li
-                  = gig.title_by_time_period
-    %div#bands
-      %h2 Bands
-      %ol
-        - @gig_list.bands.sort_by {|b| b.title}.each do |band|
-          %h3
-            %a{:href => "/band/#{band.myspace_name}/"}= band.title
+%div#main
+  %ol
+    - @gig_list.group_by_time_period.each do |time_period|
+      %li
+        %h2= time_period.title
+        %ol
+          - time_period.gigs.each do |gig|
+            %li
+              = gig.title_by_time_period
+%div#sidebar
+  %h2 Bands
+  %ol#bands
+    - @gig_list.bands.sort_by {|b| b.title}.each do |band|
+      %h3
+        %a{:href => "/band/#{band.myspace_name}/"}= band.title

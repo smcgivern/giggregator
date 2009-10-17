@@ -1,25 +1,10 @@
-!!!
-%html
-  %head
-    %title= @band.title
-    %link{:href => '/style.css', :rel => 'stylesheet',
-          :type => CONTENT_TYPES[:css]}
-  %body
-    %div#header
-      %h1= @band.title
-      %p#subtitle
-        %a{:href => '/'} Giggregator
-        \/
-        %a{:href => @band.page_uri} band page
-        \/
-        %a{:href => @band.gig_page_uri} gig page
-    %div#main
-      %ol
-        - @band.gig_list.group_by_time_period.each do |time_period|
-          %li
-            %h2= time_period.title
-            %ol
-              - time_period.gigs.each do |gig|
-                %li
-                  = gig.band.title + ' at ' + gig.location
-                  = 'on ' + gig.time_formatted
+%div#main-wide
+  %ol
+    - @band.gig_list.group_by_time_period.each do |time_period|
+      %li
+        %h2= time_period.title
+        %ol
+          - time_period.gigs.each do |gig|
+            %li
+              = gig.band.title + ' at ' + gig.location
+              = 'on ' + gig.time_formatted
