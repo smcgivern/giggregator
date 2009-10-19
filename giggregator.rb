@@ -54,6 +54,13 @@ end
 
 get '/gig-list/:link/edit/?' do |link|
   @gig_list = GigList[:link => link]
+  @page_title = @gig_list.title
+  @page_feed = "/gig-list/#{link}/feed/"
+  @breadcrumbs = default_breadcrumbs +
+    [
+     {:uri => "/gig-list/#{link}/edit/", :title => 'edit'},
+     {:uri => "/gig-list/#{link}/feed/", :title => 'feed'},
+    ]
 
   haml :edit_gig_list
 end
