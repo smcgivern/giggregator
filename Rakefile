@@ -10,11 +10,11 @@ task :spec do
   Dir['spec/**/*.rb'].each {|f| require f}
 end
 
-def deploy target
-  `rsync -r --exclude=.git* --exclude=vendor/* . #{target}`
+def deploy(target, exclude=['git*', 'vendor/*', '*.db'])
+  `rsync -r --exclude=#{exclude.join(" --exclude=")} . #{target}`
 end
 
 desc 'Deploy to Dreamhost'
 task :deploy do
-  deploy 'seanmcgivern@tombstone.org.uk:~/domains/giggregator/'
+  deploy('seanmcgivern@tombstone.org.uk:~/domains/giggregator/')
 end
