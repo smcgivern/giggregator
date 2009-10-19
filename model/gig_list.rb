@@ -34,9 +34,12 @@ class GigList < Sequel::Model
   end
 
   def myspace_urls; bands.map {|b| b.page_uri}.join("\n"); end
-  def gig_list; bands.map {|b| b.gigs}.flatten; end
   def by_time; gig_list.sort_by {|g| g.time}; end
   def updated; by_time.last.time; end
+
+  def gig_list
+    bands.map {|b| b.gigs}.flatten.delete_if {|g| g.time <= Time.now}
+  end
 
   def group_by_time_period
     TIME_PERIODS.dup.map do |period|
