@@ -21,6 +21,8 @@ helpers do
   def default_breadcrumbs
     [{:uri => '/', :title => 'Giggregator'}]
   end
+
+  def rubypants(s); RubyPants.new(s).to_html; end
 end
 
 get '/' do

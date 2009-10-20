@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'logger'
 require 'timeout'
+require 'vendor/rubypants'
 
 require 'feed_tools'
 require 'haml'
