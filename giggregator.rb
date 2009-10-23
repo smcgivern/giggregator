@@ -1,4 +1,5 @@
 set :haml, {:format => :html5}
+set :views, "#{File.dirname(__FILE__)}/view"
 
 before do
   request_type = case request.env['REQUEST_URI']
