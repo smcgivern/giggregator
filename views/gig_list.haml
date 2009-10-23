@@ -5,7 +5,7 @@
         %h2= time_period.title
         %ol
           - time_period.gigs.each do |gig|
-            %li
+            %li{:title => gig.address}
               = gig.title_by_time_period
 %div#sidebar
   %h2 Bands
