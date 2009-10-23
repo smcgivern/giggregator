@@ -1,21 +1,18 @@
 * Database
-** Conditional pulling of data from MySpace
-*** 7 days for gigs
-*** 30 days for band info
-** Extract MySpace name from URL (model? controller?)
-** Record access times and add recently-accessed bands to cron
-** Pull band pictures too
+** Cronjob to update bands and gigs
+** Remove old gigs
 * Front end
-** Textarea for URLs / band IDs
+** Rubypants everything
 ** Allow location filters
-** Show gigs by date
+*** Show location in title attribute, maybe?
+** Show gigs by date -- ignore time
 ** Error logging: list of failed bands, non-bands
 ** Four page types
 *** Front page -- textarea with space for plenty of bands
 *** Band page -- band name, upcoming gigs
 *** Collection page -- more than one band
-**** Page URL: list of band names, alphabetised, MD5
 *** Gig page -- gig details
 **** Attempt to use Google Maps for location?
 **** Show gigs nearby in time and space
 ** Band and collection pages have feeds
+*** Dependent on views
