@@ -22,7 +22,7 @@ helpers do
     [{:uri => '/', :title => 'Giggregator'}]
   end
 
-  def rubypants(s); RubyPants.new(s).to_html; end
+  def rp(s); RubyPants.new(s.gsub(' - ', ' -- ')).to_html; end
 end
 
 get '/' do
@@ -65,6 +65,21 @@ get '/gig-list/:link/edit/?' do |link|
     ]
 
   haml :edit_gig_list
+end
+
+get '/gig-list/:link/filter/:loc/?' do |link, loc|
+  @gig_list = GigList[:link => link]
+  @page_title = @gig_list.title
+  @page_feed = "/gig-list/#{link}/feed/"
+  @breadcrumbs = default_breadcrumbs +
+    [
+     {:uri => "/gig-list/#{link}/edit/", :title => 'edit'},
+     {:uri => "/gig-list/#{link}/feed/", :title => 'feed'},
+    ]
+
+  @gig_list.filter_by_location!(loc)
+
+  haml :gig_list
 end
 
 get '/gig-list/:link/feed/?' do |link|
