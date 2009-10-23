@@ -16,19 +16,20 @@ class GigList < Sequel::Model
     end
   end
 
-  def slug
+  def slug(i=nil)
     title.
       downcase.
       gsub(/([a-z0-9])(\.|'([a-z0-9]))/, '\1\3').
-      gsub(/[^a-z0-9]+/, '-')
+      gsub(/[^a-z0-9]+/, '-') +
+      ("-#{i}" if i)
   end
 
   def before_save
-    def slug_i(i); "#{slug}-#{i}"; end
+    return unless values(:link).empty?
 
     attempt = slug; i = 0
 
-    while GigList[:link => attempt] do attempt = slug_i(i += 1) end
+    while GigList[:link => attempt] do attempt = slug(i += 1) end
 
     set(:link => attempt)
   end
@@ -37,8 +38,21 @@ class GigList < Sequel::Model
   def by_time; gig_list.sort_by {|g| g.time}; end
   def updated; by_time.last.time; end
 
+  def filter_by_location!(loc)
+    gig_list.delete_if do |gig|
+      !([:title, :location, :address].any? do |col|
+          gig.send(col).downcase.include?(loc.downcase)
+        end)
+    end
+  end
+
   def gig_list
-    bands.map {|b| b.gigs}.flatten.delete_if {|g| g.time <= Time.now}
+    return @gig_list if @gig_list
+
+    @gig_list = bands.
+      map {|b| b.gigs}.
+      flatten.
+      delete_if {|g| g.time <= Time.now}
   end
 
   def group_by_time_period
