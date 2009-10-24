@@ -8,7 +8,7 @@ describe 'TimePeriod.new' do
                                  )
 
     time_period.title.should.equal 'Next minute'
-    time_period.criteria[Time.now].should.equal true
+    time_period.criteria[Time.now].should.be.true
     time_period.gigs.should.equal nil
   end
 end

@@ -6,7 +6,7 @@ describe 'Sequel::Model.create_schema' do
   it 'should create the table with the schema if no table exists' do
     class Foo < Sequel::Model; end
 
-    Foo.table_exists?.should.equal false
+    Foo.table_exists?.should.be.false
 
     class Foo < Sequel::Model
       create_schema do
@@ -14,7 +14,7 @@ describe 'Sequel::Model.create_schema' do
       end
     end
 
-    Foo.table_exists?.should.equal true
+    Foo.table_exists?.should.be.true
     Foo.primary_key.should.equal :id
   end
 
