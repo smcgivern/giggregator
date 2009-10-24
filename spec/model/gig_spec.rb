@@ -98,5 +98,7 @@ describe 'Gig#title_by_time_period' do
     band.add_gig(gig)
 
     gig.title_by_time_period.should.be including?('Honington')
+    gig.title_by_time_period.should.be including?('Stow')
+    gig.title_by_time_period.should.be including?('12:00 AM')
   end
 end
