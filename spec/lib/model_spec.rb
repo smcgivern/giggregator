@@ -17,4 +17,23 @@ describe 'Sequel::Model.create_schema' do
     Foo.table_exists?.should.equal true
     Foo.primary_key.should.equal :id
   end
+
+  it 'should capitalise the required method calls' do
+    EMMM = [:eeny, :meeny, :miny, :moe]
+
+    class Bar < Sequel::Model
+      create_schema do
+        EMMM.each {|w| String(w)}
+      end
+
+      capitalize(:eeny, :miny)
+    end
+
+    bar = Bar.new(EMMM.inject({}) {|h, w| h.merge w => "#{w} #{w}"})
+
+    bar.eeny.should.equal 'Eeny Eeny'
+    bar.meeny.should.equal 'meeny meeny'
+    bar.miny.should.equal 'Miny Miny'
+    bar.moe.should.equal 'moe moe'
+  end
 end
