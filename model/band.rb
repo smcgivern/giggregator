@@ -21,6 +21,8 @@ class Band < Sequel::Model
     DateTime(:gigs_updated)
   end
 
+  capitalize :title
+
   TIME_FORMAT = '%m-%d-%Y %H:%M'
 
   TEMPLATES = {
@@ -59,8 +61,8 @@ class Band < Sequel::Model
   end
 
   def expired?(type)
-    !((value = values["#{type}_updated".to_sym]) &&
-      Time.now <= value + TTLS[type])
+    return true unless (value = values[:"#{type}_updated"])
+    Time.now >= value + TTLS[type]
   end
 
   def uri(s); Addressable::URI.parse(s); end
@@ -69,7 +71,6 @@ class Band < Sequel::Model
   def load_band_info?; load_band_info! if expired?(:band_info); end
   def load_gigs?; load_gigs! if expired?(:gigs); end
   def gigs; load_gigs?; super; end
-  def title; super.split.map {|w| w.capitalize}.join(' '); end
 
   def gig_list
     return @gig_list if @gig_list
@@ -77,8 +78,7 @@ class Band < Sequel::Model
     @gig_list = GigList.find_or_create(:title => "__#{myspace_name}",
                                        :system => true)
 
-    @gig_list.remove_all_bands
-    @gig_list.add_band(self)
+    @gig_list.add_band(self) unless @gig_list.bands == [self]
     @gig_list
   end
 
@@ -116,8 +116,7 @@ class Band < Sequel::Model
       time = DateTime.strptime(value('DateTime', gig), TIME_FORMAT)
       location = value('Location', gig)
       title = value('Title', gig)
-
-      address = ['City', 'State', 'Zip'].
+      address = ['Street', 'City', 'State', 'Zip'].
         map {|k| value(k, gig)}.reject {|x| x.empty?}.
         join(', ')
 
