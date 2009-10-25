@@ -20,8 +20,13 @@ namespace :spec do
   end
 end
 
-def deploy(target, exclude=['git*', 'vendor/*', '*.db'])
-  `rsync -r --exclude=#{exclude.join(" --exclude=")} . #{target}`
+def deploy(target, exclude=nil)
+  exclude ||= [
+               '.git', '.gitignore', 'vendor/*', '*.db', 'spec',
+               'tmp/feed/*', 'tmp/cov',
+              ]
+
+  p `rsync -r --exclude=#{exclude.join(" --exclude=")} . #{target}`
 end
 
 desc 'Deploy to Dreamhost'
