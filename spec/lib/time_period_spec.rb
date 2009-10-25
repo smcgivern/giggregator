@@ -1,3 +1,4 @@
+require 'spec/setup'
 require 'lib/time_period'
 
 describe 'TimePeriod.new' do
