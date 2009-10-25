@@ -34,7 +34,7 @@ class GigList < Sequel::Model
     set(:link => attempt)
   end
 
-  def myspace_urls; bands.map {|b| b.page_uri}.join("\n"); end
+  def myspace_uris; bands.map {|b| b.page_uri}.join("\n"); end
   def by_time; gig_list.sort_by {|g| g.time}; end
   def updated; by_time.last.time; end
 
