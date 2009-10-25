@@ -1,9 +1,9 @@
 require 'spec/setup'
 
 require 'model/band'
+require 'model/bands_gig_list'
 require 'model/gig'
 require 'model/gig_list'
-require 'model/bands_gig_list'
 
 def type(t); lambda {|x| t === x}; end
 

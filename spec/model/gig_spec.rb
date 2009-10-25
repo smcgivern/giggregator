@@ -1,8 +1,8 @@
 require 'spec/setup'
 require 'time'
 
-require 'model/gig'
 require 'model/band'
+require 'model/gig'
 
 describe 'Gig#time' do
   it 'should return the gig time in UTC' do
