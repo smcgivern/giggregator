@@ -1,15 +1,6 @@
 require 'model/gig'
+require 'model/band'
 require 'time'
-
-class Band < Sequel::Model
-  one_to_many :gigs
-
-  create_schema do
-    primary_key(:id)
-    DateTime(:gigs_updated)
-    String(:title)
-  end
-end
 
 describe 'Gig#time' do
   it 'should return the gig time in UTC' do
