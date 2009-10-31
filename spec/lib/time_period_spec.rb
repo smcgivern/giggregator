@@ -14,6 +14,15 @@ describe 'TimePeriod.new' do
   end
 end
 
+describe 'TimePeriod.==' do
+  it 'should return true if all attributes are equal' do
+    time_period = TimePeriod.new('Equality test', lambda {|t| true})
+
+    time_period.dup.should.equal time_period
+    time_period.dup.should.not {|t| t === time_period}
+  end
+end
+
 describe 'Days' do
   it 'should return a time n days in the future' do
     # May not work around midnight
