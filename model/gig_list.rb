@@ -21,7 +21,7 @@ class GigList < Sequel::Model
       downcase.
       gsub(/([a-z0-9])(\.|'([a-z0-9]))/, '\1\3').
       gsub(/[^a-z0-9]+/, '-') +
-      ("-#{i}" if i)
+      (i ? "-#{i}" : '')
   end
 
   def before_save
@@ -36,7 +36,7 @@ class GigList < Sequel::Model
 
   def myspace_uris; bands.map {|b| b.page_uri}.join("\n"); end
   def by_time; gig_list.sort_by {|g| g.time}; end
-  def updated; by_time.last.time; end
+  def updated; bands.map {|b| b.gigs_updated}.sort.last; end
 
   def filter_by_location!(loc)
     gig_list.delete_if do |gig|
@@ -56,7 +56,8 @@ class GigList < Sequel::Model
   end
 
   def group_by_time_period
-    TIME_PERIODS.dup.map do |period|
+    TIME_PERIODS.map do |period|
+      period = period.dup
       period.gigs = by_time.select {|g| period == g.time_period}
       period
     end.reject {|p| p.gigs.empty?}
