@@ -16,7 +16,9 @@ describe 'Sequel::Model.create_schema' do
     Foo.table_exists?.should.be.true
     Foo.primary_key.should.equal :id
   end
+end
 
+describe 'Sequel::Model.capitalize' do
   it 'should capitalise the required method calls' do
     EMMM = [:eeny, :meeny, :miny, :moe]
 
@@ -34,5 +36,17 @@ describe 'Sequel::Model.create_schema' do
     bar.meeny.should.equal 'meeny meeny'
     bar.miny.should.equal 'Miny Miny'
     bar.moe.should.equal 'moe moe'
+  end
+
+  it 'should return nil if the parent method is nil' do
+    class Baz < Sequel::Model
+      create_schema do
+        String(:title)
+      end
+
+      capitalize(:title)
+    end
+
+    Baz.new.title.should.equal nil
   end
 end

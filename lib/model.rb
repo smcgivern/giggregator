@@ -8,7 +8,7 @@ class Sequel::Model
   def self.capitalize(*methods)
     methods.each do |method|
       define_method method do
-        super.split.map {|w| w.capitalize}.join(' ')
+        super.split.map {|w| w.capitalize}.join(' ') if super
       end
     end
   end
