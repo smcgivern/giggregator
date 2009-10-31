@@ -9,6 +9,7 @@ class TimePeriod
   end
 
   def ==(other)
+    return false if other.nil?
     [:title, :criteria, :gigs].map {|a| send(a) == other.send(a)}.all?
   end
 end
