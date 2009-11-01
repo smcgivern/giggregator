@@ -1,15 +1,4 @@
-%div#main
-  - if @gig_list.group_by_time_period.empty?
-    %p No gigs found.
-  - else
-    %ol
-      - @gig_list.group_by_time_period.each do |time_period|
-        %li
-          %h2= rp(time_period.title)
-          %ol
-            - time_period.gigs.each do |gig|
-              %li{:title => rp(gig.address)}
-                = rp(gig.title_by_time_period)
+%div#main= haml :feed_gig_list, :layout => false
 %div#sidebar
   %h2 Bands
   %ol#bands
