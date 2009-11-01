@@ -28,6 +28,6 @@ class Gig < Sequel::Model
   def date_formatted; format_time(DATE_FORMAT); end
 
   def title_by_time_period
-    [band.title, location, time_formatted].join(' -- ')
+    [band.title, location, time_formatted].join(' --- ')
   end
 end

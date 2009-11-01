@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title= @page_title
+    %title= rp(@page_title)
     %link{:href => '/style.css', :rel => 'stylesheet',
           :type => CONTENT_TYPES[:css]}
     - if @page_feed
@@ -9,7 +9,7 @@
             :type => CONTENT_TYPES[:atom]}
   %body
     %div#header
-      %h1= @page_title
+      %h1= rp(@page_title)
       - if @breadcrumbs
         %p#subtitle= show_breadcrumbs(@breadcrumbs)
     = yield

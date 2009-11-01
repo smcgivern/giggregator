@@ -14,9 +14,9 @@
   %ol#upcoming-gigs
     - @gig_list.by_time[0..4].each do |gig|
       %li
-        %h3= gig.title
+        %h3= rp(gig.title)
         %p
           %a{:href => "/band/#{gig.band.myspace_name}/"}<
-            = gig.band.title
+            = rp(gig.band.title)
           on
-          = gig.time_formatted
+          = rp(gig.time_formatted)
