@@ -1,11 +1,10 @@
 * Database
 ** Cronjob to update bands and gigs
 ** Remove old gigs
+** Pick up other sources, beyond MySpace
 * Front end
-** Rubypants everything
-** Allow location filters
-*** Show location in title attribute, maybe?
-** Show gigs by date -- ignore time
+** Allow filters
+*** Or = |, and = &?
 ** Error logging: list of failed bands, non-bands
 ** Four page types
 *** Front page -- textarea with space for plenty of bands
@@ -14,5 +13,7 @@
 *** Gig page -- gig details
 **** Attempt to use Google Maps for location?
 **** Show gigs nearby in time and space
+** Indices for each page type
 ** Band and collection pages have feeds
 *** Dependent on views
+** 404 page
