@@ -22,7 +22,7 @@ end
 
 def deploy(target, exclude=nil)
   exclude ||= [
-               '.git', '.gitignore', 'vendor/*', '*.db', 'spec',
+               '.git', '.gitignore', 'vendor/*', 'spec', 'tmp/*.db',
                'tmp/feed/*', 'tmp/cov',
               ]
 
