@@ -25,7 +25,7 @@ class GigList < Sequel::Model
   end
 
   def before_save
-    return unless (link && link.empty?)
+    return unless (link.nil? || link.empty?)
 
     attempt = slug; i = 0
 
