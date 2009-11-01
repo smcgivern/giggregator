@@ -212,7 +212,7 @@ describe 'Band#load_gigs!' do
       @band.gigs.first.title.should.equal "R\303\266yksopp At Berns"
       @band.gigs.first.location.should.equal 'Berns'
       @band.gigs.first.time.
-        should.equal Time.utc(2009, 10, 30, 20, 0, 0)
+        should.equal Time.utc(2019, 10, 30, 20, 0, 0)
     end
 
     it 'should extract the address as a comma-separated list' do
@@ -222,6 +222,20 @@ describe 'Band#load_gigs!' do
 
     it "should return the band's gigs" do
       @band.load_gigs!.should.equal @band.gigs
+    end
+
+    it 'should not duplicate gigs' do
+      @band.gigs.should.equal @band.load_gigs!
+    end
+
+    it 'should remove old gigs' do
+      gig = Gig.create(:time => Time.now - 60)
+
+      @band.add_gig(gig)
+      @band.gigs.should.satisfy {|g| g.include?(gig)}
+
+      @band.load_gigs!
+      @band.gigs.should.satisfy {|g| !g.include?(gig)}
     end
   end
 end

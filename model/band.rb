@@ -122,12 +122,16 @@ class Band < Sequel::Model
         map {|k| value(k, gig)}.reject {|x| x.empty?}.
         join(', ')
 
-      params = {
-        :time => time, :title => title, :location => location,
-        :address => address,
-      }
+      gig = Gig.find_or_create(:time => time, :title => title,
+                               :location => location,
+                               :address => address)
 
-      add_gig(Gig.find_or_create(params))
+      add_gig(gig) unless gigs_dataset.all.include?(gig)
+    end
+
+    gigs_dataset.filter {|g| g.time < Time.now.utc}.each do |gig|
+      remove_gig(gig)
+      gig.delete
     end
 
     update(:gigs_updated => Time.now)
