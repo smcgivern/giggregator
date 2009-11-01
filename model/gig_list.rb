@@ -83,7 +83,7 @@ class GigList < Sequel::Model
 
     entry.link = "#{ROOT_URL}/gig-list/#{link}/feed/"
     entry.title = title
-    entry.content = by_time.map {|g| g.title}.join('<br>')
+    entry.content = by_time.map {|g| g.title}.join("<br>\n")
     entry.updated = updated
 
     feed.entries = [entry]
