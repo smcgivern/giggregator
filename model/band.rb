@@ -48,8 +48,8 @@ class Band < Sequel::Model
   # TTLs are given in days
   TTLS.each {|k, v| TTLS[k] = TTLS[k] * 86_400}
 
-  def self.from_myspace(myspace_name)
-    params = {:myspace_name => myspace_name.split('/').last}
+  def self.from_myspace(myspace_uri)
+    params = {:myspace_name => myspace_uri.split('/').last}
 
     begin
       band = Band.find_or_create(params)
@@ -110,7 +110,9 @@ class Band < Sequel::Model
   end
 
   def load_gigs!
-    def value(k, e); e.at(SELECTORS[:form_input] % k)['value']; end
+    def value(key, elem)
+      (f = elem.at(SELECTORS[:form_input] % key)) ? f['value'] : ''
+    end
 
     parse(gig_page_uri).search(SELECTORS[:gig_info]).each do |gig|
       time = DateTime.strptime(value('DateTime', gig), TIME_FORMAT)
