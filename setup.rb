@@ -17,7 +17,7 @@ acquire 'lib'
 FEED_DIR = 'tmp/feed'
 LOG_DIR = 'log'
 LOG_SQLITE = 'sqlite.log'
-DB_SQLITE = 'giggregator.db'
+DB_SQLITE = 'tmp/giggregator.db'
 ROOT_URL = 'http://giggregator.sean.mcgivern.me.uk'
 
 # Monkey patch to let FeedTools work with UUIDTools
