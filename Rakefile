@@ -33,3 +33,33 @@ desc 'Deploy to Dreamhost'
 task :deploy do
   deploy('seanmcgivern@tombstone.org.uk:~/domains/giggregator/')
 end
+
+def flog file, source=nil, dir='tmp/flog'
+  source ||= [file]
+  mkdir dir unless File.exist? dir
+
+  `find #{source.join ' '} -name \\*.rb | xargs flog > #{dir}/#{file}`
+  puts "Flog output available at #{dir}/#{file}"
+end
+
+desc 'Flog all code in lib/ and spec/, output in tmp/flog/'
+task :flog do
+  flog 'all', ['lib', 'spec']
+end
+
+namespace :flog do
+  desc 'Flog all code in lib/'
+  task :lib do
+    flog 'lib'
+  end
+
+  desc 'Flog all code in spec/'
+  task :spec do
+    flog 'spec'
+  end
+end
+
+desc 'Remove flog output'
+task :clobber_flog do
+  rm_r 'tmp/flog'
+end
