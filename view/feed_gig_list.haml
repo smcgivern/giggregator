@@ -1,6 +1,6 @@
 !!! XML
 %feed{:xmlns => 'http://www.w3.org/2005/Atom'}
-  %title= @gig_list.title
+  %title= rp(@gig_list.title)
   %id= self_link
   %link{:href => self_link}
   %updated= @gig_list.updated.xmlschema
@@ -8,7 +8,7 @@
     %name Giggregator
     %uri http://giggregator.sean.mcgivern.me.uk/
   %entry
-    %title= @gig_list.title
+    %title= rp(@gig_list.title)
     %id= self_link
     %link{:href => self_link}
     %updated= @gig_list.updated.xmlschema
