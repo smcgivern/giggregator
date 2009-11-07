@@ -3,12 +3,10 @@ require 'logger'
 require 'timeout'
 require 'vendor/rubypants'
 
-require 'feed_tools'
 require 'haml'
 require 'sass'
 require 'sequel'
 require 'sinatra'
-require 'uuidtools'
 
 def acquire(dir); Dir["#{dir}/*.rb"].each {|f| require f}; end
 
@@ -19,10 +17,6 @@ LOG_DIR = 'log'
 LOG_SQLITE = 'sqlite.log'
 DB_SQLITE = 'tmp/giggregator.db'
 ROOT_URL = 'http://giggregator.sean.mcgivern.me.uk'
-
-# Monkey patch to let FeedTools work with UUIDTools
-UUID_URL_NAMESPACE = UUIDTools::UUID_URL_NAMESPACE
-UUID = UUIDTools::UUID
 
 CONTENT_TYPES = {
   :atom => 'application/atom+xml',

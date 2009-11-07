@@ -1,11 +1,17 @@
-- if @gig_list.group_by_time_period.empty?
-  %p No gigs found.
-- else
-  %ol
-    - @gig_list.group_by_time_period.each do |time_period|
-      %li
-        %h2= rp(time_period.title)
-        %ol
-          - time_period.gigs.each do |gig|
-            %li{:title => rp(gig.address)}
-              = rp(gig.title_by_time_period)
+!!! XML
+%feed{:xmlns => 'http://www.w3.org/2005/Atom'}
+  %title= @gig_list.title
+  %id= self_link
+  %link{:href => self_link}
+  %updated= @gig_list.updated.xmlschema
+  %author
+    %name Giggregator
+    %uri http://giggregator.sean.mcgivern.me.uk/
+  %entry
+    %title= @gig_list.title
+    %id= self_link
+    %link{:href => self_link}
+    %updated= @gig_list.updated.xmlschema
+    %content{:type => 'html'}
+      :cdata
+        #{haml :_gig_list, :layout => false}

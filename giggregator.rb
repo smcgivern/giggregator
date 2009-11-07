@@ -12,17 +12,21 @@ before do
 end
 
 helpers do
+  include Rack::Utils
+  alias_method :h, :escape_html
+
+  def rp(s); RubyPants.new(h(s).gsub(' - ', ' -- ')).to_html; end
+  def self_link; request.url; end
+
+  def default_breadcrumbs
+    [{:uri => '/', :title => 'Giggregator'}]
+  end
+
   def show_breadcrumbs(breadcrumbs)
     breadcrumbs.
       map {|b| "<a href=\"#{b[:uri]}\">#{rp(b[:title])}</a>"}.
       join(' / ')
   end
-
-  def default_breadcrumbs;
-    [{:uri => '/', :title => 'Giggregator'}]
-  end
-
-  def rp(s); RubyPants.new(s.gsub(' - ', ' -- ')).to_html; end
 end
 
 get '/style.css' do
@@ -42,9 +46,16 @@ get '/' do
 end
 
 get '/gig-list/:link/?' do |link|
-  @gig_list = GigList[:link => link, :system => false]
+  @gig_list = GigList[:link => link, :system => nil]
   @page_title = @gig_list.title
   @page_feed = "/gig-list/#{link}/feed/"
+
+  params[:from]
+  params[:to]
+  params[:filter]
+
+  query_string = request.query_string
+
   @breadcrumbs = default_breadcrumbs +
     [
      {:uri => "/gig-list/#{link}/edit/", :title => 'edit'},
@@ -68,10 +79,10 @@ get '/gig-list/:link/edit/?' do |link|
 end
 
 get '/gig-list/:link/feed/?' do |link|
-  gig_list = GigList[:link => link]
-  gig_list.generate_feed?
+  @gig_list = GigList[:link => link]
+  @inline_style = 'list-style-type : none'
 
-  send_file gig_list.feed_filename
+  haml :feed_gig_list, :format => :xhtml, :layout => false
 end
 
 get '/band/:myspace_name/?' do |myspace_name|

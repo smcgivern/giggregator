@@ -17,7 +17,7 @@ class GigList < Sequel::Model
   end
 
   def slug(i=nil)
-    title.
+    (title || '').
       downcase.
       gsub(/([a-z0-9])(\.|'([a-z0-9]))/, '\1\3').
       gsub(/[^a-z0-9]+/, '-') +
@@ -61,33 +61,5 @@ class GigList < Sequel::Model
       period.gigs = by_time.select {|g| period == g.time_period}
       period
     end.reject {|p| p.gigs.empty?}
-  end
-
-  def feed_filename; File.join(FEED_DIR, "#{link}.atom"); end
-
-  def generate_feed?
-    generate_feed! unless (File.exist?(feed_filename) &&
-                           File.size(feed_filename) > 0 &&
-                           File.stat(feed_filename).mtime < updated
-                           )
-  end
-
-  def generate_feed!
-    feed = FeedTools::Feed.new
-    entry = FeedTools::FeedItem.new
-
-    feed.link = "#{ROOT_URL}/gig-list/#{link}/feed/"
-    feed.title = title
-    feed.updated = updated
-    feed.author = 'Giggregator'
-
-    entry.link = "#{ROOT_URL}/gig-list/#{link}/feed/"
-    entry.title = title
-    entry.content = by_time.map {|g| g.title}.join("<br>\n")
-    entry.updated = updated
-
-    feed.entries = [entry]
-
-    open(feed_filename, 'w').puts(feed.build_xml)
   end
 end
