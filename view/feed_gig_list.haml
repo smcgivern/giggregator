@@ -1,16 +1,16 @@
 !!! XML
 %feed{:xmlns => 'http://www.w3.org/2005/Atom'}
   %title= rp(@gig_list.title)
-  %id= self_link
-  %link{:href => self_link}
+  %id= self_uri
+  %link{:href => self_uri}
   %updated= @gig_list.updated.xmlschema
   %author
     %name Giggregator
-    %uri http://giggregator.sean.mcgivern.me.uk/
+    %uri= self_base_uri
   %entry
     %title= rp(@gig_list.title)
-    %id= self_link
-    %link{:href => self_link}
+    %id= self_uri.gsub('/feed', '')
+    %link{:href => self_uri.gsub('/feed', '')}
     %updated= @gig_list.updated.xmlschema
     %content{:type => 'html'}
       :cdata
