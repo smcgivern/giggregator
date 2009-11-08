@@ -1,19 +1,24 @@
 * Database
+** TODO Add gig#updated field to use as gig_list#updated
 ** Cronjob to update bands and gigs
-** Remove old gigs
 ** Pick up other sources, beyond MySpace
 * Front end
-** Allow filters
-*** Or = |, and = &?
-** Error logging: list of failed bands, non-bands
 ** Four page types
 *** Front page -- textarea with space for plenty of bands
 *** Band page -- band name, upcoming gigs
 *** Collection page -- more than one band
-*** Gig page -- gig details
+*** TODO Gig page -- gig details
 **** Attempt to use Google Maps for location?
 **** Show gigs nearby in time and space
+** TODO Filtering
+*** =[0-9]+ - number of days in future to include
+*** =.+ - text to look for in title, location, address
+**** Case-insensitive
+**** Search is OR, AND is not possible
+** Feeds
+*** TODO Band page as well as gig pages
+*** Cache to file
+** Error logging: list of failed bands, non-bands
 ** Indices for each page type
-** Band and collection pages have feeds
-*** Dependent on views
 ** 404 page
+** XSS?
