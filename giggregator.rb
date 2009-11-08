@@ -16,22 +16,28 @@ get '/' do
   haml :index
 end
 
-get '/gig-list/:link/?' do |link|
-  @gig_list = GigList[:link => link, :system => nil]
+get %r{^/gig-list/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$} do
+  retrieve_captures
+
+  @gig_list = GigList[:link => @link, :system => nil]
+
+  if @feed
+    @inline_style = 'list-style-type : none'
+
+    return haml(:feed_gig_list, :format => :xhtml, :layout => false)
+  end
+
   @page_title = @gig_list.title
-  @page_feed = "/gig-list/#{link}/feed/"
-
-  params[:from]
-  params[:to]
-  params[:filter]
-
-  query_string = request.query_string
-
+  @page_feed = "#{self_link}feed/"
   @breadcrumbs = default_breadcrumbs +
     [
-     {:uri => "/gig-list/#{link}/edit/", :title => 'edit'},
-     {:uri => "/gig-list/#{link}/feed/", :title => 'feed'},
+     {:uri => "/gig-list/#{@link}/edit/", :title => 'edit'},
+     {:uri => @page_feed, :title => 'feed'},
     ]
+
+  if @days or @filter
+    @breadcrumbs << {:uri => "/gig-list/#{@link}/", :title => 'reset'}
+  end
 
   haml :gig_list
 end
@@ -47,13 +53,6 @@ get '/gig-list/:link/edit/?' do |link|
     ]
 
   haml :edit_gig_list
-end
-
-get '/gig-list/:link/feed/?' do |link|
-  @gig_list = GigList[:link => link]
-  @inline_style = 'list-style-type : none'
-
-  haml :feed_gig_list, :format => :xhtml, :layout => false
 end
 
 get '/band/:myspace_name/?' do |myspace_name|
@@ -81,5 +80,5 @@ post '/update-gig-list/?' do
     end
   end
 
-  redirect("/gig-list/#{gig_list.link}/")
+  redirect "/gig-list/#{gig_list.link}/"
 end
