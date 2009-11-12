@@ -1,5 +1,4 @@
 require 'rcov/rcovtask'
-require 'hanna/rdoctask'
 
 desc 'Run all specs in spec/'
 task :spec do
