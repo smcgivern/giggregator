@@ -84,13 +84,17 @@ describe 'GigList#by_time' do
 end
 
 describe 'GigList#updated' do
-  it 'should be the latest gigs_updated for all bands in the list' do
+  it 'should be the latest updated time for all gigs in the list' do
     gig_list = GigList.create
 
     expected = [1, 2, 3].map do |i|
       time = Time.now + (60 * i)
+      band = mock_band("updated-#{i}", time)
 
-      gig_list.add_band(mock_band("updated-#{i}", time))
+      gig_list.add_band(band)
+      band.add_gig(Gig.create(:time => time, :title => "Gig #{i}",
+                              :updated => time))
+
       time
     end
 

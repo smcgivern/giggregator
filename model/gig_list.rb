@@ -36,7 +36,7 @@ class GigList < Sequel::Model
 
   def myspace_uris; bands.map {|b| b.page_uri}.join("\n"); end
   def by_time; gig_list.sort_by {|g| g.time}; end
-  def updated; bands.map {|b| b.gigs_updated}.sort.last; end
+  def updated; gig_list.sort_by {|g| g.updated}.last.updated; end
 
   def filter_by_location!(loc)
     gig_list.delete_if do |gig|
