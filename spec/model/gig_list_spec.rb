@@ -129,6 +129,44 @@ describe 'GigList#gig_list' do
 
     gig_list.gig_list.should.equal []
   end
+
+  it 'should apply the days filter' do
+    gig_list = GigList.create
+    band = mock_band('gig_list_days_filter')
+
+    gig_list.filters[:days] = 2
+    gig_list.add_band(band)
+
+    [1, 2, 3].map do |i|
+      band.add_gig(Gig.create(:time => Days(i) - 60,
+                              :title => "Test gig #{i}"))
+    end
+
+    gig_list.gig_list.length.should.equal 2
+    gig_list.gig_list.map {|g| g.title}.
+      should.not {|g| g.title == 'Test gig 1'}
+  end
+
+  it 'should apply the location filter' do
+    gig_list = GigList.create
+    band = mock_band('gig_list_location_filter')
+    cols = [:title, :location, :address]
+
+    gig_list.filters[:location] = 'test location'
+    gig_list.add_band(band)
+
+    cols.each do |col|
+      params = {:time => Time.now + 60, col => 'Test Location'}
+
+      cols.each {|c| params[c] = '' unless col == c}
+      band.add_gig(Gig.create(params))
+
+      params[col] = 'Excluded'
+      band.add_gig(Gig.create(params))
+    end
+
+    gig_list.gig_list.length.should.equal 3
+  end
 end
 
 describe 'GigList#group_by_time_period' do
@@ -170,5 +208,26 @@ describe 'GigList#group_by_time_period' do
     time_period.gigs = @band.gigs
 
     @gig_list.group_by_time_period.should.equal [time_period]
+  end
+end
+
+describe 'GigList#clear_cached_gig_list' do
+  it 'should re-apply the filters to the gig list' do
+    gig_list = GigList.create
+    band = mock_band('gig_list_filters')
+
+    gig_list.filters[:days] = 3
+    gig_list.add_band(band)
+
+    [2, 3, 4].map do |i|
+      band.add_gig(Gig.create(:time => Days(i) - 60,
+                              :title => "Test gig #{i}"))
+    end
+
+    gig_list.gig_list.length.should.equal 2
+
+    gig_list.filters[:days] = nil
+    gig_list.clear_cached_gig_list
+    gig_list.gig_list.length.should.equal 3
   end
 end
