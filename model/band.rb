@@ -126,7 +126,10 @@ class Band < Sequel::Model
                                :location => location,
                                :address => address)
 
-      add_gig(gig) unless gigs_dataset.all.include?(gig)
+      unless gigs_dataset.all.include?(gig)
+        gig.updated = Time.now
+        add_gig(gig.save)
+      end
     end
 
     gigs_dataset.filter {|g| g.time < Time.now.utc}.each do |gig|

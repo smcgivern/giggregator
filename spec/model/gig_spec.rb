@@ -28,17 +28,6 @@ describe 'Gig#time_period' do
   end
 end
 
-describe 'Gig#updated' do
-  it "should return the band's gigs_updated field" do
-    time = Time.utc(2009, 1, 1, 0, 0, 0)
-    band = Band.create(:gigs_updated => time)
-    gig = Gig.new
-    band.add_gig(gig)
-
-    gig.updated.should.equal time
-  end
-end
-
 describe 'Gig#format_time' do
   before {@gig = Gig.new(:time => Time.utc(2009, 1, 1, 0, 0, 0))}
 

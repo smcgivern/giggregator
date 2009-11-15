@@ -237,5 +237,16 @@ describe 'Band#load_gigs!' do
       @band.load_gigs!
       @band.gigs.should.satisfy {|g| !g.include?(gig)}
     end
+
+    it "should update the gig's updated field if it's a new gig" do
+      gig_updated = @band.gigs.first.updated
+
+      @band.myspace_name = 'royksopp2'
+      @band.load_gigs!
+
+      @band.gigs.first.updated.should.equal gig_updated
+      @band.gigs.sort_by {|g| g.updated}.last.
+        should.satisfy {|g| g.updated > gig_updated}
+    end
   end
 end
