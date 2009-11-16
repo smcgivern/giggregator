@@ -41,7 +41,7 @@ get %r{^/gig-list/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$} do
      {:uri => @page_feed, :title => 'feed'},
     ]
 
-  if @days or @filter
+  if @days or @text_search
     @breadcrumbs << {:uri => "/gig-list/#{@link}/", :title => 'reset'}
   end
 
