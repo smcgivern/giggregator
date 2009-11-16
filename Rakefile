@@ -22,7 +22,7 @@ end
 def deploy(target, exclude=nil)
   exclude ||= [
                '.git', '.gitignore', 'vendor/*', 'spec', 'tmp/*.db',
-               'tmp/feed/*', 'tmp/cov',
+               'tmp/feed/*', 'tmp/cov', 'tmp/flog',
               ]
 
   p `rsync -r --exclude=#{exclude.join(" --exclude=")} . #{target}`
