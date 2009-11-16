@@ -56,15 +56,17 @@ class GigList < Sequel::Model
       @gig_list =
         case type
         when :days
-          @gig_list.delete_if {|g| g.time >= Days(value)}
+          @gig_list.delete_if {|g| g.time >= Days(value.to_i)}
         when :location
-          gig_list.delete_if do |gig|
+          @gig_list.delete_if do |gig|
           !([:title, :location, :address].any? do |col|
               value.split.any? do |val|
                 gig.send(col).downcase.include?(val.downcase)
               end
             end)
-          end
+        end
+        else
+          @gig_list
         end
     end
 
