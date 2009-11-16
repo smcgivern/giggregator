@@ -1,12 +1,11 @@
 %div#main-wide
   %form{:action => '/update-gig-list/', :method => 'POST'}
     %p
-      %input{:type => 'hidden', :name => 'id',
-             :value => @gig_list.id}
       %input{:type => 'text', :name => 'title',
              :value => @gig_list.title}
     %p
       %textarea{:name => 'band_list', :rows => 12, :cols => 60}
         = preserve @gig_list.myspace_uris
     %p
+      %input{:type => 'hidden', :name => 'id', :value => @gig_list.id}
       %input{:type => 'submit', :value => 'Update gig list'}
