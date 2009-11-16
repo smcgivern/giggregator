@@ -1,5 +1,4 @@
 * Database
-** TODO Add gig#updated field to use as gig_list#updated
 ** Cronjob to update bands and gigs
 ** Pick up other sources, beyond MySpace
 * Front end
@@ -10,7 +9,7 @@
 *** TODO Gig page -- gig details
 **** Attempt to use Google Maps for location?
 **** Show gigs nearby in time and space
-** TODO Filtering
+** TODO Filtering specs
 *** =[0-9]+ - number of days in future to include
 *** =.+ - text to look for in title, location, address
 **** Case-insensitive
