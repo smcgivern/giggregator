@@ -21,7 +21,7 @@ get %r{^/gig-list/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$} do
 
   @gig_list = GigList[:link => @link, :system => nil]
 
-  [:days, :filter].each do |field|
+  [:days, :text_search].each do |field|
     if (value = instance_variable_get("@#{f}"))
       @gig_list.filters[field] = value
     end
@@ -73,6 +73,9 @@ get '/band/:myspace_name/?' do |myspace_name|
   haml :band
 end
 
+get '/band/:myspace_name/gig/:gig_id/?' do |myspace_name, gig_id|
+end
+
 post '/update-gig-list/?' do
   unless (gig_list = GigList[params[:id]])
     gig_list = GigList.create(:title => params[:title])
@@ -87,4 +90,12 @@ post '/update-gig-list/?' do
   end
 
   redirect "/gig-list/#{gig_list.link}/"
+end
+
+post '/filter-gig-list/?' do
+  dest = ['gig-list', GigList[params[:id]]] + [:days, :text_search].
+    map {|f| params[:f]}.
+    join('/')
+
+  redirect "/#{dest}/"
 end

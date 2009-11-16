@@ -12,6 +12,9 @@ before do
 end
 
 helpers do
+  include Rack::Utils
+  alias_method :h, :escape_html
+
   def rp(s); RubyPants.new(s.gsub(' - ', ' -- ')).to_html; end
   def ts(s); "#{s}#{'/' unless s =~ /\/$/}"; end
 
@@ -34,7 +37,7 @@ helpers do
       captures.compact.each do |capture|
         case capture
         when /^\/=([\d]+)/: @days = capture.gsub(/^\/=/, '')
-        when /^\/=/: @filter = capture.gsub(/^\/=/, '')
+        when /^\/=/: @text_search = capture.gsub(/^\/=/, '')
         when '/feed': @feed = true
         else @link = capture
         end
