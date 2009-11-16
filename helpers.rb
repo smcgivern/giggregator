@@ -4,7 +4,7 @@ set :views, "#{File.dirname(__FILE__)}/view"
 before do
   request_type = case request.env['REQUEST_URI']
                  when /\.css$/ : :css
-#                 when /\/feed\/?$/ : :atom
+                 when /\/feed\/?$/ : :atom
                  else :html
                  end
 
@@ -15,8 +15,9 @@ helpers do
   include Rack::Utils
   alias_method :h, :escape_html
 
+  def u(s); Addressable::URI.encode(s.gsub(' ', '+')); end
   def rp(s); RubyPants.new(s.gsub(' - ', ' -- ')).to_html; end
-  def ts(s); "#{s}#{'/' unless s =~ /\/$/}"; end
+  def ts(s); u("#{s}#{'/' unless s =~ /\/$/}"); end
 
   def self_base_uri; ts(self_uri.gsub(self_link, '')); end
   def self_uri; ts(request.url); end
@@ -37,7 +38,7 @@ helpers do
       captures.compact.each do |capture|
         case capture
         when /^\/=([\d]+)/: @days = capture.gsub(/^\/=/, '')
-        when /^\/=/: @text_search = capture.gsub(/^\/=/, '')
+        when /^\/=/: @location = capture.gsub(/^\/=/, '')
         when '/feed': @feed = true
         else @link = capture
         end
