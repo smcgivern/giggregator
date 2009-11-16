@@ -1,15 +1,20 @@
 !body_colour = #000
-!body_background = #fbf0da
-!header_colour = #fbd58b
-!header_link = #dae4f7
-!header_background = #765008
-!main_colour = #000
-!main_link = #08204f
+!body_background = #d5dfbb
+!header_colour = #dadfbb
+!header_link = #d4df95
+!header_background = #4b6227
+!main_colour = #191f0f
+!main_link = #373d1a
 !main_background = #fff
-!border_colour = #765908
+!border_colour = #5d6729
+
+h1, h2, h3
+  font-family: helvetica, bitstream vera sans, sans-serif
+
+body, li h3
+  font-family: georgia, times, serif
 
 body
-  font: normal 100% georgia, times, serif
   color= !body_colour
   background= !body_background
   max-width: 57em
@@ -79,11 +84,17 @@ div
     padding: 0.2em
     margin: 0.5em 0em
 
-    li
+    ol#upcoming-gigs li, div#filter
       border-bottom:
         width: 1px
         style: solid
         color= !border_colour
+
+    div#filter
+      padding-bottom: 0.5em
+      margin-bottom: 0.5em
+
+    li
       padding: 0.5em 0.1em
       margin: 0em
 

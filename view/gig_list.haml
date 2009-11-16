@@ -1,21 +1,22 @@
 %div#main=haml :_gig_list, :layout => false
 %div#sidebar
-  %h2 Filter
-  %form{:action => '/filter-gig-list/', :method => 'POST'}
-    %p
-      %input{:type => 'text', :name => 'days', :size => 2,
-             :value => h(@days)}
-      %label{:for => 'days'} days ahead at
-      %br
-      %input{:type => 'text', :name => 'location', :size => 20,
-             :value => h(@location)}
-      %label{:for => 'days'} (locations)
-    %p
-      %input{:type => 'hidden', :name => 'id',
-             :value => @gig_list.id}
-      %input{:type => 'submit', :value => 'Filter'}
+  %div#filter
+    %h2 Filter
+    %form{:action => '/filter-gig-list/', :method => 'POST'}
+      %p
+        %input{:type => 'text', :name => 'days', :size => 2,
+               :value => h(@days)}
+        %label{:for => 'days'} days ahead at
+        %br
+        %input{:type => 'text', :name => 'location', :size => 20,
+               :value => h(@location)}
+        %label{:for => 'days'} (locations)
+      %p
+        %input{:type => 'hidden', :name => 'id',
+               :value => @gig_list.id}
+        %input{:type => 'submit', :value => 'Filter'}
   %h2 Bands
   %ol#bands
     - @gig_list.bands.sort_by {|b| b.title}.each do |band|
-      %h3
+      %li
         %a{:href => "/band/#{band.myspace_name}/"}= rp(band.title)
