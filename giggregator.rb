@@ -21,8 +21,8 @@ get %r{^/gig-list/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$} do
 
   @gig_list = GigList[:link => @link, :system => nil]
 
-  [:days, :text_search].each do |field|
-    if (value = instance_variable_get("@#{f}"))
+  [:days, :location].each do |field|
+    if (value = instance_variable_get("@#{field}"))
       @gig_list.filters[field] = value
     end
   end
@@ -30,6 +30,7 @@ get %r{^/gig-list/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$} do
   if @feed
     @inline_style = 'list-style-type : none'
 
+    last_modified(@gig_list.updated)
     return haml(:feed_gig_list, :format => :xhtml, :layout => false)
   end
 
@@ -41,7 +42,7 @@ get %r{^/gig-list/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$} do
      {:uri => @page_feed, :title => 'feed'},
     ]
 
-  if @days or @text_search
+  if @days or @location
     @breadcrumbs << {:uri => "/gig-list/#{@link}/", :title => 'reset'}
   end
 
@@ -93,9 +94,11 @@ post '/update-gig-list/?' do
 end
 
 post '/filter-gig-list/?' do
-  dest = ['gig-list', GigList[params[:id]]] + [:days, :text_search].
-    map {|f| params[:f]}.
-    join('/')
+  filters = [:days, :location].
+    map {|f| "=#{params[f]}" unless params[f].strip.empty?}.
+    compact
 
-  redirect "/#{dest}/"
+  dest = (['gig-list', GigList[params[:id]].link] + filters).join('/')
+
+  redirect u("/#{dest}/")
 end
