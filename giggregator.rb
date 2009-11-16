@@ -21,6 +21,12 @@ get %r{^/gig-list/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$} do
 
   @gig_list = GigList[:link => @link, :system => nil]
 
+  [:days, :filter].each do |field|
+    if (value = instance_variable_get("@#{f}"))
+      @gig_list.filters[field] = value
+    end
+  end
+
   if @feed
     @inline_style = 'list-style-type : none'
 
