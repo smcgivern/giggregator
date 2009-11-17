@@ -64,7 +64,9 @@ end
 
 get '/band/:myspace_name/?' do |myspace_name|
   @band = Band.from_myspace(myspace_name)
+  @gig_list = @band.gig_list
   @page_title = @band.title
+  @title_by = 'band'
   @breadcrumbs = default_breadcrumbs +
     [
      {:uri => @band.page_uri, :title => 'band page'},

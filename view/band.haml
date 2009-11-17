@@ -1,10 +1,2 @@
 %div#main-wide
-  %ol
-    - @band.gig_list.group_by_time_period.each do |time_period|
-      %li
-        %h2= time_period.title
-        %ol
-          - time_period.gigs.each do |gig|
-            %li
-              = gig.band.title + ' at ' + gig.location
-              = 'on ' + gig.time_formatted
+  =haml :_gig_list, :layout => false
