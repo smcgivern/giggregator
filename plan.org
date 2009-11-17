@@ -1,4 +1,6 @@
 * Database
+** TODO Improve capitalization
+*** What happens to "'a'"?
 ** Cronjob to update bands and gigs
 ** Pick up other sources, beyond MySpace
 * Front end
