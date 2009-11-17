@@ -4,6 +4,8 @@ require 'time'
 require 'model/band'
 require 'model/gig'
 
+def including?(t); lambda {|s| s.include?(t)}; end
+
 describe 'Gig#time' do
   it 'should return the gig time in UTC' do
     def time(h, z); Time.xmlschema("2010-01-01T#{h}:00:00#{z}"); end
@@ -71,8 +73,6 @@ end
 
 describe 'Gig#title_by_time_period' do
   it 'should include the band title, the location, and the time' do
-    def including?(t); lambda {|s| s.include?(t)}; end
-
     gig = Gig.create(:location => 'Stow',
                      :time => Time.utc(2009, 1, 1, 0, 0, 0))
 
@@ -82,5 +82,19 @@ describe 'Gig#title_by_time_period' do
     gig.title_by_time_period.should.be including?('Honington')
     gig.title_by_time_period.should.be including?('Stow')
     gig.title_by_time_period.should.be including?('12:00 AM')
+  end
+end
+
+describe 'Gig#title_by_band' do
+  it 'should include the location and the time' do
+    gig = Gig.create(:location => 'Edgehill',
+                     :time => Time.utc(2009, 1, 1, 0, 0, 0))
+
+    band = Band.create(:title => 'Compton Verney')
+    band.add_gig(gig)
+
+    gig.title_by_band.should.be including?('Edgehill')
+    gig.title_by_band.should.not.be including?('Compton Verney')
+    gig.title_by_band.should.be including?('12:00 AM')
   end
 end
