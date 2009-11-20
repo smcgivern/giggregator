@@ -24,7 +24,7 @@ helpers do
   def self_link; ts(request.fullpath); end
 
   def build_link(*parts)
-    "#{self_base_uri if @feed}/#{ts(parts.compact.join('/'))}"
+    "#{self_base_uri if @feed}#{ts(parts.compact.join('/'))}"
   end
 
   def gig_link(gig)
