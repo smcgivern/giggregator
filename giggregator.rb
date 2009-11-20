@@ -1,6 +1,8 @@
 require 'helpers'
 
-get '/style.css' {sass :style}
+get '/style.css' do
+  sass :style
+end
 
 get '/' do
   @page_title = 'Giggregator'
