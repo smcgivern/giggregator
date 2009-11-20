@@ -113,7 +113,11 @@ post '/filter-gig-list/?' do
     map {|f| "=#{params[f]}" unless params[f].strip.empty?}.
     compact
 
-  dest = (['gig-list', GigList[params[:id]].link] + filters).join('/')
+  if params[:link]
+    dest = ['gig-list', params[:link]]
+  else
+    dest = ['band', params[:myspace_name]]
+  end
 
-  redirect u("/#{dest}/")
+  redirect build_link(*(dest + filters))
 end
