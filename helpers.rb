@@ -23,6 +23,14 @@ helpers do
   def self_uri; ts(request.url); end
   def self_link; ts(request.fullpath); end
 
+  def build_link(*parts)
+    "#{self_base_uri if @feed}/#{ts(parts.compact.join('/'))}"
+  end
+
+  def gig_link(gig)
+    build_link('band', gig.band.myspace_name, 'gig', gig.id)
+  end
+
   def default_breadcrumbs
     [{:uri => '/', :title => 'Giggregator'}]
   end

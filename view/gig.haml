@@ -1,0 +1,20 @@
+%div#main
+  %h2= @gig.title
+  %dl
+    %dt Band
+    %dd= @gig.band.title
+    %dt Time
+    %dd= @gig.time_formatted
+    %dt Location
+    %dd#location= @gig.location
+    %dt Address
+    %dd#address= @gig.address
+  %div#map
+%div#sidebar
+  %h2 Other gigs
+  %ol
+    - @gig_list.by_time.delete_if {|g| g == @gig}[0..4].each do |gig|
+      %li
+        %a{:href => gig_link(gig)}= rp(gig.title)
+        on
+        = rp(gig.time_formatted)
