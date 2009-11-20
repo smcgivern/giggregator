@@ -1,5 +1,10 @@
 require 'helpers'
 
+def filterable(root, feed=true)
+  feed = '(/feed)?' if feed
+  %r{^/#{root}/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?#{feed}/?$}
+end
+
 get '/style.css' do
   sass :style
 end
@@ -16,24 +21,10 @@ get '/' do
   haml :index
 end
 
-get %r{^/gig-list/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$} do
+get filterable('gig-list') do
   retrieve_captures
 
   @gig_list = GigList[:link => @link, :system => nil]
-
-  [:days, :location].each do |field|
-    if (value = instance_variable_get("@#{field}"))
-      @gig_list.filters[field] = value
-    end
-  end
-
-  if @feed
-    @inline_style = 'list-style-type : none'
-
-    last_modified(@gig_list.updated)
-    return haml(:feed_gig_list, :format => :xhtml, :layout => false)
-  end
-
   @page_title = @gig_list.title
   @page_feed = "#{self_link}feed/"
   @breadcrumbs = default_breadcrumbs +
@@ -46,7 +37,9 @@ get %r{^/gig-list/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$} do
     @breadcrumbs << {:uri => "/gig-list/#{@link}/", :title => 'reset'}
   end
 
-  haml :gig_list
+  filter_gig_list
+
+  @feed ? send_feed : haml(:gig_list)
 end
 
 get '/gig-list/:link/edit/?' do |link|
@@ -62,8 +55,10 @@ get '/gig-list/:link/edit/?' do |link|
   haml :edit_gig_list
 end
 
-get '/band/:myspace_name/?' do |myspace_name|
-  @band = Band.from_myspace(myspace_name)
+get filterable('band') do
+  retrieve_captures
+
+  @band = Band.from_myspace(@link)
   @gig_list = @band.gig_list
   @page_title = @band.title
   @title_by = 'band'
@@ -73,7 +68,13 @@ get '/band/:myspace_name/?' do |myspace_name|
      {:uri => @band.gig_page_uri, :title => 'gig page'},
     ]
 
-  haml :band
+  if @days or @location
+    @breadcrumbs << {:uri => "/band/#{@link}/", :title => 'reset'}
+  end
+
+  filter_gig_list
+
+  @feed ? send_feed : haml(:band)
 end
 
 get '/band/:myspace_name/gig/:gig_id/?' do |myspace_name, gig_id|

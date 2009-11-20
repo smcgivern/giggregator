@@ -53,4 +53,19 @@ helpers do
       end
     end
   end
+
+  def filter_gig_list
+    [:days, :location].each do |field|
+      if (value = instance_variable_get("@#{field}"))
+        @gig_list.filters[field] = value
+      end
+    end
+  end
+
+  def send_feed
+    @inline_style = 'list-style-type : none'
+
+    last_modified(@gig_list.updated)
+    haml(:feed_gig_list, :format => :xhtml, :layout => false)
+  end
 end
