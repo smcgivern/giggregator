@@ -12,6 +12,7 @@ def acquire(dir); Dir["#{dir}/*.rb"].each {|f| require f}; end
 
 acquire 'lib'
 
+GOOGLE_MAPS_API_KEY = ''
 FEED_DIR = 'tmp/feed'
 LOG_DIR = 'log'
 LOG_SQLITE = 'sqlite.log'
