@@ -8,4 +8,5 @@
         %ol
           - time_period.gigs.each do |gig|
             %li{:title => rp(gig.address)}
-              = rp(gig.send("title_by_#{@title_by or 'time_period'}"))
+              %a{:href => gig_link(gig)}
+                = rp(gig.send("title_by_#{@title_by or 'time_period'}"))
