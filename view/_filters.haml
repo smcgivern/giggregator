@@ -1,0 +1,7 @@
+- if @days or @location
+  %p Filters:
+  %ul
+    - if @days
+      %li Days ahead: #{@days}
+    - if @location
+      %li Locations: &#8216;#{@location}&#8217;
