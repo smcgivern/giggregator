@@ -7,6 +7,8 @@
     - if @page_feed
       %link{:href => @page_feed, :rel => 'alternate',
             :type => CONTENT_TYPES[:atom]}
+    - (@scripts || []).each do |script|
+      %script{:src => script, :type => CONTENT_TYPES[:js]}
   %body
     %div#header
       %h1= rp(@page_title)
