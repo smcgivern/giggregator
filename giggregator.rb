@@ -61,11 +61,13 @@ get filterable('band') do
   @band = Band.from_myspace(@link)
   @gig_list = @band.gig_list
   @page_title = @band.title
+  @page_feed = "#{self_link}feed/"
   @title_by = 'band'
   @breadcrumbs = default_breadcrumbs +
     [
      {:uri => @band.page_uri, :title => 'band page'},
      {:uri => @band.gig_page_uri, :title => 'gig page'},
+     {:uri => @page_feed, :title => 'feed'},
     ]
 
   if @days or @location
