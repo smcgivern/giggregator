@@ -1,8 +1,6 @@
 require 'helpers'
 
-get '/style.css' do
-  sass :style
-end
+get '/style.css' {sass :style}
 
 get '/' do
   @page_title = 'Giggregator'
@@ -77,6 +75,18 @@ get '/band/:myspace_name/?' do |myspace_name|
 end
 
 get '/band/:myspace_name/gig/:gig_id/?' do |myspace_name, gig_id|
+  @gig = Gig.find(:id => gig_id)
+  @gig_list = @gig.band.gig_list
+  @page_title = @gig.band.title
+  @breadcrumbs = default_breadcrumbs +
+    [
+     {:uri => "/band/#{myspace_name}/", :title => @gig.band.title},
+    ]
+
+  @scripts = ["http://maps.google.com/maps?file=api&v=2.x&key=#{GOOGLE_MAPS_API_KEY}",
+              '/map.js']
+
+  haml :gig
 end
 
 post '/update-gig-list/?' do
