@@ -1,2 +1,16 @@
 %div#main-wide
+  %div#filter
+    %h2 Filter
+    %form{:action => '/filter-gig-list/', :method => 'POST'}
+      %p
+        %input{:type => 'text', :name => 'days', :size => 2,
+               :value => h(@days)}
+        %label{:for => 'days'} days ahead at
+        %input{:type => 'text', :name => 'location', :size => 20,
+               :value => h(@location)}
+        %label{:for => 'days'} (locations)
+        %input{:type => 'hidden', :name => 'myspace_name',
+               :value => @band.myspace_name}
+        %input{:type => 'submit', :value => 'Filter'}
+
   =haml :_gig_list, :layout => false
