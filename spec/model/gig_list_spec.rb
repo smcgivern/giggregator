@@ -155,6 +155,47 @@ describe 'GigList#gig_list' do
     gig_list.filters[:location] = 'test location'
     gig_list.add_band(band)
 
+    band.add_gig(Gig.create(:time => Time.now + 60,
+                            :location => 'Test Location'))
+
+    band.add_gig(Gig.create(:time => Time.now + 60,
+                            :location => 'Nocation'))
+
+    gig_list.gig_list.length.should.equal 1
+    gig_list.gig_list.first.location.should.equal 'Test Location'
+  end
+end
+
+describe 'GigList#days_filter' do
+  it 'should exclude gigs beyond n days ahead' do
+    gig_list = GigList.create
+    band = mock_band('days_filter')
+
+    gig_list.add_band(band)
+
+    [1, 2, 3, 4, 5, 6].map do |i|
+      band.add_gig(Gig.create(:time => Days(i) - 60,
+                              :title => "Test gig #{i}"))
+    end
+
+    gig_list.gig_list # Initialize @gig_list
+
+    gig_list.days_filter(2).length.should.equal 2
+    gig_list.days_filter(2).map {|g| g.title}.
+      should.not {|l| l.include?('Test gig 3')}
+  end
+end
+
+describe 'GigList#location_filter' do
+  before do
+    next if @gig_list
+
+    @gig_list = GigList.create
+    band = mock_band('location_filter')
+    cols = [:title, :location, :address]
+
+    @gig_list.add_band(band)
+
     cols.each do |col|
       params = {:time => Time.now + 60, col => 'Test Location'}
 
@@ -165,9 +206,29 @@ describe 'GigList#gig_list' do
       band.add_gig(Gig.create(params))
     end
 
-    gig_list.gig_list.length.should.equal 3
+    @gig_list.gig_list # Initialize @gig_list.@gig_list
+  end
+
+  it 'should be case-insensitive' do
+    @gig_list.location_filter('location').length.should.equal 3
+    @gig_list.location_filter('LOCATION').length.should.equal 3
+  end
+
+  it 'should be an OR search' do
+    @gig_list.location_filter('excluded location').length.
+      should.equal 6
+  end
+
+  it 'should be non-destructive' do
+    @gig_list.location_filter('failure').length.should.equal 0
+    @gig_list.gig_list.length.should.equal 6
+  end
+
+  it 'should look in all string columns' do
+    @gig_list.location_filter('excluded').length.should.equal 3
   end
 end
+
 
 describe 'GigList#group_by_time_period' do
   before do

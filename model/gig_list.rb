@@ -55,22 +55,31 @@ class GigList < Sequel::Model
 
       @gig_list =
         case type
-        when :days
-          @gig_list.delete_if {|g| g.time >= Days(value.to_i)}
-        when :location
-          @gig_list.delete_if do |gig|
-          !([:title, :location, :address].any? do |col|
-              value.split.any? do |val|
-                gig.send(col).downcase.include?(val.downcase)
-              end
-            end)
-        end
-        else
-          @gig_list
+        when :days: days_filter(value.to_i)
+        when :location: location_filter(value)
+        else @gig_list
         end
     end
 
     @gig_list
+  end
+
+  def days_filter(days)
+    @gig_list.map {|g| g if g.time <= Days(days)}.compact
+  end
+
+  def location_filter(locations)
+    @gig_list.map do |gig|
+      if ([:title, :location, :address].any? do |col|
+            locations.split.any? do |loc|
+              if (src = gig.send(col))
+                src.downcase.include?(loc.downcase)
+              end
+            end
+          end)
+        gig
+      end
+    end.compact
   end
 
   def group_by_time_period
