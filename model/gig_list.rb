@@ -9,6 +9,7 @@ class GigList < Sequel::Model
     Boolean(:system)
     String(:title)
     String(:link, :unique => true)
+    String(:openid)
   end
 
   def initialize(*args); @filters ||= {}; super(*args); end
