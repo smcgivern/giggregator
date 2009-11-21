@@ -1,6 +1,4 @@
 * Database
-** TODO Access controls
-*** Claim a gig list with OpenID
 ** Cronjob to update bands and gigs
 ** Pick up other sources, beyond MySpace
 * Front end
