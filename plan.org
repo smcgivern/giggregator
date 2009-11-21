@@ -1,21 +1,10 @@
 * Database
-** TODO Improve capitalization
-*** What happens to "'a'"?
+** TODO Access controls
+*** Claim a gig list with OpenID
 ** Cronjob to update bands and gigs
 ** Pick up other sources, beyond MySpace
 * Front end
-** Four page types
-*** Front page -- textarea with space for plenty of bands
-*** Band page -- band name, upcoming gigs
-*** Collection page -- more than one band
-*** Gig page -- gig details
-** TODO Filtering specs
-*** =[0-9]+ - number of days in future to include
-*** =.+ - text to look for in title, location, address
-**** Case-insensitive
-**** Search is OR, AND is not possible
 ** Feeds
-*** TODO Band page as well as gig pages
 *** Cache to file
 ** Error logging: list of failed bands, non-bands
 ** Indices for each page type
