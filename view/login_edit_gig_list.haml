@@ -1,12 +1,11 @@
 %div#main-wide
+  %h2 Login required
   %p This gig list has an OpenID attached. You must log in to edit it.
-
   - if @login_failure
     %p
       Login failed. Please
       %a{:href => '/'} create a new gig list
       or try again.
-
   %form{:action => '/openid-login/', :method => 'POST'}
     %p
       %input.openid{:type => 'text', :name => 'openid_uri',
