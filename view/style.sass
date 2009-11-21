@@ -89,6 +89,18 @@ div
     dd
       width: auto
 
+    input
+      width: 15em
+
+    input.openid
+      background: url(/ext/openid.png) no-repeat
+      background-position: 0 50%
+      padding-left: 1.5em
+      width: 13.5em
+
+    textarea
+      width: 90%
+
   &#main
     width: 39em
 
@@ -101,6 +113,9 @@ div
         style: solid
         color= !border_colour
       margin-bottom: 1em
+
+      input
+        width: auto
 
   &#sidebar
     width: 16.5em
@@ -143,5 +158,6 @@ ol
   list-style-type: none
   padding: 0.1em
 
-textarea
-  width: 90%
+input, textarea
+  color= !main_colour
+  background= !main_background
