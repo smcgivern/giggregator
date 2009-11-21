@@ -19,6 +19,7 @@ FEED_DIR = 'tmp/feed'
 LOG_DIR = 'log'
 LOG_SQLITE = 'sqlite.log'
 DB_SQLITE = 'tmp/giggregator.db'
+OPENID_STORE = 'tmp/openid'
 
 CONTENT_TYPES = {
   :atom => 'application/atom+xml',
