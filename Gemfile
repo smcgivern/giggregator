@@ -12,3 +12,5 @@ gem 'uuidtools'
 
 gem 'addressable'
 gem 'nokogiri'
+
+gem 'ruby-openid', :require_as => 'openid'

@@ -4,6 +4,8 @@ require 'timeout'
 require 'vendor/rubypants'
 
 require 'haml'
+require 'openid'
+require 'openid/store/filesystem'
 require 'sass'
 require 'sequel'
 require 'sinatra'
