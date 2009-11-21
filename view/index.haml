@@ -6,6 +6,10 @@
       %input{:type => 'text', :name => 'title', :id => 'title'}
       %label{:for => 'title'} (list title)
     %p
+      %input.openid{:type => 'text', :name => 'openid_uri',
+                    :id => 'openid_uri'}
+      %label{:for => 'openid_uri'} (OpenID &#8212; optional)
+    %p
       %textarea{:name => 'band_list', :rows => 12, :cols => 60}
     %p
       %input{:type => 'submit', :value => 'Create gig list'}

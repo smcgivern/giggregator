@@ -5,6 +5,10 @@
              :value => @gig_list.title}
       %label{:for => 'title'} (list title)
     %p
+      %input.openid{:type => 'text', :name => 'openid_uri',
+                    :id => 'openid_uri', :value => @gig_list.openid}
+      %label{:for => 'openid_uri'} (OpenID &#8212; optional)
+    %p
       %textarea{:name => 'band_list', :rows => 12, :cols => 60}
         = preserve @gig_list.myspace_uris
     %p
