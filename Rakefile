@@ -23,9 +23,9 @@ def deploy(target, exclude=nil)
   exclude ||= [
                '.git', '.gitignore', 'vendor/*', 'spec', 'tmp/*.db',
                'tmp/feed/*', 'tmp/cov', 'tmp/flog',
-              ]
+              ].join(' --exclude=')
 
-  p `rsync -r --exclude=#{exclude.join(" --exclude=")} . #{target}`
+  puts `rsync -rv --exclude=#{exclude} . #{target}`
 end
 
 desc 'Deploy to Dreamhost'
