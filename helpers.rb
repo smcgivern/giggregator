@@ -1,5 +1,6 @@
 set :haml, {:format => :html5}
 set :views, "#{File.dirname(__FILE__)}/view"
+enable :sessions
 
 before do
   request_type = case request.env['REQUEST_URI']
@@ -52,6 +53,13 @@ helpers do
         end
       end
     end
+  end
+
+  def openid_consumer
+    return @openid_consumer if @openid_consumer
+
+    store = OpenID::Store::Filesystem.new(OPENID_STORE)
+    @openid_consumer = OpenID::Consumer.new(session, store)
   end
 
   def filter_gig_list
