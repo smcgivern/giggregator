@@ -3,7 +3,7 @@
   %p Enter a list of band links on MySpace:
   %form{:action => '/update-gig-list/', :method => 'POST'}
     %p
-      %input{:type => 'text', :name => 'title'}
+      %input{:type => 'text', :name => 'title', :id => 'title'}
       %label{:for => 'title'} (list title)
     %p
       %textarea{:name => 'band_list', :rows => 12, :cols => 60}
