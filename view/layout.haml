@@ -2,7 +2,7 @@
 %html
   %head
     %title= rp(@page_title)
-    %link{:href => '/style.css', :rel => 'stylesheet',
+    %link{:href => '/ext/style.css', :rel => 'stylesheet',
           :type => CONTENT_TYPES[:css]}
     - if @page_feed
       %link{:href => @page_feed, :rel => 'alternate',

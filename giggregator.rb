@@ -5,7 +5,7 @@ def filterable(root, feed=true)
   %r{^/#{root}/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?#{feed}/?$}
 end
 
-get '/style.css' do
+get '/ext/style.css' do
   sass :style
 end
 
@@ -89,7 +89,7 @@ get '/band/:myspace_name/gig/:gig_id/?' do |myspace_name, gig_id|
     ]
 
   @scripts = ["http://maps.google.com/maps?file=api&v=2.x&key=#{GOOGLE_MAPS_API_KEY}",
-              '/map.js']
+              '/ext/map.js']
 
   haml :gig
 end
