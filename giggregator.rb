@@ -42,19 +42,6 @@ get filterable('gig-list') do
   @feed ? send_feed : haml(:gig_list)
 end
 
-get '/gig-list/:link/edit/?' do |link|
-  @gig_list = GigList[:link => link]
-  @page_title = @gig_list.title
-  @page_feed = "/gig-list/#{link}/feed/"
-  @breadcrumbs = default_breadcrumbs +
-    [
-     {:uri => "/gig-list/#{link}/", :title => 'view'},
-     {:uri => "/gig-list/#{link}/feed/", :title => 'feed'},
-    ]
-
-  haml :edit_gig_list
-end
-
 get filterable('band') do
   retrieve_captures
 
@@ -94,16 +81,58 @@ get '/band/:myspace_name/gig/:gig_id/?' do |myspace_name, gig_id|
   haml :gig
 end
 
+
+get %r{^/gig-list/([^/?&#]+)/edit(/logged-in)?/?$} do
+  link, @logged_in = params[:captures]
+
+  @gig_list = GigList[:link => link]
+  @page_title = @gig_list.title
+  @page_feed = "/gig-list/#{link}/feed/"
+  @breadcrumbs = default_breadcrumbs +
+    [
+     {:uri => "/gig-list/#{link}/", :title => 'view'},
+     {:uri => "/gig-list/#{link}/feed/", :title => 'feed'},
+    ]
+
+  if @logged_in
+    params.delete('captures')
+    oidresp = openid_consumer.complete(params, request.url)
+
+    if oidresp.status == OpenID::Consumer::SUCCESS
+      session[:openid] = oidresp.display_identifier
+      redirect build_link('gig-list', link, 'edit')
+    else
+      @login_failure = true
+    end
+  end
+
+  if @login_failure or
+      (!((openid = @gig_list.openid) || '').empty? &&
+       openid != session[:openid])
+
+    haml :login_edit_gig_list
+  else
+    haml :edit_gig_list
+  end
+end
+
 post '/update-gig-list/?' do
   unless (gig_list = GigList[params[:id]])
     gig_list = GigList.create(:title => params[:title])
   end
 
-  gig_list.remove_all_bands
+  if ((openid = (gig_list.openid || '')).empty? ||
+      (openid == session[:openid]))
 
-  params[:band_list].split.each do |myspace_uri|
-    Timeout::timeout(20) do
-      gig_list.add_band(Band.from_myspace(myspace_uri))
+    gig_list.title = params[:title]
+    gig_list.openid = params[:openid_uri]
+    gig_list.save
+    gig_list.remove_all_bands
+
+    params[:band_list].split.each do |myspace_uri|
+      Timeout::timeout(20) do
+        gig_list.add_band(Band.from_myspace(myspace_uri))
+      end
     end
   end
 
@@ -122,4 +151,17 @@ post '/filter-gig-list/?' do
   end
 
   redirect build_link(*(dest + filters))
+end
+
+post '/openid-login/?' do
+  dest = ['gig-list', params[:link], 'edit', 'logged-in']
+
+  begin
+    oidreq = openid_consumer.begin(params[:openid_uri])
+  rescue OpenID::DiscoveryFailure
+    redirect build_link(*dest)
+  else
+    @feed = true
+    redirect oidreq.redirect_url(self_base_uri, build_link(*dest))
+  end
 end
