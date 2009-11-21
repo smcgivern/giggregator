@@ -23,4 +23,4 @@
           %a{:href => "/band/#{gig.band.myspace_name}/"}<
             = rp(gig.band.title)
           on
-          = rp(gig.time_formatted)
+          %a{:href => gig_link(gig)}= rp(gig.time_formatted)
