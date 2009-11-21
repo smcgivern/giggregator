@@ -38,6 +38,25 @@ describe 'Sequel::Model.capitalize' do
     bar.moe.should.equal 'moe moe'
   end
 
+  it 'should capitalize on punctuation boundaries' do
+    class Quux < Sequel::Model
+      create_schema do
+        String(:words)
+      end
+
+      capitalize(:words)
+    end
+
+    def quux(w); Quux.new(:words => w); end
+
+    quux('fOO bAR').words.should.equal 'Foo Bar'
+    quux('"air quotes"').words.should.equal '"Air Quotes"'
+    quux("apostrophe's").words.should.equal "Apostrophe's"
+
+    quux("EMBEDDED 'QUOTES' IN STRING").words.
+      should.equal "Embedded 'Quotes' In String"
+  end
+
   it 'should return nil if the parent method is nil' do
     class Baz < Sequel::Model
       create_schema do
