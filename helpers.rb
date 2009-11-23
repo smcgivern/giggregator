@@ -23,9 +23,17 @@ helpers do
   def self_base_uri; ts(self_uri.gsub(self_link, '')); end
   def self_uri; ts(request.url); end
   def self_link; ts(request.fullpath); end
+  def self_domain; self_base_uri.gsub(/(http\:|\/)/, ''); end
 
   def build_link(*parts)
     "#{@feed ? self_base_uri : '/'}#{ts(parts.compact.join('/'))}"
+  end
+
+  def atom_entry_id(gig_list)
+    ['tag',
+     "#{self_domain},#{gig_list.updated.strftime('%Y-%m-%d')}",
+     gig_list.link
+    ].join(':')
   end
 
   def gig_link(gig)

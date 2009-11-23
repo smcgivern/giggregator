@@ -2,14 +2,15 @@
 %feed{:xmlns => 'http://www.w3.org/2005/Atom'}
   %title= rp(@page_title)
   %id= self_uri
-  %link{:href => self_uri}
+  %link{:href => self_uri, :rel => 'self'}
+  %link{:href => self_uri.gsub('/feed', '')}
   %updated= @gig_list.updated.xmlschema
   %author
     %name Giggregator
     %uri= self_base_uri
   %entry
     %title= rp(@page_title)
-    %id= self_uri.gsub('/feed', '')
+    %id= atom_entry_id(@gig_list)
     %link{:href => self_uri.gsub('/feed', '')}
     %updated= @gig_list.updated.xmlschema
     %content{:type => 'html'}
