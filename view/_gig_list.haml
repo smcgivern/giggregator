@@ -1,12 +1,10 @@
 - if @gig_list.group_by_time_period.empty?
   %p No gigs found.
 - else
-  %ol{:style => (@inline_style if @inline_style)}
-    - @gig_list.group_by_time_period.each do |time_period|
-      %li
-        %h2= rp(time_period.title)
-        %ol
-          - time_period.gigs.each do |gig|
-            %li{:title => rp(gig.address)}
-              %a{:href => gig_link(gig)}
-                = rp(gig.send("title_by_#{@title_by or 'time_period'}"))
+  - @gig_list.group_by_time_period.each do |time_period|
+    %h2= rp(time_period.title)
+    %ol
+      - time_period.gigs.each do |gig|
+        %li
+          %a{:href => gig_link(gig), :title => rp(gig.address)}
+            = rp(gig.send("title_by_#{@title_by or 'time_period'}"))
