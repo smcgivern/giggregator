@@ -17,6 +17,7 @@ acquire 'lib'
 GOOGLE_MAPS_API_KEY = 'ABQIAAAAIMsc0fFg7uQ53CccTk6oEhR-lgg7DzJwhYtAcnHQYGQig9oPuxSkU_WH7PZwwvsCrZCJTmjWtCi4gg'
 FEED_DIR = 'tmp/feed'
 LOG_DIR = 'log'
+LOG_SINATRA = 'sinatra.log'
 LOG_SQLITE = 'sqlite.log'
 DB_SQLITE = 'tmp/giggregator.db'
 OPENID_STORE = 'tmp/openid'
@@ -42,5 +43,9 @@ DB = Sequel.sqlite(DB_SQLITE)
 end
 
 DB.logger = Logger.new(File.join(LOG_DIR, LOG_SQLITE))
+SINATRA_LOG = File.new(File.join(LOG_DIR, LOG_SINATRA), 'a')
+
+STDOUT.reopen(SINATRA_LOG)
+STDERR.reopen(SINATRA_LOG)
 
 acquire 'model'
