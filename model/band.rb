@@ -133,7 +133,6 @@ class Band < Sequel::Model
     end
 
     gigs_dataset.filter {|g| g.time < Time.now.utc}.each do |gig|
-      remove_gig(gig)
       gig.delete
     end
 
