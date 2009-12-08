@@ -1,14 +1,14 @@
 %div#main
-  %h2= @gig.title
+  %h2= rp(@gig.title)
   %dl
     %dt Band
-    %dd= @gig.band.title
+    %dd= rp(@gig.band.title)
     %dt Time
-    %dd= @gig.time_formatted
+    %dd= rp(@gig.time_formatted)
     %dt Location
-    %dd#location= @gig.location
+    %dd#location= rp(@gig.location)
     %dt Address
-    %dd#address= @gig.address
+    %dd#address= rp(@gig.address)
   %div#map
 %div#sidebar
   %h2 Other gigs
