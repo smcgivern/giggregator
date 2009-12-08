@@ -1,5 +1,5 @@
 * Database
-** Cronjob to update bands and gigs
+** TODO Cronjob to update bands and gigs
 ** Pick up other sources, beyond MySpace
 * Front end
 ** Feeds
