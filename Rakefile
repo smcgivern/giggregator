@@ -62,3 +62,13 @@ desc 'Remove flog output'
 task :clobber_flog do
   rm_r 'tmp/flog'
 end
+
+desc 'Backup database file'
+task :backup_db do
+  ['', '-journal'].each do |s|
+    if (file = "tmp/giggregator.db#{s}" and File.exist?(file))
+      cp(file,
+         "tmp/backup-#{Time.now.strftime('%Y%m%d-%H%M')}.db#{s}")
+    end
+  end
+end
