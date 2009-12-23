@@ -7,6 +7,7 @@
 !main_link = #011620
 !main_background = #fff
 !border_colour = #4f4b46
+!highlight_colour = #fffcc4
 
 h1, h2, h3
   font-family: helvetica, bitstream vera sans, arial, sans-serif
@@ -59,7 +60,7 @@ div
     background= !main_background
     a:link, a:visited, a:hover, a:active
       color= !main_link
-      background= !main_background
+      background: transparent
       font-weight: bold
 
   &#main, &#main-wide
@@ -164,3 +165,7 @@ ol
 input, textarea
   color= !main_colour
   background= !main_background
+
+.updated
+  color: inherit
+  background= !highlight_colour

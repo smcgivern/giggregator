@@ -29,6 +29,10 @@ helpers do
     "#{@feed ? self_base_uri : '/'}#{ts(parts.compact.join('/'))}"
   end
 
+  def updated_class?(gig, gig_list)
+    gig.updated == gig_list.updated ? {:class => 'updated'} : {}
+  end
+
   def atom_entry_id(gig_list)
     ['tag',
      "#{self_domain},#{gig_list.updated.strftime('%Y-%m-%d')}",
