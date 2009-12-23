@@ -228,6 +228,16 @@ describe 'Band#load_gigs!' do
       @band.gigs.should.equal @band.load_gigs!
     end
 
+    it 'should overwrite duplicate gigs with the new title' do
+      gig_updated = @band.gigs.first.updated
+
+      @band.myspace_name = 'royksopp3'
+      @band.load_gigs!
+
+      @band.gigs.first.updated.should.satisfy {|t| t > gig_updated}
+      @band.gigs.first.title.should.satisfy {|t| t =~ /\ADuplicate/}
+    end
+
     it 'should remove old gigs' do
       gig = Gig.create(:time => Time.now - 60)
 

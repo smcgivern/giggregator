@@ -70,7 +70,7 @@ class Band < Sequel::Model
 
   def load_band_info?; load_band_info! if expired?(:band_info); end
   def load_gigs?; load_gigs! if expired?(:gigs); end
-  def gigs; load_gigs?; super; end
+  def gigs; load_gigs?; gigs_dataset.all; end
 
   def gig_list
     return @gig_list if @gig_list
@@ -122,19 +122,22 @@ class Band < Sequel::Model
         map {|k| value(k, gig)}.reject {|x| x.empty?}.
         join(', ')
 
-      gig = Gig.find_or_create(:time => time, :title => title,
-                               :location => location,
-                               :address => address)
+      gig = Gig.find_or_create(:time => time, :band_id => id)
+      cols = {:title => title, :location => location,
+        :address => address}
 
-      unless gigs_dataset.all.include?(gig)
-        gig.updated = Time.now
-        add_gig(gig.save)
+      cols.each do |col, val|
+        gig.updated = Time.now if gig[col] != val
+
+        gig[col] = val
       end
+
+      gig.save
+
+      add_gig(gig) unless gigs_dataset.all.include?(gig)
     end
 
-    gigs_dataset.filter {|g| g.time < Time.now.utc}.each do |gig|
-      gig.delete
-    end
+    gigs_dataset.filter {|g| g.time < Time.now.utc}.delete
 
     update(:gigs_updated => Time.now)
     gigs
