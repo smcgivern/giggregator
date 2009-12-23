@@ -1,4 +1,16 @@
-require 'rcov/rcovtask'
+begin
+  require 'rcov/rcovtask'
+
+  namespace :spec do
+    desc 'Generate C0 code coverage information for specs'
+    Rcov::RcovTask.new :cov do |t|
+      t.test_files = FileList['spec/**/*_spec.rb']
+      t.output_dir = 'tmp/cov'
+      t.verbose = true
+    end
+  end
+rescue LoadError
+end
 
 desc 'Run all specs in spec/'
 task :spec do
@@ -8,15 +20,6 @@ task :spec do
   Bacon.summary_on_exit
 
   Dir['spec/**/*.rb'].each {|f| require f}
-end
-
-namespace :spec do
-  desc 'Generate C0 code coverage information for specs'
-  Rcov::RcovTask.new :cov do |t|
-    t.test_files = FileList['spec/**/*_spec.rb']
-    t.output_dir = 'tmp/cov'
-    t.verbose = true
-  end
 end
 
 def deploy(target, exclude=nil)
