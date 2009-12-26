@@ -122,7 +122,9 @@ class Band < Sequel::Model
         map {|k| value(k, gig)}.reject {|x| x.empty?}.
         join(', ')
 
-      gig = Gig.find_or_create(:time => time.utc, :band_id => id)
+      gig = Gig.find_or_create(:time => time.new_offset(0),
+                               :band_id => id)
+
       cols = {:title => title, :location => location,
         :address => address}
 
