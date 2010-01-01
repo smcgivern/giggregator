@@ -100,6 +100,31 @@ describe 'GigList#updated' do
 
     gig_list.updated.should.equal expected.sort.last
   end
+
+  it 'should be today if nothing was updated in the last week' do
+    gig_list = GigList.create
+    band = mock_band('updated-old')
+    gig_list.add_band(band)
+    band.add_gig(Gig.create(:time => Time.now + 60,
+                            :title => 'Old gig',
+                            :updated => Time.now - (8 * 60 * 60 * 24)
+                            ))
+
+    gig_list.updated.should.satisfy {|t| t >= (Time.now - 60)}
+  end
+
+  it 'should continue to update weekly when there are no new gigs' do
+    gig_list = GigList.create
+    band = mock_band('updated-older')
+    gig_list.accessed = Time.now - (30 * 60 * 60 * 24)
+    gig_list.add_band(band)
+    band.add_gig(Gig.create(:time => Time.now + 60,
+                            :title => 'Older gig',
+                            :updated => Time.now - (30 * 60 * 60 * 24)
+                            ))
+
+    gig_list.updated.should.satisfy {|t| t >= (Time.now - 60)}
+  end
 end
 
 describe 'GigList#gig_list' do

@@ -10,6 +10,7 @@ class GigList < Sequel::Model
     String(:title)
     String(:link, :unique => true)
     String(:openid)
+    DateTime(:accessed)
   end
 
   def initialize(*args); @filters ||= {}; super(*args); end
@@ -40,8 +41,20 @@ class GigList < Sequel::Model
 
   def myspace_uris; bands.map {|b| b.page_uri}.join("\n"); end
   def by_time; gig_list.sort_by {|g| g.time}; end
-  def updated; gig_list.sort_by {|g| g.updated}.last.updated; end
   def clear_cached_gig_list; @gig_list = nil; end
+
+  def updated
+    latest = (gig_list.map {|g| g.updated} + [accessed]).compact.max
+
+    if latest < Days(-7)
+      latest = Time.now
+      set(:accessed => latest)
+      save
+    end
+
+    latest
+  end
+
 
   def gig_list
     return @gig_list if @gig_list
