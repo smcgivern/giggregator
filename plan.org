@@ -4,8 +4,6 @@
 * Front end
 ** Feeds
 *** Cache to file
-*** TODO Smarter updated
-**** At the moment, only updates if there are new gigs!
 ** Error logging: list of failed bands, non-bands
 ** Indices for each page type
 ** 404 page
