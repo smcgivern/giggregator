@@ -12,6 +12,19 @@ begin
 rescue LoadError
 end
 
+desc 'Remove duplicates from the database'
+task :remove_duplicates do
+  require 'setup'
+
+  Band.all.each do |band|
+    band.gigs.each do |gig|
+      band.gigs.each do |other|
+        other.delete if (other.time == gig.time && other.id < gig.id)
+      end
+    end
+  end
+end
+
 desc 'Run all specs in spec/'
 task :spec do
   require 'bacon'
