@@ -45,7 +45,7 @@ end
 DB.logger = Logger.new(File.join(LOG_DIR, LOG_SQLITE))
 SINATRA_LOG = File.new(File.join(LOG_DIR, LOG_SINATRA), 'a')
 
-STDOUT.reopen(SINATRA_LOG)
-STDERR.reopen(SINATRA_LOG)
+$stdout.reopen(SINATRA_LOG)
+$stderr.reopen(SINATRA_LOG)
 
 acquire 'model'
