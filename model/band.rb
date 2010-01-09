@@ -116,14 +116,15 @@ class Band < Sequel::Model
 
     parse(gig_page_uri).search(SELECTORS[:gig_info]).each do |gig|
       time = DateTime.strptime(value('DateTime', gig), TIME_FORMAT)
+      time = Time.parse(time.new_offset(0).to_s)
+
       location = value('Location', gig)
       title = value('Title', gig)
       address = ['Street', 'City', 'State', 'Zip'].
         map {|k| value(k, gig)}.reject {|x| x.empty?}.
         join(', ')
 
-      gig = Gig.find_or_create(:time => time.new_offset(0),
-                               :band_id => id)
+      gig = Gig.find_or_create(:time => time, :band_id => id)
 
       cols = {:title => title, :location => location,
         :address => address}
