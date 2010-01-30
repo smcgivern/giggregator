@@ -72,8 +72,8 @@ describe 'Gig#date_formatted' do
 end
 
 describe 'Gig#title_by_time_period' do
-  it 'should include the band title, the location, and the time' do
-    gig = Gig.create(:location => 'Stow',
+  it 'should include the band title, the address, and the time' do
+    gig = Gig.create(:address => 'Stow',
                      :time => Time.utc(2009, 1, 1, 0, 0, 0))
 
     band = Band.create(:title => 'Honington')
@@ -86,8 +86,8 @@ describe 'Gig#title_by_time_period' do
 end
 
 describe 'Gig#title_by_band' do
-  it 'should include the location and the time' do
-    gig = Gig.create(:location => 'Edgehill',
+  it 'should include the address and the time' do
+    gig = Gig.create(:address => 'Edgehill',
                      :time => Time.utc(2009, 1, 1, 0, 0, 0))
 
     band = Band.create(:title => 'Compton Verney')
