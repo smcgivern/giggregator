@@ -6,5 +6,5 @@
     %ol
       - time_period.gigs.each do |gig|
         %li{updated_class?(gig, @gig_list)}
-          %a{:href => gig_link(gig), :title => rp(gig.address)}
+          %a{:href => gig_link(gig), :title => rp(gig.location)}
             = rp(gig.send("title_by_#{@title_by or 'time_period'}"))
