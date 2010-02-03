@@ -8,6 +8,8 @@ class TimePeriod
     yield self if block_given?
   end
 
+  def css; title.downcase.gsub(' ', '-'); end
+
   def ==(other)
     return false if other.nil?
     [:title, :criteria, :gigs].map {|a| send(a) == other.send(a)}.all?

@@ -23,6 +23,14 @@ describe 'TimePeriod.==' do
   end
 end
 
+describe 'TimePeriod.css' do
+  it 'should be a version of the title suitable for use in CSS' do
+    time_period = TimePeriod.new('CSS class test', lambda {|t| true})
+
+    time_period.css.should.equal 'css-class-test'
+  end
+end
+
 describe 'Days' do
   it 'should return a time n days in the future' do
     # May not work around midnight
