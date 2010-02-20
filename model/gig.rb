@@ -27,11 +27,24 @@ class Gig < Sequel::Model
   def time_formatted; format_time(TIME_FORMAT); end
   def date_formatted; format_time(DATE_FORMAT); end
 
+  def span_elements(elements)
+    elements.map do |element|
+      "<span class=\"#{element[:title]}\">#{element[:text]}</span>"
+    end.join(' --- ')
+  end
+
   def title_by_time_period
-    [band.title, address, time_formatted].join(' --- ')
+    span_elements([
+                   {:title => 'band', :text => band.title},
+                   {:title => 'address', :text => address},
+                   {:title => 'time', :text => time_formatted},
+                  ])
   end
 
   def title_by_band
-    [address, time_formatted].join(' --- ')
+    span_elements([
+                   {:title => 'address', :text => address},
+                   {:title => 'time', :text => time_formatted},
+                  ])
   end
 end
