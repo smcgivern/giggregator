@@ -30,7 +30,7 @@ helpers do
   end
 
   def updated_class?(gig, gig_list)
-    gig.updated == gig_list.updated ? {:class => 'updated'} : {}
+    gig.updated > (gig_list.updated - 60) ? {:class => 'updated'} : {}
   end
 
   def atom_entry_id(gig_list)
