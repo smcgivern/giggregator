@@ -1,10 +1,10 @@
 %div#main
-  %h2= rp(@gig.title)
+  %h2 rp(@gig.title)
   %dl
     %dt Band
-    %dd= rp(@gig.band.title)
+    %dd#band= rp(@gig.band.title)
     %dt Time
-    %dd= rp(@gig.time_formatted)
+    %dd#time= rp(@gig.time_formatted)
     %dt Location
     %dd#location= rp(@gig.location)
     %dt Address
