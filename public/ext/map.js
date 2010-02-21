@@ -1,28 +1,34 @@
 var map = null;
 var geocoder = null;
 
-window.onload = function() {
-    if (GBrowserIsCompatible()) {
-        map = new GMap2(document.getElementById('map'));
+window.onload = attachMap;
+
+function e(i) { return document.getElementById(i); }
+function t(e) { return e.innerHTML; }
+
+function attachMap() {
+    if (google.maps.BrowserIsCompatible()) {
+        map = new google.maps.Map2(e('map'));
         map.setUIToDefault();
-        geocoder = new GClientGeocoder();
-        showAddress(t('location') + ', ' + t('address'));
+        geocoder = new google.maps.ClientGeocoder();
+        if (e('address')) {
+            addMarker(t(e('location')) + ', ' + t(e('address')));
+        } else {
+
+        }
     }
 };
 
-function t(i) { return document.getElementById(i).innerHTML; }
-
-function showAddress(address) {
+function addMarker(address) {
     if (geocoder) {
-        geocoder.getLatLng(
-                           address,
-                           function(point) {
-                               if (point) {
-                                   map.setCenter(point, 11);
-                                   var marker = new GMarker(point);
-                                   map.addOverlay(marker);
-                               }
-                           }
-                           );
+		var callback = function(point) {
+            if (point) {
+                map.setCenter(point, 11);
+                var marker = new google.maps.Marker(point);
+                map.addOverlay(marker);
+            }
+        };
+
+        geocoder.getLatLng(address, callback);
     }
 }
