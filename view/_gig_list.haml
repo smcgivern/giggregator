@@ -3,7 +3,7 @@
 - else
   - @gig_list.group_by_time_period.each do |time_period|
     %h2= rp(time_period.title)
-    %ol{:class => time_period.css}
+    %ol.time-period{:class => time_period.css}
       - time_period.gigs.each do |gig|
         %li{updated_class?(gig, @gig_list)}
           %a{:href => gig_link(gig), :title => rp(gig.location)}
