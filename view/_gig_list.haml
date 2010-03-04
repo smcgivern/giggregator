@@ -2,7 +2,7 @@
   %p No gigs found.
 - else
   - @gig_list.group_by_time_period.each do |time_period|
-    %div.time-period{:class => time_period.css}
+    %div.time-period{:id => time_period.css}
       %h2= rp(time_period.title)
       %ol
         - time_period.gigs.each do |gig|
