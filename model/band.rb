@@ -2,6 +2,8 @@ require 'lib/model'
 
 require 'date'
 require 'open-uri'
+require 'timeout'
+
 require 'addressable/template'
 require 'addressable/uri'
 require 'nokogiri'
