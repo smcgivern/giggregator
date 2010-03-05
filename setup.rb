@@ -26,7 +26,7 @@ CONTENT_TYPES = {
   :atom => 'application/atom+xml',
   :html => 'text/html',
   :css => 'text/css',
-  :js => 'application/javascript',
+  :js => 'text/javascript', # For Internet Explorer
 }
 
 TIME_PERIODS = [
