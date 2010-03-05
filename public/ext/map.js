@@ -113,7 +113,7 @@ function loadTimePeriods() {
         if (div.className.indexOf('time-period') > -1) {
             timePeriods.push({
                 name: t(div.getElementsByTagName('h2')[0]),
-                id: div.id,
+                id: div.id
             });
         }
     }
@@ -130,7 +130,7 @@ function addMarker(location, address, band, time, center) {
             var info = [
                 '<strong>' + t(band) + '</strong>',
                 t(time),
-                place,
+                place
             ].join('<br>');
 
             map.addOverlay(marker);
