@@ -5,6 +5,8 @@ require 'model/bands_gig_list'
 require 'model/gig'
 require 'model/gig_list'
 
+require 'spec/time_periods'
+
 def mock_band(myspace_name, time=Time.now)
   Band.create(:myspace_name => myspace_name, :gigs_updated => time)
 end
@@ -294,6 +296,21 @@ describe 'GigList#group_by_time_period' do
     time_period.gigs = @band.gigs
 
     @gig_list.group_by_time_period.should.equal [time_period]
+  end
+
+  it 'should use another column if specified' do
+    TIME_PERIODS <<
+      TimePeriod.new('Next three months', lambda {|t| t <= Days(90)})
+
+    time_period = TIME_PERIODS.last.dup
+
+    @band.add_gig(Gig.create(:time => Days(1), :updated => Days(60)))
+    time_period.gigs = @band.gigs
+
+    @gig_list.group_by_time_period(:updated).
+      should.equal [time_period]
+
+    TIME_PERIODS.pop
   end
 end
 

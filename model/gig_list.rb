@@ -96,10 +96,10 @@ class GigList < Sequel::Model
     end.compact
   end
 
-  def group_by_time_period
+  def group_by_time_period(col=:time)
     TIME_PERIODS.map do |period|
       period = period.dup
-      period.gigs = by_time.select {|g| period == g.time_period}
+      period.gigs = by_time.select {|g| period == g.time_period(col)}
       period
     end.reject {|p| p.gigs.empty?}
   end

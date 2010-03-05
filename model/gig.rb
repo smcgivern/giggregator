@@ -19,7 +19,10 @@ class Gig < Sequel::Model
   capitalize :title, :location, :address
 
   def time; values[:time].utc; end
-  def time_period; TIME_PERIODS.detect {|t| t.criteria[time]}; end
+
+  def time_period(col=:time)
+    TIME_PERIODS.detect {|t| t.criteria[send(col)]}
+  end
 
   def format_time(fmt); strip_leading_zeroes(time.strftime(fmt)); end
   def strip_leading_zeroes(s); s.gsub(/( |\A)0(\d)/, '\1\2'); end

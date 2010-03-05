@@ -4,6 +4,8 @@ require 'time'
 require 'model/band'
 require 'model/gig'
 
+require 'spec/time_periods'
+
 def including?(t); lambda {|s| s.include?(t)}; end
 
 describe 'Gig#time' do
@@ -17,16 +19,16 @@ end
 
 describe 'Gig#time_period' do
   it 'should be the first time period the gig matches' do
-    TIME_PERIODS =
-      [
-       TimePeriod.new('The past', lambda {|t| t < Time.now}),
-       TimePeriod.new('Next hour', lambda {|t| t <= Time.now + 3600}),
-      ]
-
     gig = Gig.new(:time => Time.now)
 
     TIME_PERIODS.each {|t| t.criteria[gig.time].should.be.true}
     gig.time_period.should.equal TIME_PERIODS.first
+  end
+
+  it 'should use another column if specified' do
+    gig = Gig.new(:updated => Time.now + 60)
+
+    gig.time_period(:updated).should.equal TIME_PERIODS.last
   end
 end
 
