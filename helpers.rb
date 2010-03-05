@@ -88,4 +88,6 @@ helpers do
     last_modified(@gig_list.updated)
     haml(:feed_gig_list, :format => :xhtml, :layout => false)
   end
+
+  def mappable; @scripts = [GOOGLE_MAPS_SCRIPT, '/ext/map.js']; end
 end

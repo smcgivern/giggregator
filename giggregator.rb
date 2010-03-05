@@ -22,6 +22,7 @@ end
 
 get filterable('gig-list') do
   retrieve_captures
+  mappable
 
   @gig_list = GigList[:link => @link, :system => nil]
   @page_title = @gig_list.title
@@ -35,8 +36,6 @@ get filterable('gig-list') do
   if @days or @location
     @breadcrumbs << {:uri => "/gig-list/#{@link}/", :title => 'reset'}
   end
-
-  @scripts = [GOOGLE_MAPS_SCRIPT, '/ext/map.js']
 
   filter_gig_list
 
@@ -68,6 +67,8 @@ get filterable('band') do
 end
 
 get '/band/:myspace_name/gig/:gig_id/?' do |myspace_name, gig_id|
+  mappable
+
   @gig = Gig.find(:id => gig_id)
   @gig_list = @gig.band.gig_list
   @page_title = @gig.band.title
@@ -75,8 +76,6 @@ get '/band/:myspace_name/gig/:gig_id/?' do |myspace_name, gig_id|
     [
      {:uri => "/band/#{myspace_name}/", :title => @gig.band.title},
     ]
-
-  @scripts = [GOOGLE_MAPS_SCRIPT, '/ext/map.js']
 
   haml :gig
 end
