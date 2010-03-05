@@ -3,6 +3,8 @@
 ** TODO Cronjob to update bands and gigs
 ** Pick up other sources, beyond MySpace
 * Front end
+** TODO Show gigs by last updated
+*** Nearly done, but everything's updated in the last day?
 ** Feeds
 *** Cache to file
 ** Error logging: list of failed bands, non-bands
