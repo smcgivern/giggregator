@@ -44,6 +44,7 @@ end
 
 get filterable('band') do
   retrieve_captures
+  mappable
 
   @band = Band.from_myspace(@link)
   @gig_list = @band.gig_list
