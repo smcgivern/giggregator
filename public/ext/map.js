@@ -91,10 +91,12 @@ function activeTimePeriod() {
 
     for (var i = 0; i < gigs.length; i++) {
         var gig = gigs[i];
+        var a = gig.getElementsByTagName('a')[0];
+        var band = s('band', gig) ? s('band', gig) : e('band');
 
         addMarker(
-            gig.getElementsByTagName('a')[0].title,
-            s('address', gig), s('band', gig), s('time', gig)
+            a.title, s('address', gig), band, s('time', gig), false,
+            a.href
         );
     }
 }
@@ -119,19 +121,21 @@ function loadTimePeriods() {
     }
 }
 
-function addMarker(location, address, band, time, center) {
+function addMarker(location, address, band, time, center, href) {
     var place = t(location) + ', ' + t(address);
+    var band = '<strong>' + t(band) + '</strong>';
+	var time = t(time);
 
     var callback = function(point) {
         if (point) {
             if (center) { map.setCenter(point, 11); }
 
+            if (href) {
+                time = '<a href="' + href + '">' + time + '</a>';
+            }
+
             var marker = new google.maps.Marker(point);
-            var info = [
-                '<strong>' + t(band) + '</strong>',
-                t(time),
-                place
-            ].join('<br>');
+            var info = [band, time, place].join('<br>');
 
             map.addOverlay(marker);
 
