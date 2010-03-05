@@ -1,8 +1,7 @@
 require 'helpers'
 
-def filterable(root, feed=true)
-  feed = '(/feed)?' if feed
-  %r{^/#{root}/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?#{feed}/?$}
+def filterable(root)
+  %r{^/#{root}/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$}
 end
 
 get '/ext/style.css' do
