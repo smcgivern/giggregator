@@ -16,7 +16,7 @@ acquire 'lib'
 
 GOOGLE_MAPS_API_KEY = 'ABQIAAAAIMsc0fFg7uQ53CccTk6oEhR-lgg7DzJwhYtAcnHQYGQig9oPuxSkU_WH7PZwwvsCrZCJTmjWtCi4gg'
 GOOGLE_MAPS_PREFIX = 'http://maps.google.com/maps?file=api&v=2.x&key='
-GOOGLE_MAPS_SCRIPT = GOOGLE_MAPS_API_KEY + GOOGLE_MAPS_API_KEY
+GOOGLE_MAPS_SCRIPT = GOOGLE_MAPS_PREFIX + GOOGLE_MAPS_API_KEY
 FEED_DIR = 'tmp/feed'
 LOG_DIR = 'log'
 LOG_SINATRA = 'sinatra.log'
