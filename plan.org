@@ -1,4 +1,5 @@
 * Database
+** TODO Spec for GigList#before_save is missing
 ** TODO Cronjob to update bands and gigs
 ** Pick up other sources, beyond MySpace
 * Front end
