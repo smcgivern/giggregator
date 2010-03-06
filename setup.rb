@@ -37,6 +37,12 @@ TIME_PERIODS =
    TimePeriod.new('Next week', lambda {|t| Between(t, 0, 7)}),
    TimePeriod.new('Next month', lambda {|t| Between(t, 0, 30)}),
    TimePeriod.new('Later', lambda {|t| Between(t, 0)}),
+
+   # Reversed, for freshness view
+   TimePeriod.new('Last day', lambda {|t| Between(t, -1, 0)}),
+   TimePeriod.new('Last week', lambda {|t| Between(t, -7, 0)}),
+   TimePeriod.new('Last month', lambda {|t| Between(t, -30, 0)}),
+   TimePeriod.new('Earlier', lambda {|t| Between(t, nil, 0)}),
   ]
 
 DB = Sequel.sqlite(DB_SQLITE)
