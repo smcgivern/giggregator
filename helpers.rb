@@ -10,6 +10,8 @@ before do
                  end
 
   content_type CONTENT_TYPES[request_type], :charset => 'utf-8'
+
+  @col = :time
 end
 
 helpers do
@@ -60,6 +62,7 @@ helpers do
         case capture
         when /^\/=([\d]+)/: @days = capture.gsub(/^\/=/, '')
         when /^\/=/: @location = capture.gsub(/^\/=/, '')
+        when '/freshness': @col = :updated; @freshness = true
         when '/feed': @feed = true
         else @link = capture
         end

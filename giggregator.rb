@@ -1,7 +1,7 @@
 require 'helpers'
 
 def filterable(root)
-  %r{^/#{root}/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/feed)?/?$}
+  %r{^/#{root}/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/freshness)?(/feed)?/?$}
 end
 
 get '/ext/style.css' do
@@ -33,7 +33,11 @@ get filterable('gig-list') do
      {:uri => @page_feed, :title => 'feed'},
     ]
 
-  if @days or @location
+  @breadcrumbs << {
+    :uri => "#{self_link}freshness/", :title => 'freshness'
+  } unless @freshness
+
+  if @days or @location or @freshness
     @breadcrumbs << {:uri => "/gig-list/#{@link}/", :title => 'reset'}
   end
 
@@ -58,7 +62,11 @@ get filterable('band') do
      {:uri => @page_feed, :title => 'feed'},
     ]
 
-  if @days or @location
+  @breadcrumbs << {
+    :uri => "#{self_link}freshness/", :title => 'freshness'
+  } unless @freshness
+
+  if @days or @location or @freshness
     @breadcrumbs << {:uri => "/band/#{@link}/", :title => 'reset'}
   end
 
