@@ -158,6 +158,8 @@ post '/filter-gig-list/?' do
     dest = ['band', params[:myspace_name]]
   end
 
+  filters << 'freshness' if params[:freshness]
+
   redirect build_link(*(dest + filters))
 end
 

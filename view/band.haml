@@ -11,6 +11,9 @@
         %label{:for => 'days'} (locations)
         %input{:type => 'hidden', :name => 'myspace_name',
                :value => @band.myspace_name}
+        - if @freshness
+          %input{:type => 'hidden', :name => 'freshness',
+                 :value => 'freshness'}
         %input{:type => 'submit', :value => 'Filter'}
   %div#map-container
     %p#band{:style => 'display : none'}= @band.title

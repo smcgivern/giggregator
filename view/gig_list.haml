@@ -16,6 +16,9 @@
       %p
         %input{:type => 'hidden', :name => 'link',
                :value => @gig_list.link}
+        - if @freshness
+          %input{:type => 'hidden', :name => 'freshness',
+                 :value => 'freshness'}
         %input{:type => 'submit', :value => 'Filter'}
   %h2 Bands
   %ol#bands
