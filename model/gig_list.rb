@@ -40,7 +40,8 @@ class GigList < Sequel::Model
   end
 
   def myspace_uris; bands.map {|b| b.page_uri}.join("\n"); end
-  def by_time; gig_list.sort_by {|g| g.time}; end
+  def by(c); gig_list.sort_by {|g| g.send(c)}; end
+  def by_time; by(:time); end
   def clear_cached_gig_list; @gig_list = nil; end
 
   def updated
@@ -99,7 +100,7 @@ class GigList < Sequel::Model
   def group_by_time_period(col=:time)
     TIME_PERIODS.map do |period|
       period = period.dup
-      period.gigs = by_time.select {|g| period == g.time_period(col)}
+      period.gigs = by(col).select {|g| period == g.time_period(col)}
       period
     end.reject {|p| p.gigs.empty?}
   end

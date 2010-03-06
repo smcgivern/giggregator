@@ -69,6 +69,22 @@ describe 'GigList#myspace_uris' do
   end
 end
 
+describe 'GigList#by' do
+  it 'should be sorted by the column' do
+    gig_list = GigList.create
+    band = mock_band('by_title')
+
+    expected = [1, 2, 3].map do |i|
+      band.add_gig(Gig.create(:time => Time.now + (600 - 60 * i),
+                              :title => "Gig #{i}"))
+    end
+
+    gig_list.add_band(band)
+
+    gig_list.by(:title).should.equal expected
+  end
+end
+
 describe 'GigList#by_time' do
   it 'should be sorted by time, oldest first' do
     gig_list = GigList.create
