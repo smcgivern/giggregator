@@ -17,3 +17,8 @@ class TimePeriod
 end
 
 def Days(n); Time.now + (n * 60 * 60 * 24); end
+
+def Between(time, first, last=nil)
+  (first.nil? || time >= Days(first)) &&
+    (last.nil? || time <= Days(last))
+end

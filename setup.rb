@@ -31,12 +31,13 @@ CONTENT_TYPES = {
   :js => 'text/javascript', # For Internet Explorer
 }
 
-TIME_PERIODS = [
-  TimePeriod.new('Next day', lambda {|t| t <= Days(1)}),
-  TimePeriod.new('Next week', lambda {|t| t <= Days(7)}),
-  TimePeriod.new('Next month', lambda {|t| t <= Days(30)}),
-  TimePeriod.new('Later', lambda {|t| true}),
-]
+TIME_PERIODS =
+  [
+   TimePeriod.new('Next day', lambda {|t| Between(t, 0, 1)}),
+   TimePeriod.new('Next week', lambda {|t| Between(t, 0, 7)}),
+   TimePeriod.new('Next month', lambda {|t| Between(t, 0, 30)}),
+   TimePeriod.new('Later', lambda {|t| Between(t, 0)}),
+  ]
 
 DB = Sequel.sqlite(DB_SQLITE)
 

@@ -42,3 +42,16 @@ describe 'Days' do
     end
   end
 end
+
+describe 'Between' do
+  it 'should check that the time is between the two days' do
+    Between(Time.now, -1, 1).should.be.true
+    Between(Time.now, 1, 2).should.be.false
+    Between(Days(-2), -3, -1).should.be.true
+  end
+
+  it 'should allow both second and third arguments to be nil' do
+    Between(Time.now, -1).should.be.true
+    Between(Time.now, nil, 2).should.be.true
+  end
+end
