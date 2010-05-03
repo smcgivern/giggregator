@@ -239,7 +239,7 @@ describe 'Band#load_gigs!' do
     end
 
     it 'should remove old gigs' do
-      gig = Gig.create(:time => Time.now - 60)
+      gig = Gig.create(:time => Time.now - 6000, :updated => Time.now)
 
       @band.add_gig(gig)
       @band.gigs.should.satisfy {|g| g.include?(gig)}
