@@ -13,6 +13,7 @@ class Gig < Sequel::Model
     String(:title)
     String(:location)
     String(:address)
+    Integer(:event_id)
     DateTime(:updated)
   end
 
