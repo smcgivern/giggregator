@@ -175,8 +175,8 @@ end
 
 describe 'Band#gig_page_uri' do
   it "should be the the URI of the band's gig page" do
-    band = Band.new(:friend_id => '181410567', :title => "The D\303\270")
-    gig_page_uri = "http://collect.myspace.com/index.cfm?fuseaction=bandprofile.listAllShows&friendid=181410567&n=The D\303\270"
+    band = Band.new(:friend_id => '181410567')
+    gig_page_uri = 'http://events.myspace.com/181410567/Events/1'
 
     band.gig_page_uri.should.equal Band.new.uri(gig_page_uri)
   end

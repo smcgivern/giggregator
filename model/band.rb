@@ -29,7 +29,7 @@ class Band < Sequel::Model
 
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
-    :gig => 'http://collect.myspace.com/index.cfm?fuseaction=bandprofile.listAllShows&friendid={friend_id}&n={name}',
+    :gig => 'http://events.myspace.com/{friend_id}/Events/1',
   }
 
   SELECTORS = {
@@ -89,9 +89,7 @@ class Band < Sequel::Model
   end
 
   def gig_page_uri
-    params = {'friend_id' => friend_id.to_s, 'name' => title}
-
-    TEMPLATES[:gig].expand(params)
+    TEMPLATES[:gig].expand('friend_id' => friend_id.to_s)
   end
 
   def load_band_info!
