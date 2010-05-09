@@ -88,8 +88,8 @@ class Band < Sequel::Model
     TEMPLATES[:band].expand('myspace_name' => myspace_name)
   end
 
-  def gig_page_uri
-    TEMPLATES[:gig].expand('friend_id' => friend_id.to_s, 'p' => 1)
+  def gig_page_uri(p=1)
+    TEMPLATES[:gig].expand('friend_id' => friend_id, 'p' => p)
   end
 
   def load_band_info!

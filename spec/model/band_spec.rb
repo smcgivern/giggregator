@@ -15,9 +15,16 @@ class Band < Sequel::Model
     alias_method(method_name, :"old_#{method_name}")
   end
 
-  def replacement_page_uri; "spec/fixture/#{myspace_name}.html"; end
-  def replacement_gig_page_uri
-    "spec/fixture/#{myspace_name}_gigs.html"
+  def self.using_replacement_template(key)
+    templates = {
+      :band => 'spec/fixture/{myspace_name}.html',
+      :gig => 'spec/fixture/{friend_id}_gigs_{p}.html',
+    }
+
+    original = TEMPLATES[key]
+    TEMPLATES[key] = Addressable::Template.new(templates[key])
+    yield
+    TEMPLATES[key] = original
   end
 
   def replacement_load_band_info!; 'Loaded band info'; end
@@ -67,7 +74,7 @@ describe 'Band.from_myspace' do
   end
 
   it 'should fail and not update DB if the page is not a band page' do
-    Band.using_replacement_method(:page_uri) do
+    Band.using_replacement_template(:band) do
       Band.from_myspace('nokogiri')
       Band[:myspace_name => 'nokogiri'].should.equal nil
     end
@@ -174,16 +181,23 @@ describe 'Band#page_uri' do
 end
 
 describe 'Band#gig_page_uri' do
-  it "should be the the URI of the band's gig page" do
-    band = Band.new(:friend_id => '181410567')
-    gig_page_uri = 'http://events.myspace.com/181410567/Events/1'
+  before do
+    @band = Band.new(:friend_id => '181410567')
+    @gig_page_uri = 'http://events.myspace.com/181410567/Events/1'
+    @gig_page_uri_2 = 'http://events.myspace.com/181410567/Events/2'
+  end
 
-    band.gig_page_uri.should.equal Band.new.uri(gig_page_uri)
+  it "should be the the URI of the band's gig page" do
+    @band.gig_page_uri.should.equal Band.new.uri(@gig_page_uri)
+  end
+
+  it 'should take an optional page number argument' do
+    @band.gig_page_uri(2).should.equal Band.new.uri(@gig_page_uri_2)
   end
 end
 
 describe 'Band#load_band_info!' do
-  Band.using_replacement_method(:page_uri) do
+  Band.using_replacement_template(:band) do
     it 'should extract the title and friend ID, returning the band' do
       band = Band.create(:myspace_name => 'thiswilldestroyyou').
         load_band_info!
@@ -202,9 +216,9 @@ describe 'Band#load_band_info!' do
 end
 
 describe 'Band#load_gigs!' do
-  Band.using_replacement_method(:gig_page_uri) do
+  Band.using_replacement_template(:gig) do
     before do
-      @band = Band.find_or_create(:myspace_name => 'royksopp')
+      @band = Band.find_or_create(:friend_id => '352745480')
       @band.load_gigs?
     end
 
@@ -231,7 +245,7 @@ describe 'Band#load_gigs!' do
     it 'should overwrite duplicate gigs with the new title' do
       gig_updated = @band.gigs.first.updated
 
-      @band.myspace_name = 'royksopp3'
+      @band.friend_id = '3527454803'
       @band.load_gigs!
 
       @band.gigs.first.updated.should.satisfy {|t| t > gig_updated}
@@ -251,7 +265,7 @@ describe 'Band#load_gigs!' do
     it "should update the gig's updated field if it's a new gig" do
       gig_updated = @band.gigs.first.updated
 
-      @band.myspace_name = 'royksopp2'
+      @band.friend_id = '3527454802'
       @band.load_gigs!
 
       @band.gigs.first.updated.should.equal gig_updated
