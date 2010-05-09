@@ -32,7 +32,8 @@ class GigList < Sequel::Model
   def before_save
     return unless (link.nil? || link.empty?)
 
-    attempt = slug; i = 0
+    i = 0
+    attempt = slug
 
     while GigList[:link => attempt] do attempt = slug(i += 1) end
 
@@ -55,7 +56,6 @@ class GigList < Sequel::Model
 
     latest
   end
-
 
   def gig_list
     return @gig_list if @gig_list
