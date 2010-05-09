@@ -29,7 +29,7 @@ class Band < Sequel::Model
 
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
-    :gig => 'http://events.myspace.com/{friend_id}/Events/1',
+    :gig => 'http://events.myspace.com/{friend_id}/Events/{p}',
   }
 
   SELECTORS = {
@@ -89,7 +89,7 @@ class Band < Sequel::Model
   end
 
   def gig_page_uri
-    TEMPLATES[:gig].expand('friend_id' => friend_id.to_s)
+    TEMPLATES[:gig].expand('friend_id' => friend_id.to_s, 'p' => 1)
   end
 
   def load_band_info!
