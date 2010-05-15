@@ -121,8 +121,8 @@ function loadTimePeriods() {
     }
 }
 
-function addMarker(location, address, band, time, center, href) {
-    var place = t(location) + ', ' + t(address);
+function addMarker(location, address, band, time, center, href, r) {
+    var place = r ? t(address) : t(location) + ', ' + t(address);
     var band = '<strong>' + t(band) + '</strong>';
 	var time = t(time);
 
@@ -144,7 +144,11 @@ function addMarker(location, address, band, time, center, href) {
                     marker.openInfoWindowHtml(info);
                 }
             );
-        }
+        } else {
+			addMarker(
+				location, address, band, time, center, href, true
+			);
+		}
     };
 
     geocoder.getLatLng(place, callback);
