@@ -199,7 +199,8 @@ end
 describe 'Band#load_band_info!' do
   Band.using_replacement_template(:band) do
     it 'should extract the title and friend ID, returning the band' do
-      band = Band.create(:myspace_name => 'thiswilldestroyyou').
+      band = Band.
+        find_or_create(:myspace_name => 'thiswilldestroyyou').
         load_band_info!
 
       band.title.should.equal 'This Will Destroy You'
@@ -211,6 +212,18 @@ describe 'Band#load_band_info!' do
       should.raise(NotABandError) do
         Band.create(:myspace_name => 'nokogiri').load_band_info!
       end
+    end
+
+    it 'should not error if there is already a friend ID' do
+      band = Band.
+        find_or_create(:myspace_name => 'thiswilldestroyyou').
+        load_band_info!
+
+      band.myspace_name = 'thiswilldeployyou'
+      band.load_band_info!
+
+      band.friend_id.should.equal 7333792
+      band.band_info_updated.should.be {|t| t >= Time.now + 60}
     end
   end
 end

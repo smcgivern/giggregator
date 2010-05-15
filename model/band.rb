@@ -95,15 +95,15 @@ class Band < Sequel::Model
   def load_band_info!
     band_page = parse(page_uri)
     gig_link = band_page.at(SELECTORS[:gig_page])
+    params = {:band_info_updated => Time.now}
 
-    raise NotABandError unless gig_link
-
-    gig_link = TEMPLATES[:gig_list].extract(uri(gig_link['href']))
-    params = {
-      :title => band_page.at(SELECTORS[:band_name])['about'],
-      :friend_id => gig_link['friend_id'],
-      :band_info_updated => Time.now,
-    }
+    if gig_link
+      gig_link = TEMPLATES[:gig_list].extract(uri(gig_link['href']))
+      params[:title] = band_page.at(SELECTORS[:band_name])['about']
+      params[:friend_id] = gig_link['friend_id']
+    else
+      raise NotABandError unless friend_id
+    end
 
     update(params)
     save
