@@ -30,7 +30,7 @@ class Band < Sequel::Model
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
     :gig_list_link => 'http://events.myspace.com/{friend_id}/Events/{p}',
-    :gig_list => 'http://collect.myspace.com/index.cfm?fuseaction=bandprofile.listAllShows&friendid={friend_id}'
+    :gig_list => 'http://collect.myspace.com/index.cfm?fuseaction=bandprofile.listAllShows&friendid={friend_id}',
   }
 
   SELECTORS = {
