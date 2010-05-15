@@ -29,7 +29,7 @@ class Band < Sequel::Model
 
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
-    :gig => 'http://events.myspace.com/{friend_id}/Events/{p}',
+    :gig_list => 'http://events.myspace.com/{friend_id}/Events/{p}',
   }
 
   SELECTORS = {
@@ -89,7 +89,7 @@ class Band < Sequel::Model
   end
 
   def gig_page_uri(p=1)
-    TEMPLATES[:gig].expand('friend_id' => friend_id, 'p' => p)
+    TEMPLATES[:gig_list].expand('friend_id' => friend_id, 'p' => p)
   end
 
   def load_band_info!
@@ -98,10 +98,10 @@ class Band < Sequel::Model
 
     raise NotABandError unless gig_link
 
-    gig_link = uri(gig_link['href'])
+    gig_link = TEMPLATES[:gig_list].extract(uri(gig_link['href']))
     params = {
       :title => band_page.at(SELECTORS[:band_name])['about'],
-      :friend_id => TEMPLATES[:gig].extract(gig_link)['friend_id'],
+      :friend_id => gig_link['friend_id'],
       :band_info_updated => Time.now,
     }
 

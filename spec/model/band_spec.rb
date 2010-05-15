@@ -18,7 +18,7 @@ class Band < Sequel::Model
   def self.using_replacement_template(key)
     templates = {
       :band => 'spec/fixture/{myspace_name}.html',
-      :gig => 'spec/fixture/{friend_id}_gigs_{p}.html',
+      :gig_list => 'spec/fixture/{friend_id}_gigs_{p}.html',
     }
 
     original = TEMPLATES[key]
@@ -216,7 +216,7 @@ describe 'Band#load_band_info!' do
 end
 
 describe 'Band#load_gigs!' do
-  Band.using_replacement_template(:gig) do
+  Band.using_replacement_template(:gig_list) do
     before do
       @band = Band.find_or_create(:friend_id => '352745480')
       @band.load_gigs?
