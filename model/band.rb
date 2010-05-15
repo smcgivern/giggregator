@@ -30,12 +30,14 @@ class Band < Sequel::Model
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
     :gig_list_link => 'http://events.myspace.com/{friend_id}/Events/{p}',
-    :gig_list => 'http://collect.myspace.com/index.cfm?fuseaction=bandprofile.listAllShows&friendid={friend_id}'
+    :gig_list => 'http://collect.myspace.com/index.cfm?fuseaction=bandprofile.listAllShows&friendid={friend_id}',
+    :gig_page => 'http://events.myspace.com/Event/{event_id}/{title}',
   }
 
   SELECTORS = {
     :band_name => 'meta[property="myspace:profileType"]',
     :gig_page => '#profile_bandschedule a.whitelink',
+    :gig_list_pages => 'div.paginateCenter a',
     :gig_info => 'table[width="615"] form',
     :form_input => 'input[name="calEvt%s"]',
   }
@@ -113,39 +115,14 @@ class Band < Sequel::Model
   end
 
   def load_gigs!
-    def value(key, elem)
-      (f = elem.at(SELECTORS[:form_input] % key)) ? f['value'] : ''
+    pages = [parse(gig_page_uri)]
+    page_div = pages.first.search(SELECTORS[:gig_list_pages])
+    page_count = page_div.first ? page_div.last.inner_text.to_i : 1
+
+    (2..page_count).each {|p| pages << parse(gig_page_uri(p))}
+
+    pages.each do |page|
+
     end
-
-    parse(gig_page_uri).search(SELECTORS[:gig_info]).each do |gig|
-      time = DateTime.strptime(value('DateTime', gig), TIME_FORMAT)
-      time = Time.parse(time.new_offset(0).to_s)
-
-      location = value('Location', gig)
-      title = value('Title', gig)
-      address = ['Street', 'City', 'State', 'Zip'].
-        map {|k| value(k, gig)}.reject {|x| x.empty?}.
-        join(', ')
-
-      gig = Gig.find_or_create(:time => time, :band_id => id)
-
-      cols = {:title => title, :location => location,
-        :address => address}
-
-      cols.each do |col, val|
-        gig.updated = Time.now if gig[col] != val
-
-        gig[col] = val
-      end
-
-      gig.save
-
-      add_gig(gig) unless gigs_dataset.all.include?(gig)
-    end
-
-    gigs_dataset.filter {|g| g.time < Time.now.utc}.delete
-
-    update(:gigs_updated => Time.now)
-    gigs
   end
 end

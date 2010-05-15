@@ -226,8 +226,14 @@ end
 describe 'Band#load_gigs!' do
   Band.using_replacement_template(:gig_list) do
     before do
-      @band = Band.find_or_create(:friend_id => '352745480')
+      @band = Band.find_or_create(:friend_id => 6114901)
       @band.load_gigs?
+    end
+
+    it 'should follow multiple pages, if they exist' do
+      band = Band.find_or_create(:friend_id => 65642225)
+      band.load_gigs!
+      band.gigs.length.should.equal 13
     end
 
     it 'should extract the time, title, and location' do
@@ -251,10 +257,10 @@ describe 'Band#load_gigs!' do
     end
 
     it 'should overwrite duplicate gigs with the new title' do
-      gig_updated = @band.gigs.first.updated
-
-      @band.friend_id = '3527454803'
+      @band.friend_id = 6114901
       @band.load_gigs!
+
+      gig_updated = @band.gigs.first.updated
 
       @band.gigs.first.updated.should.satisfy {|t| t > gig_updated}
       @band.gigs.first.title.should.satisfy {|t| t =~ /\ADuplicate/}
