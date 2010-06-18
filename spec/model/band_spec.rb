@@ -18,7 +18,7 @@ class Band < Sequel::Model
   def self.using_replacement_template(key)
     templates = {
       :band => 'spec/fixture/{myspace_name}.html',
-      :gig_list => 'spec/fixture/{friend_id}_gigs.html',
+      :gig_list => 'spec/fixture/{friend_id}_gigs_{p}.html',
     }
 
     original = TEMPLATES[key]

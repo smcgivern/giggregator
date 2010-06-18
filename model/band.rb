@@ -92,7 +92,7 @@ class Band < Sequel::Model
   end
 
   def gig_page_uri(p=1)
-    TEMPLATES[:gig_list].expand('friend_id' => friend_id)
+    TEMPLATES[:gig_list].expand('friend_id' => friend_id, 'p' => p)
   end
 
   def load_band_info!
