@@ -26,6 +26,7 @@ class Band < Sequel::Model
   capitalize :title
 
   TIME_FORMAT = '%a, %d %B @ %H:%M'
+  TIME_FORMAT_ALT = '%a, %B %d @ %H:%M'
 
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
@@ -142,7 +143,12 @@ class Band < Sequel::Model
         time = time.gsub(/\ATomorrow/,
                          human_date(Time.now + 24 * 60 * 60))
 
-        time = DateTime.strptime(time, TIME_FORMAT)
+        begin
+          time = DateTime.strptime(time, TIME_FORMAT)
+        rescue
+          time = DateTime.strptime(time, TIME_FORMAT_ALT)
+        end
+
         time = to_time(time) do |year|
           year + (to_time(time) < Time.now ? 1 : 0)
         end
