@@ -122,5 +122,9 @@ class Band < Sequel::Model
     pages.each do |page|
 
     end
+
+    update(:gigs_updated => Time.now)
+    save
+    gigs
   end
 end
