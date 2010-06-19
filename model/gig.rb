@@ -1,4 +1,5 @@
 require 'lib/model'
+require 'model/band'
 
 class Gig < Sequel::Model
   many_to_one :band
@@ -20,6 +21,16 @@ class Gig < Sequel::Model
   capitalize :title, :location, :address
 
   def time; values[:time].utc; end
+
+  def event_id
+    if (val = values[:event_id])
+      if val === BigDecimal
+        val.to_s('F').split('.').first
+      else
+        val.to_s
+      end
+    end
+  end
 
   def time_period(col=:time)
     TIME_PERIODS.detect {|t| t.criteria[send(col)]}
@@ -50,5 +61,12 @@ class Gig < Sequel::Model
                    {:title => 'address', :text => address},
                    {:title => 'time', :text => time_formatted},
                   ])
+  end
+
+  def uri
+    if event_id
+      Band::TEMPLATES[:gig_page].expand('event_id' => event_id,
+                                        'title' => title)
+    end
   end
 end

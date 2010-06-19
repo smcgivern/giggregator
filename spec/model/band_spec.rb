@@ -18,7 +18,7 @@ class Band < Sequel::Model
   def self.using_replacement_template(key)
     templates = {
       :band => 'spec/fixture/{myspace_name}.html',
-      :gig_list => 'spec/fixture/{friend_id}_gigs.html',
+      :gig_list => 'spec/fixture/{friend_id}_gigs_{p}.html',
     }
 
     original = TEMPLATES[key]
@@ -183,7 +183,7 @@ end
 describe 'Band#gig_page_uri' do
   before do
     @band = Band.new(:friend_id => '181410567')
-    @gig_page_uri = 'http://collect.myspace.com/index.cfm?fuseaction=bandprofile.listAllShows&friendid=181410567'
+    @gig_page_uri = 'http://events.myspace.com/181410567/Events/1'
   end
 
   it "should be the the URI of the band's gig page" do
@@ -226,20 +226,42 @@ end
 describe 'Band#load_gigs!' do
   Band.using_replacement_template(:gig_list) do
     before do
-      @band = Band.find_or_create(:friend_id => '352745480')
+      @band = Band.find_or_create(:friend_id => 6114901)
       @band.load_gigs?
+
+      def strip_gig_times(gigs)
+        gigs.map {|g| g.to_yaml.gsub(/\n  :updated: .*?\n/, "\n")}
+      end
+    end
+
+    it 'should follow multiple pages, if they exist' do
+      band = Band.find_or_create(:friend_id => 65642225)
+      band.load_gigs!
+      band.gigs.length.should.equal 13
     end
 
     it 'should extract the time, title, and location' do
-      @band.gigs.first.title.should.equal "R\303\266yksopp At Berns"
-      @band.gigs.first.location.should.equal 'Berns'
-      @band.gigs.first.time.
-        should.equal Time.utc(2019, 10, 30, 20, 0, 0)
+      @band.gigs.first.title.should.equal 'Asobi Seksu'
+      @band.gigs.first.location.should.equal 'Bkln Yard'
+      @band.gigs.first.time.strftime('20XX-%m-%dT%T%z').
+        should.equal '20XX-07-16T16:00:00+0000'
+    end
+
+    it 'should treat times in the past as happening next year' do
+      band = Band.find_or_create(:friend_id => 111111111)
+      band.load_gigs!
+      band.gigs.each {|g| g.time.should.satisfy {|t| t >= Time.now}}
+    end
+
+    it "should parse the special dates 'today' and 'tomorrow'" do
+      band = Band.find_or_create(:friend_id => 61149013)
+      band.load_gigs!
+      band.gigs.each {|g| g.time.should.satisfy {|t| t >= Time.now}}
+      band.gigs.length.should.equal Time.now.utc.hour >= 20 ? 1 : 2
     end
 
     it 'should extract the address as a comma-separated list' do
-      @band.gigs.first.address.
-        should.equal "N\303\244ckstr\303\266msg. 8, Stockholm, 11147"
+      @band.gigs.first.address.should.equal 'Brooklyn, New York'
     end
 
     it "should return the band's gigs" do
@@ -247,17 +269,18 @@ describe 'Band#load_gigs!' do
     end
 
     it 'should not duplicate gigs' do
-      @band.gigs.should.equal @band.load_gigs!
+      strip_gig_times(@band.gigs).
+        should.equal strip_gig_times(@band.load_gigs!)
     end
 
     it 'should overwrite duplicate gigs with the new title' do
+      @band.friend_id = 61149011
       gig_updated = @band.gigs.first.updated
 
-      @band.friend_id = '3527454803'
       @band.load_gigs!
 
-      @band.gigs.first.updated.should.satisfy {|t| t > gig_updated}
       @band.gigs.first.title.should.satisfy {|t| t =~ /\ADuplicate/}
+      @band.gigs.first.updated.should.satisfy {|t| t > gig_updated}
     end
 
     it 'should remove old gigs' do
@@ -272,11 +295,13 @@ describe 'Band#load_gigs!' do
 
     it "should update the gig's updated field if it's a new gig" do
       gig_updated = @band.gigs.first.updated
+      @band.friend_id = 61149012
 
-      @band.friend_id = '3527454802'
       @band.load_gigs!
 
-      @band.gigs.first.updated.should.equal gig_updated
+      @band.gigs.first.updated.
+        should.satisfy {|t| t - 60 <= gig_updated}
+
       @band.gigs.sort_by {|g| g.updated}.last.
         should.satisfy {|g| g.updated > gig_updated}
     end

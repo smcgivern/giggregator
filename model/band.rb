@@ -25,19 +25,23 @@ class Band < Sequel::Model
 
   capitalize :title
 
-  TIME_FORMAT = '%m-%d-%Y %H:%M'
+  TIME_FORMAT = '%a, %d %B @ %H:%M'
+  TIME_FORMAT_ALT = '%a, %B %d @ %H:%M'
 
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
-    :gig_list_link => 'http://events.myspace.com/{friend_id}/Events/{p}',
-    :gig_list => 'http://collect.myspace.com/index.cfm?fuseaction=bandprofile.listAllShows&friendid={friend_id}',
+    :gig_list => 'http://events.myspace.com/{friend_id}/Events/{p}',
+    :gig_page => 'http://events.myspace.com/Event/{event_id}/{title}',
   }
 
   SELECTORS = {
     :band_name => 'meta[property="myspace:profileType"]',
     :gig_page => '#profile_bandschedule a.whitelink',
-    :gig_info => 'table[width="615"] form',
-    :form_input => 'input[name="calEvt%s"]',
+    :gig_list_pages => 'div.paginateCenter a',
+    :gig_info => 'div.event-info',
+    :gig_info_title => '.event-title',
+    :gig_info_place => '.event-titleinfo',
+    :gig_info_time => '.event-cal',
   }
 
   TTLS = {
@@ -90,7 +94,7 @@ class Band < Sequel::Model
   end
 
   def gig_page_uri(p=1)
-    TEMPLATES[:gig_list].expand('friend_id' => friend_id)
+    TEMPLATES[:gig_list].expand('friend_id' => friend_id, 'p' => p)
   end
 
   def load_band_info!
@@ -99,8 +103,7 @@ class Band < Sequel::Model
     params = {:band_info_updated => Time.now}
 
     if gig_link
-      gig_link = TEMPLATES[:gig_list_link].
-        extract(uri(gig_link['href']))
+      gig_link = TEMPLATES[:gig_list].extract(uri(gig_link['href']))
 
       params[:title] = band_page.at(SELECTORS[:band_name])['about']
       params[:friend_id] = gig_link['friend_id']
@@ -113,39 +116,68 @@ class Band < Sequel::Model
   end
 
   def load_gigs!
-    def value(key, elem)
-      (f = elem.at(SELECTORS[:form_input] % key)) ? f['value'] : ''
-    end
+    def to_time(d, &b); Time.parse(d.new_offset(0).to_s, &b); end
+    def human_date(t); t.strftime('%a, %d %B'); end
 
-    parse(gig_page_uri).search(SELECTORS[:gig_info]).each do |gig|
-      time = DateTime.strptime(value('DateTime', gig), TIME_FORMAT)
-      time = Time.parse(time.new_offset(0).to_s)
+    pages = [parse(gig_page_uri)]
+    page_div = pages.first.search(SELECTORS[:gig_list_pages])
+    page_count = page_div.first ? page_div.last.inner_text.to_i : 1
 
-      location = value('Location', gig)
-      title = value('Title', gig)
-      address = ['Street', 'City', 'State', 'Zip'].
-        map {|k| value(k, gig)}.reject {|x| x.empty?}.
-        join(', ')
+    (2..page_count).each {|p| pages << parse(gig_page_uri(p))}
 
-      gig = Gig.find_or_create(:time => time, :band_id => id)
+    pages.each do |page|
+      page.search(SELECTORS[:gig_info]).each do |gig_info|
+        title, place, orig_time = [:title, :place, :time].map do |key|
+          gig_info.at(SELECTORS["gig_info_#{key}".to_sym]).inner_text.
+            strip
+        end
 
-      cols = {:title => title, :location => location,
-        :address => address}
+        event_id = gig_info.at(SELECTORS[:gig_info_title])['href']
+        event_id = TEMPLATES[:gig_page].extract(event_id)['event_id']
 
-      cols.each do |col, val|
-        gig.updated = Time.now if gig[col] != val
+        place = place.gsub("#{title}\302\240 at \302\240", '')
+        location, *address = place.split(', ')
+        address = address.join(', ')
 
-        gig[col] = val
+        time = orig_time.gsub(/\AToday/, human_date(Time.now))
+        time = time.gsub(/\ATomorrow/,
+                         human_date(Time.now + 24 * 60 * 60))
+
+        begin
+          time = DateTime.strptime(time, TIME_FORMAT)
+        rescue
+          time = DateTime.strptime(time, TIME_FORMAT_ALT)
+        end
+
+        time = to_time(time) do |year|
+          if (to_time(time) < Time.now and
+              !(orig_time =~ /\A(Today|Tomorrow)/))
+            year + 1
+          else
+            year
+          end
+        end
+
+        gig = Gig.find_or_create(:time => time, :band_id => id)
+        cols = {:title => title, :location => location,
+          :address => address, :event_id => event_id}
+
+        cols.each do |col, val|
+          gig.updated = Time.now if gig[col] != val
+
+          gig[col] = val
+        end
+
+        gig.save
+
+        add_gig(gig) unless gigs_dataset.all.include?(gig)
       end
-
-      gig.save
-
-      add_gig(gig) unless gigs_dataset.all.include?(gig)
     end
 
-    gigs_dataset.filter {|g| g.time < Time.now.utc}.delete
+    gigs_dataset.filter {|g| g.time < Time.now}.delete
 
     update(:gigs_updated => Time.now)
+    save
     gigs
   end
 end
