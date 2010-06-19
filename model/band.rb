@@ -127,7 +127,7 @@ class Band < Sequel::Model
 
     pages.each do |page|
       page.search(SELECTORS[:gig_info]).each do |gig_info|
-        title, place, time = [:title, :place, :time].map do |key|
+        title, place, orig_time = [:title, :place, :time].map do |key|
           gig_info.at(SELECTORS["gig_info_#{key}".to_sym]).inner_text.
             strip
         end
@@ -139,7 +139,7 @@ class Band < Sequel::Model
         location, *address = place.split(', ')
         address = address.join(', ')
 
-        time = time.gsub(/\AToday/, human_date(Time.now))
+        time = orig_time.gsub(/\AToday/, human_date(Time.now))
         time = time.gsub(/\ATomorrow/,
                          human_date(Time.now + 24 * 60 * 60))
 
@@ -150,7 +150,12 @@ class Band < Sequel::Model
         end
 
         time = to_time(time) do |year|
-          year + (to_time(time) < Time.now ? 1 : 0)
+          if (to_time(time) < Time.now and
+              !(orig_time =~ /\A(Today|Tomorrow)/))
+            year + 1
+          else
+            year
+          end
         end
 
         gig = Gig.find_or_create(:time => time, :band_id => id)
@@ -169,7 +174,7 @@ class Band < Sequel::Model
       end
     end
 
-    gigs_dataset.filter {|g| g.time < Time.now.utc}.delete
+    gigs_dataset.filter {|g| g.time < Time.now}.delete
 
     update(:gigs_updated => Time.now)
     save

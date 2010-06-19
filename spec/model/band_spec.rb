@@ -257,7 +257,7 @@ describe 'Band#load_gigs!' do
       band = Band.find_or_create(:friend_id => 61149013)
       band.load_gigs!
       band.gigs.each {|g| g.time.should.satisfy {|t| t >= Time.now}}
-      band.gigs.length.should.equal Time.now.hour > 20 ? 1 : 2
+      band.gigs.length.should.equal Time.now.utc.hour >= 20 ? 1 : 2
     end
 
     it 'should extract the address as a comma-separated list' do
