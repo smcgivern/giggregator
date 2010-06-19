@@ -22,6 +22,16 @@ class Gig < Sequel::Model
 
   def time; values[:time].utc; end
 
+  def event_id
+    if (val = values[:event_id])
+      if val === BigDecimal
+        val.to_s('F').split('.').first
+      else
+        val.to_s
+      end
+    end
+  end
+
   def time_period(col=:time)
     TIME_PERIODS.detect {|t| t.criteria[send(col)]}
   end
