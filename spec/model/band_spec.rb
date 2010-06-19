@@ -183,7 +183,7 @@ end
 describe 'Band#gig_page_uri' do
   before do
     @band = Band.new(:friend_id => '181410567')
-    @gig_page_uri = 'http://collect.myspace.com/index.cfm?fuseaction=bandprofile.listAllShows&friendid=181410567'
+    @gig_page_uri = 'http://events.myspace.com/181410567/Events/1'
   end
 
   it "should be the the URI of the band's gig page" do
