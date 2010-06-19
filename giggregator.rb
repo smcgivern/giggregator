@@ -58,7 +58,7 @@ get filterable('band') do
   @breadcrumbs = default_breadcrumbs +
     [
      {:uri => @band.page_uri, :title => 'band page'},
-     {:uri => @band.gig_page_uri, :title => 'gig page'},
+     {:uri => @band.gig_page_uri, :title => 'gig list page'},
      {:uri => @page_feed, :title => 'feed'},
     ]
 
@@ -86,9 +86,12 @@ get '/band/:myspace_name/gig/:gig_id/?' do |myspace_name, gig_id|
      {:uri => "/band/#{myspace_name}/", :title => @gig.band.title},
     ]
 
+  if @gig.event_id
+    @breadcrumbs << {:uri => @gig.uri, :title => 'gig page'}
+  end
+
   haml :gig
 end
-
 
 get %r{^/gig-list/([^/?&#]+)/edit(/logged-in)?/?$} do
   link, @logged_in = params[:captures]
