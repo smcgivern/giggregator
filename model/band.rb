@@ -25,7 +25,7 @@ class Band < Sequel::Model
 
   capitalize :title
 
-  TIME_FORMAT = '%m-%d-%Y %H:%M'
+  TIME_FORMAT = '%a, %d %B @ %H:%M'
 
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
@@ -37,8 +37,10 @@ class Band < Sequel::Model
     :band_name => 'meta[property="myspace:profileType"]',
     :gig_page => '#profile_bandschedule a.whitelink',
     :gig_list_pages => 'div.paginateCenter a',
-    :gig_info => 'table[width="615"] form',
-    :form_input => 'input[name="calEvt%s"]',
+    :gig_info => 'div.event-info',
+    :gig_info_title => '.event-title',
+    :gig_info_place => '.event-titleinfo',
+    :gig_info_time => '.event-cal',
   }
 
   TTLS = {
@@ -113,6 +115,9 @@ class Band < Sequel::Model
   end
 
   def load_gigs!
+    def to_time(d, &b); Time.parse(d.new_offset(0).to_s, &b); end
+    def human_date(t); t.strftime('%a, %d %B'); end
+
     pages = [parse(gig_page_uri)]
     page_div = pages.first.search(SELECTORS[:gig_list_pages])
     page_count = page_div.first ? page_div.last.inner_text.to_i : 1
@@ -120,8 +125,42 @@ class Band < Sequel::Model
     (2..page_count).each {|p| pages << parse(gig_page_uri(p))}
 
     pages.each do |page|
+      page.search(SELECTORS[:gig_info]).each do |gig_info|
+        title, place, time = [:title, :place, :time].map do |key|
+          gig_info.at(SELECTORS["gig_info_#{key}".to_sym]).inner_text.
+            strip
+        end
 
+        place = place.gsub("#{title}\302\240 at \302\240", '')
+        location, *address = place.split(', ')
+        address = address.join(', ')
+
+        time = time.gsub(/\AToday/, human_date(Time.now))
+        time = time.gsub(/\ATomorrow/,
+                         human_date(Time.now + 24 * 60 * 60))
+
+        time = DateTime.strptime(time, TIME_FORMAT)
+        time = to_time(time) do |year|
+          year + (to_time(time) < Time.now ? 1 : 0)
+        end
+
+        gig = Gig.find_or_create(:time => time, :band_id => id)
+        cols = {:title => title, :location => location,
+          :address => address}
+
+        cols.each do |col, val|
+          gig.updated = Time.now if gig[col] != val
+
+          gig[col] = val
+        end
+
+        gig.save
+
+        add_gig(gig) unless gigs_dataset.all.include?(gig)
+      end
     end
+
+    gigs_dataset.filter {|g| g.time < Time.now.utc}.delete
 
     update(:gigs_updated => Time.now)
     save

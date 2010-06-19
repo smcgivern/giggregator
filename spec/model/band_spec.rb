@@ -237,15 +237,27 @@ describe 'Band#load_gigs!' do
     end
 
     it 'should extract the time, title, and location' do
-      @band.gigs.first.title.should.equal "R\303\266yksopp At Berns"
-      @band.gigs.first.location.should.equal 'Berns'
-      @band.gigs.first.time.
-        should.equal Time.utc(2019, 10, 30, 20, 0, 0)
+      @band.gigs.first.title.should.equal 'Asobi Seksu'
+      @band.gigs.first.location.should.equal 'Bkln Yard'
+      @band.gigs.first.time.strftime('20XX-%m-%dT%T%z').
+        should.equal '20XX-07-16T16:00:00+0000'
+    end
+
+    it 'should treat times in the past as happening next year' do
+      band = Band.find_or_create(:friend_id => 111111111)
+      band.load_gigs!
+      band.gigs.each {|g| g.time.should.satisfy {|t| t >= Time.now}}
+    end
+
+    it "should parse the special dates 'today' and 'tomorrow'" do
+      band = Band.find_or_create(:friend_id => 61149013)
+      band.load_gigs!
+      band.gigs.each {|g| g.time.should.satisfy {|t| t >= Time.now}}
+      band.gigs.length.should.equal Time.now.hour > 20 ? 1 : 2
     end
 
     it 'should extract the address as a comma-separated list' do
-      @band.gigs.first.address.
-        should.equal "N\303\244ckstr\303\266msg. 8, Stockholm, 11147"
+      @band.gigs.first.address.should.equal 'Brooklyn, New York'
     end
 
     it "should return the band's gigs" do
@@ -257,13 +269,13 @@ describe 'Band#load_gigs!' do
     end
 
     it 'should overwrite duplicate gigs with the new title' do
-      @band.friend_id = 6114901
-      @band.load_gigs!
-
+      @band.friend_id = 61149011
       gig_updated = @band.gigs.first.updated
 
-      @band.gigs.first.updated.should.satisfy {|t| t > gig_updated}
+      @band.load_gigs!
+
       @band.gigs.first.title.should.satisfy {|t| t =~ /\ADuplicate/}
+      @band.gigs.first.updated.should.satisfy {|t| t > gig_updated}
     end
 
     it 'should remove old gigs' do
@@ -279,7 +291,7 @@ describe 'Band#load_gigs!' do
     it "should update the gig's updated field if it's a new gig" do
       gig_updated = @band.gigs.first.updated
 
-      @band.friend_id = '3527454802'
+      @band.friend_id = 61149012
       @band.load_gigs!
 
       @band.gigs.first.updated.should.equal gig_updated
