@@ -1,7 +1,6 @@
 require 'spec/setup'
 require 'time'
 
-require 'model/band'
 require 'model/gig'
 
 require 'spec/time_periods'
@@ -98,5 +97,17 @@ describe 'Gig#title_by_band' do
     gig.title_by_band.should.be including?('Edgehill')
     gig.title_by_band.should.not.be including?('Compton Verney')
     gig.title_by_band.should.be including?('12:00 AM')
+  end
+end
+
+describe 'Gig#uri' do
+  it 'should link to the gig page on Myspace' do
+    gig = Gig.create(:event_id => 1, :title => 'Foo')
+    gig.uri.to_s.should.equal 'http://events.myspace.com/Event/1/Foo'
+  end
+
+  it 'should be nil when there is no event ID' do
+    gig = Gig.create
+    gig.uri.should.equal nil
   end
 end

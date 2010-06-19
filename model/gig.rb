@@ -1,4 +1,5 @@
 require 'lib/model'
+require 'model/band'
 
 class Gig < Sequel::Model
   many_to_one :band
@@ -50,5 +51,12 @@ class Gig < Sequel::Model
                    {:title => 'address', :text => address},
                    {:title => 'time', :text => time_formatted},
                   ])
+  end
+
+  def uri
+    if event_id
+      Band::TEMPLATES[:gig_page].expand('event_id' => event_id,
+                                        'title' => title)
+    end
   end
 end
