@@ -131,6 +131,9 @@ class Band < Sequel::Model
             strip
         end
 
+        event_id = gig_info.at(SELECTORS[:gig_info_title])['href']
+        event_id = TEMPLATES[:gig_page].extract(event_id)['event_id']
+
         place = place.gsub("#{title}\302\240 at \302\240", '')
         location, *address = place.split(', ')
         address = address.join(', ')
@@ -146,7 +149,7 @@ class Band < Sequel::Model
 
         gig = Gig.find_or_create(:time => time, :band_id => id)
         cols = {:title => title, :location => location,
-          :address => address}
+          :address => address, :event_id => event_id}
 
         cols.each do |col, val|
           gig.updated = Time.now if gig[col] != val

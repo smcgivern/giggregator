@@ -228,6 +228,10 @@ describe 'Band#load_gigs!' do
     before do
       @band = Band.find_or_create(:friend_id => 6114901)
       @band.load_gigs?
+
+      def strip_gig_times(gigs)
+        gigs.map {|g| g.to_yaml.gsub(/\n  :updated: .*?\n/, "\n")}
+      end
     end
 
     it 'should follow multiple pages, if they exist' do
@@ -265,7 +269,8 @@ describe 'Band#load_gigs!' do
     end
 
     it 'should not duplicate gigs' do
-      @band.gigs.should.equal @band.load_gigs!
+      strip_gig_times(@band.gigs).
+        should.equal strip_gig_times(@band.load_gigs!)
     end
 
     it 'should overwrite duplicate gigs with the new title' do
@@ -290,11 +295,13 @@ describe 'Band#load_gigs!' do
 
     it "should update the gig's updated field if it's a new gig" do
       gig_updated = @band.gigs.first.updated
-
       @band.friend_id = 61149012
+
       @band.load_gigs!
 
-      @band.gigs.first.updated.should.equal gig_updated
+      @band.gigs.first.updated.
+        should.satisfy {|t| t - 60 <= gig_updated}
+
       @band.gigs.sort_by {|g| g.updated}.last.
         should.satisfy {|g| g.updated > gig_updated}
     end
