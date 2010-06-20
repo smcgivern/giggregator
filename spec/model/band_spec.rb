@@ -268,6 +268,11 @@ describe 'Band#load_gigs!' do
       @band.load_gigs!.should.equal @band.gigs
     end
 
+    it 'should use an alternative time format if required' do
+      band = Band.find_or_create(:friend_id => 60520888)
+      band.load_gigs!.length.should.equal 3
+    end
+
     it 'should not duplicate gigs' do
       strip_gig_times(@band.gigs).
         should.equal strip_gig_times(@band.load_gigs!)
