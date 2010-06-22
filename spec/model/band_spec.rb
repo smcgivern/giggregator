@@ -271,6 +271,8 @@ describe 'Band#load_gigs!' do
     it 'should use an alternative time format if required' do
       band = Band.find_or_create(:friend_id => 60520888)
       band.load_gigs!.length.should.equal 3
+      band.gigs.first.time.strftime('20XX-%m-%dT%T%z').
+        should.equal '20XX-08-06T20:00:00+0000'
     end
 
     it 'should not duplicate gigs' do

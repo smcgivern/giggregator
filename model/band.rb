@@ -26,7 +26,7 @@ class Band < Sequel::Model
   capitalize :title
 
   TIME_FORMAT = '%a, %d %B @ %H:%M'
-  TIME_FORMAT_ALT = '%a, %B %d @ %H:%M'
+  TIME_FORMAT_ALT = '%a, %B %d @ %H:%M %p'
 
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
