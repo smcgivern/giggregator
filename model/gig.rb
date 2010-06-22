@@ -24,7 +24,7 @@ class Gig < Sequel::Model
 
   def event_id
     if (val = values[:event_id])
-      val === BigDecimal ? val.to_s('F').split('.').first : val.to_s
+      BigDecimal === val ? val.to_s('F').split('.').first : val.to_s
     end
   end
 
