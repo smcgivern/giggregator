@@ -264,6 +264,10 @@ describe 'Band#load_gigs!' do
       @band.gigs.first.address.should.equal 'Brooklyn, New York'
     end
 
+    it 'should remove trailing commas from the address' do
+      @band.gigs.last.address.should.equal 'Philadelphia, Pennsylvan'
+    end
+
     it "should return the band's gigs" do
       @band.load_gigs!.should.equal @band.gigs
     end

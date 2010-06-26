@@ -151,7 +151,9 @@ class Band < Sequel::Model
 
         place = place.gsub("#{title}\302\240 at \302\240", '')
         location, *address = place.split(', ')
-        address = address.join(', ')
+
+        address = address.delete_if {|x| x.gsub('.', '').empty?}.
+          join(', ')
 
         time = begin
                  parse_time(orig_time)
