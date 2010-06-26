@@ -6,7 +6,7 @@
 <title>MAXENCE CYRIN - Upcoming Shows and Events</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="verify-v1" content="taydbhn7VzJoY3lvvGZy5OeL2RR7neFNufmEvprBMVA=" /> <!--for Google webmasters tools -->
- 
+
 
 <!-- build:57 -->
 
@@ -29,9 +29,9 @@
   var i18n_ok_button = "Ok";
   var i18n_neverMind_button = "Never Mind";
   var i18n_IsAttending = " is attending::";
-  
+
   var i18n_time_labels = {};
-  i18n_time_labels.amPmDesignators = ['AM', 
+  i18n_time_labels.amPmDesignators = ['AM',
                                       'PM'];
   i18n_time_labels.monthDayFormat = "MMMM dd";
   i18n_time_labels.minAbbrv = "min";
@@ -39,7 +39,7 @@
   i18n_time_labels.hoursPlural = "hours";
   i18n_time_labels.daysPlural = "days";
   i18n_time_labels.shortDatePattern = "m/d/yy";
-  
+
   i18n_time_labels.dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   i18n_time_labels.monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -48,17 +48,17 @@
   var EventsRes = {
     "rsvp":"rsvp",
     "Going":"{0} Going",
-    "GoingText":"Going", 
-    "IamGoing":"I\'m going", 
-    "WantToGo":"Want to go", 
-    "IWantToGo":"I want to go", 
-    "Change":"Change", 
-    "At" : " at ", 
-    "ViewAll" : "View All", 
-    "NoPhoto" : "No Photo", 
-    "NoPhotoURL" : "http:\/\/x.myspacecdn.com\/images\/no_pic.gif", 
-    "FindTickets" : "Find Tickets", 
-    "NoResult": "<b>Sorry, no events were found matching your search criteria.<\/b><br \/><br \/>We\'re continually adding new events, so we invite you to check back later or try another search.<br \/><br \/>MySpace Events is a new service and we\'re developing features as fast as we can. We would love to get your <a href=\'http:\/\/faq.myspace.com\/events\'>suggestions<\/a>.  If it\'s good, you might just see it up on the site! :)", 
+    "GoingText":"Going",
+    "IamGoing":"I\'m going",
+    "WantToGo":"Want to go",
+    "IWantToGo":"I want to go",
+    "Change":"Change",
+    "At" : " at ",
+    "ViewAll" : "View All",
+    "NoPhoto" : "No Photo",
+    "NoPhotoURL" : "http:\/\/x.myspacecdn.com\/images\/no_pic.gif",
+    "FindTickets" : "Find Tickets",
+    "NoResult": "<b>Sorry, no events were found matching your search criteria.<\/b><br \/><br \/>We\'re continually adding new events, so we invite you to check back later or try another search.<br \/><br \/>MySpace Events is a new service and we\'re developing features as fast as we can. We would love to get your <a href=\'http:\/\/faq.myspace.com\/events\'>suggestions<\/a>.  If it\'s good, you might just see it up on the site! :)",
     "Error":"We\'re sorry, there was an error processing your request."};
 
   var metroPickerEnterCityZipMsg = "Please Enter City, State or Zip";
@@ -66,7 +66,7 @@
   var metroPickerSelectLocationTitle = "Select your metro";
   var metroPickerSelectLocationCancel = "Cancel";
   var metroPickerSelectLocationSave = "Save"
-  
+
   var i18n_loginRSVP_message ="You must login to MySpace in order to RSVP for an event.";
   var i18n_addEdit_TicketingUrlName ="ticketing";
   var i18n_addEdit_VideoUrlName ="video";
@@ -92,39 +92,39 @@
       };
     }
   }
-  
+
   function getMilitaryClockTime(dt)
   {
     if (dt == null) {
      return "???";
     }
-    
+
     var hour   = dt.getUTCHours();
     var minute = dt.getUTCMinutes();
 
     if(minute < 10){
       minute = "0" + minute;
-    }    
-    if(hour < 10){ 
+    }
+    if(hour < 10){
       hour = "0"+ hour;
     }
 
     return hour+":"+minute;
   }
-    
+
   function getClockTime(dt,optionalFormat, amPmDesignators)
   {
     //Assign default value for amPmDesignators
     amPmDesignators = typeof(amPmDesignators) != 'undefined' ? amPmDesignators : ['AM', 'PM'];
-    
+
     if(dt == null) {
       return "???";
     }
-    
+
     var hour   = dt.getUTCHours();
     var minute = dt.getUTCMinutes();
     var ap = "";
-    
+
     if(amPmDesignators[0] != '' && amPmDesignators[1] != '') //use 12hr (AM/PM) format
     {
       ap = (hour   > 11) ? " " + amPmDesignators[1] : " " + amPmDesignators[0];
@@ -141,15 +141,15 @@
     {
       if(minute < 10){
         minute = "0" + minute;
-      }    
-      if(hour < 10){ 
+      }
+      if(hour < 10){
         hour = "0"+ hour;
       }
     }
 
     return hour + ":" + minute + ap;
   }
-  
+
   function addOnclickEvent(func) {
     var oldonclick = document.onclick;
     if (typeof document.onclick != 'function') {
@@ -173,12 +173,12 @@
   <link rel="stylesheet" type="text/css" href="http://assets.socialplan.com/Assets/css/_css/manage.213l.css"/>
   <link rel="stylesheet" type="text/css" href="http://assets.socialplan.com/Assets/css/_css/sppro.213l.css"/>
 
-<script type="text/javascript" src="http://assets.socialplan.com/Assets/js/json2.213l.js"></script>  
+<script type="text/javascript" src="http://assets.socialplan.com/Assets/js/json2.213l.js"></script>
 
-     
+
 <script type="text/javascript" src="http://www.myspace.com/Modules/Partner/Pages/RawHeader.aspx?fuseaction=SPEvents.PublicList&msid=0&culture=en-US" ></script>
 <script type="text/javascript">
-    if((typeof(MySpaceHeader) != 'undefined') && MySpaceHeader) document.write(MySpaceHeader);          
+    if((typeof(MySpaceHeader) != 'undefined') && MySpaceHeader) document.write(MySpaceHeader);
 </script>
 
 
@@ -186,19 +186,19 @@
 <body>
 
 
-  
+
 	<div id="msSubnav" class="group"><h1><a title="events" href="http://events.myspace.com">events</a></h1><ul>
 		<li><a href="http://events.myspace.com" class=""><span>Home</span><small>▲</small></a></li>
-				
+
 		 			<li><a href="javascript:void(0);" onclick="javascript:RequireLogin('home-local-events', 'You must log in to MySpace to view this content.', 'MIGUBgkrBgEEAYI3WAOggYYwgYMGCisGAQQBgjdYAwGgdTBzAgMCAAECAmYDAgIAwAQILbhynFpWOIkEEHVATa%2b1Dj4%2bPN0UVvrc7HEESOLfMit7p0ld0kdmLADIDjAaN%2b6QV9jlxDVWgl7FBUyNVpG4pSXAsmzY7djP3q3a12c0FBbJ%2brB6a18d98SYPArCiiH2kzptDg%3d%3d');"><span>My Events</span><small>▲</small></a></li>
-			 
+
 		<li><a href="http://events.myspace.com/Calendar" class="active"><span>Calendar</span><small>▲</small></a></li>
-				
-		
+
+
 		<li><a href="http://events.myspace.com/Browse" class=""><span>Browse</span><small>▲</small></a></li>
 		</ul>
-		
-	</div>	
+
+	</div>
 
 <div id="main">
 </div>
@@ -209,13 +209,13 @@
       <a href="http://www.myspace.com/60520888">MAXENCE CYRIN</a> &gt; Shows &amp; Events<br />
     </div>
 
-    
+
 
 	<div id="home-feature-events" class="moduleTop"><h2 class="floatL marginH2">Upcoming Shows &amp; Events</h2>
-      
+
     </div>
     <div id="home-rec-events" class="floatL marginItemsPublic">
-      <div class='eventitem'><div class='event-img'><a href=http://events.myspace.com/Event/3893831/Sázavafest><img src='http://x.myspacecdn.com/images/no_pic.gif' alt='No Photo' /></a></div><div class='event-info'><div class='event-titleinfo'><a class="event-title" href="http://events.myspace.com/Event/3893831/Sázavafest"><span title="Sázavafest">S&#225;zavafest</span></a><span>&nbsp; at &nbsp;<span title="Sázavafest, Kacov, Czech Repu">S&#225;zavafest, Kacov, Czech Repu</span></span></div><div class='event-cal'>Fri, August 06 @ 8:00 PM</div><div class='event-notes'><a class='guests-going reclist3893831going' href='http://events.myspace.com/Event/3893831/Sázavafest'>1 Going</a><span class="side-rsvp-controls rsvp-control3893831 "><span class="rsvpText">rsvp</span><span class="rsvpContainer  reclist3893831"><span onclick="RsvpEvent('3893831', 3, 'reclist3893831', false, false);">I'm going</span>&nbsp;|&nbsp;<span onclick="RsvpEvent('3893831', 2, 'reclist3893831', false, false);">I want to go</span></span><span class="rsvpedtext hide respondid3893831">No thanks <a onclick="ChangeRSVP('respondid3893831', 'reclist3893831', '3893831', false)"> (Change)</a></span></span></span></div></div></div><div class='eventitem'><div class='event-img'><a href=http://events.myspace.com/Event/3893604/PIANO-SOLO-LIVE--Nouvelle-Vague><img src='http://x.myspacecdn.com/images/no_pic.gif' alt='No Photo' /></a></div><div class='event-info'><div class='event-titleinfo'><a class="event-title" href="http://events.myspace.com/Event/3893604/PIANO-SOLO-LIVE--Nouvelle-Vague"><span title="PIANO SOLO LIVE + Nouvelle Vague">PIANO SOLO LIVE + Nouvelle Vague</span></a><span>&nbsp; at &nbsp;<span title="Hasselt, Hasselt, Belgium">Hasselt, Hasselt, Belgium</span></span></div><div class='event-cal'>Fri, October 15 @ 8:00 PM</div><div class='event-notes'><a class='guests-going reclist3893604going' href='http://events.myspace.com/Event/3893604/PIANO-SOLO-LIVE--Nouvelle-Vague'>1 Going</a><span class="side-rsvp-controls rsvp-control3893604 "><span class="rsvpText">rsvp</span><span class="rsvpContainer  reclist3893604"><span onclick="RsvpEvent('3893604', 3, 'reclist3893604', false, false);">I'm going</span>&nbsp;|&nbsp;<span onclick="RsvpEvent('3893604', 2, 'reclist3893604', false, false);">I want to go</span></span><span class="rsvpedtext hide respondid3893604">No thanks <a onclick="ChangeRSVP('respondid3893604', 'reclist3893604', '3893604', false)"> (Change)</a></span></span></span></div></div></div><div class='eventitem'><div class='event-img'><a href=http://events.myspace.com/Event/3893720/piano><img src='http://x.myspacecdn.com/images/no_pic.gif' alt='No Photo' /></a></div><div class='event-info'><div class='event-titleinfo'><a class="event-title" href="http://events.myspace.com/Event/3893720/piano"><span title="piano">piano</span></a><span>&nbsp; at &nbsp;<span title="De Warande Festival, Turnhout, Belgium">De Warande Festival, Turnhout, Belgium</span></span></div><div class='event-cal'>Sat, October 16 @ 8:00 PM</div><div class='event-notes'><a class='guests-going reclist3893720going' href='http://events.myspace.com/Event/3893720/piano'>1 Going</a><span class="side-rsvp-controls rsvp-control3893720 "><span class="rsvpText">rsvp</span><span class="rsvpContainer  reclist3893720"><span onclick="RsvpEvent('3893720', 3, 'reclist3893720', false, false);">I'm going</span>&nbsp;|&nbsp;<span onclick="RsvpEvent('3893720', 2, 'reclist3893720', false, false);">I want to go</span></span><span class="rsvpedtext hide respondid3893720">No thanks <a onclick="ChangeRSVP('respondid3893720', 'reclist3893720', '3893720', false)"> (Change)</a></span></span></span></div></div></div>
+      <div class='eventitem'><div class='event-img'><a href=http://events.myspace.com/Event/3893831/Sázavafest><img src='http://x.myspacecdn.com/images/no_pic.gif' alt='No Photo' /></a></div><div class='event-info'><div class='event-titleinfo'><a class="event-title" href="http://events.myspace.com/Event/3893831/Sázavafest"><span title="Sázavafest">S&#225;zavafest</span></a><span>&nbsp; at &nbsp;<span title="Sázavafest, Kacov, Czech Repu">S&#225;zavafest, Kacov, Czech Repu</span></span></div><div class='event-cal'>Today @ 8:00 PM</div><div class='event-notes'><a class='guests-going reclist3893831going' href='http://events.myspace.com/Event/3893831/Sázavafest'>1 Going</a><span class="side-rsvp-controls rsvp-control3893831 "><span class="rsvpText">rsvp</span><span class="rsvpContainer  reclist3893831"><span onclick="RsvpEvent('3893831', 3, 'reclist3893831', false, false);">I'm going</span>&nbsp;|&nbsp;<span onclick="RsvpEvent('3893831', 2, 'reclist3893831', false, false);">I want to go</span></span><span class="rsvpedtext hide respondid3893831">No thanks <a onclick="ChangeRSVP('respondid3893831', 'reclist3893831', '3893831', false)"> (Change)</a></span></span></span></div></div></div><div class='eventitem'><div class='event-img'><a href=http://events.myspace.com/Event/3893604/PIANO-SOLO-LIVE--Nouvelle-Vague><img src='http://x.myspacecdn.com/images/no_pic.gif' alt='No Photo' /></a></div><div class='event-info'><div class='event-titleinfo'><a class="event-title" href="http://events.myspace.com/Event/3893604/PIANO-SOLO-LIVE--Nouvelle-Vague"><span title="PIANO SOLO LIVE + Nouvelle Vague">PIANO SOLO LIVE + Nouvelle Vague</span></a><span>&nbsp; at &nbsp;<span title="Hasselt, Hasselt, Belgium">Hasselt, Hasselt, Belgium</span></span></div><div class='event-cal'>Fri, October 15 @ 8:00 PM</div><div class='event-notes'><a class='guests-going reclist3893604going' href='http://events.myspace.com/Event/3893604/PIANO-SOLO-LIVE--Nouvelle-Vague'>1 Going</a><span class="side-rsvp-controls rsvp-control3893604 "><span class="rsvpText">rsvp</span><span class="rsvpContainer  reclist3893604"><span onclick="RsvpEvent('3893604', 3, 'reclist3893604', false, false);">I'm going</span>&nbsp;|&nbsp;<span onclick="RsvpEvent('3893604', 2, 'reclist3893604', false, false);">I want to go</span></span><span class="rsvpedtext hide respondid3893604">No thanks <a onclick="ChangeRSVP('respondid3893604', 'reclist3893604', '3893604', false)"> (Change)</a></span></span></span></div></div></div><div class='eventitem'><div class='event-img'><a href=http://events.myspace.com/Event/3893720/piano><img src='http://x.myspacecdn.com/images/no_pic.gif' alt='No Photo' /></a></div><div class='event-info'><div class='event-titleinfo'><a class="event-title" href="http://events.myspace.com/Event/3893720/piano"><span title="piano">piano</span></a><span>&nbsp; at &nbsp;<span title="De Warande Festival, Turnhout, Belgium">De Warande Festival, Turnhout, Belgium</span></span></div><div class='event-cal'>Sat, October 16 @ 8:00 PM</div><div class='event-notes'><a class='guests-going reclist3893720going' href='http://events.myspace.com/Event/3893720/piano'>1 Going</a><span class="side-rsvp-controls rsvp-control3893720 "><span class="rsvpText">rsvp</span><span class="rsvpContainer  reclist3893720"><span onclick="RsvpEvent('3893720', 3, 'reclist3893720', false, false);">I'm going</span>&nbsp;|&nbsp;<span onclick="RsvpEvent('3893720', 2, 'reclist3893720', false, false);">I want to go</span></span><span class="rsvpedtext hide respondid3893720">No thanks <a onclick="ChangeRSVP('respondid3893720', 'reclist3893720', '3893720', false)"> (Change)</a></span></span></span></div></div></div>
     </div>
 
 </div>
@@ -244,7 +244,7 @@
 	addLoadEvent(MySpace.UI.EventTicketsTooltip.prototype.Initialize);
 </script>
 
-  
+
 <script type="text/javascript">
   function handle_onclick_tab(url, label)
   {
@@ -257,8 +257,8 @@
 
   <script type="text/javascript" src="http://assets.socialplan.com/Assets/js/combined.213l.js"></script>
   <script type="text/javascript" src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/en_US"></script>
-    
-  
+
+
 <script type="text/javascript">
 function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_,endTextbox_,startTime_,endTime_,callbackFunction_,date_and_time_modified_,allowMultipleDays_,isQuickInvite_,isQuickCreate_,isPro_){
 
@@ -280,8 +280,8 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
   var isPro = isPro_;
   var startDropdownSelectedIndex = 0;
   var endDropdownSelectedIndex = 0;
-  
-  //var IE6 = false /*@cc_on || @_jscript_version <= 5.7 @*/;  
+
+  //var IE6 = false /*@cc_on || @_jscript_version <= 5.7 @*/;
   var IE6 = /msie|MSIE 6/.test(navigator.userAgent);
   //methods
   this.noOp = _noOp;
@@ -306,7 +306,7 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
   this.updateStartTimeDropdown();
   startTextbox.value = getClockTime(this.startTime, null, i18n_time_labels.amPmDesignators);
   endTextbox.value = getClockTime(this.endTime, null, i18n_time_labels.amPmDesignators);
-    
+
   //method definitions
   function _noOp(){}
 
@@ -330,7 +330,7 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
             startDiv.style.top = '114px';
         }
     }
-    
+
     this.resolveTime(startTextbox,startDropdown,false);
     this.resolveTime(endTextbox,endDropdown,true);
     startDiv.style.display = (startDiv.style.display != "block")?"block":"none";
@@ -340,13 +340,13 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
       startDropdown.options[startDropdownSelectedIndex].selected = true;
     }
   }
-  
+
   function _toggleEndTimeDropdown() {
 
       if (isPro) {
         var pos = $("#"+endTextbox.id).position();
-        endDiv.style.left = pos.left+"px";   
-        endDiv.style.top = (pos.top+$("#"+endTextbox.id).outerHeight(false))+"px";   
+        endDiv.style.left = pos.left+"px";
+        endDiv.style.top = (pos.top+$("#"+endTextbox.id).outerHeight(false))+"px";
       } else if (isQuickCreate) {
           endDiv.style.left = '173px';
           endDiv.style.top = '113px';
@@ -367,7 +367,7 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
     this.resolveTime(startTextbox,startDropdown,false);
     this.resolveTime(endTextbox,endDropdown,true);
   }
-  
+
   function _getDateString(dt){
     var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
@@ -376,13 +376,13 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
     var dayOfWeek = dt.getUTCDay();
     return days[dayOfWeek]+" "+months[month]+" "+day;
   }
-  
 
-  
+
+
   function _updateEndTimeDropdown(){
     //empty the end time dropdown
     endDropdown.options.length=0;
-    
+
     //add custom options for half hour increments up to 24 hrs
     var myStartDate;
     if(this.startTime==null){
@@ -409,16 +409,16 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
         }
         durationText = " (" + durationText + ")";
       }
-      
+
       var selected = false;
       if(this.endTime && this.endTime.valueOf() == tempDate.valueOf()){
         selected = true;
       }
-      
+
       endDropdown.options[i-1] = new Option(getClockTime(tempDate, null, i18n_time_labels.amPmDesignators)+durationText, tempDate.valueOf(), selected, selected);
-      
+
     }
-    
+
     //add custom options for 2 to 7 days
     if(allowMultipleDays && false){
       for(i=2;i<=7;i++){
@@ -435,7 +435,7 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
       }
     }
   }
-    
+
   function _updateStartTimeDropdown(){
     //empty the start time dropdown
     startDropdown.options.length=0;
@@ -447,10 +447,10 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
     else{
       myStartDate = new Date(this.startTime.valueOf()); //copies start time
     }
-    
+
     myStartDate.setUTCHours(0);  //we want it to start at midnight
     myStartDate.setUTCMinutes(0);//we want it to start at midnight
-    
+
     startDropdownSelectedIndex = -1;
     for(var i=0;i < 48; i++){
       var tempDate = new Date( myStartDate.valueOf() + 60000*i*30); //60000 milliseconds in a minute
@@ -459,11 +459,11 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
         startDropdownSelectedIndex = i;
         selected = true;
       }
-      
+
       startDropdown.options[i] = new Option(getClockTime(tempDate, null, i18n_time_labels.amPmDesignators), tempDate.valueOf(), selected, selected);
     }
   }
-  
+
   function _resolveTime(textbox,dropdown,isEndTime)
   {
     var previousStartTime = null;
@@ -518,7 +518,7 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
         this.startTime = null;
       }
     }
-    
+
     if(!isEndTime){
       this.updateEndTime(previousStartTime);
       this.updateEndTimeDropdown(); //set the text for the durations, etc
@@ -526,7 +526,7 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
     }
     this.callbackFunction();
   }
-  
+
   function _setStartTimeText(){
     var previousStartTime = null;
     if(this.startTime){
@@ -537,22 +537,22 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
     startDiv.style.display = "none";
     this.date_and_time_modified = true;
     this.updateEndTime(previousStartTime);
-    
+
     //fling an event to update the calendar
     this.callbackFunction();
   }
-  
+
   function _setEndTimeText(){
     this.endTime = new Date(endDropdown.value-0);  //-0 to make sure it treats it like a number
     endTextbox.value = getClockTime(this.endTime, null, i18n_time_labels.amPmDesignators);
     endDiv.style.display = "none";
     this.date_and_time_modified = true;
-    
+
     //fling an event to update the calendar ...or whatever officially stores the end time
     this.callbackFunction();
-    
+
   }
-  
+
   function _handleOnClick(id){
     if(id != endTextbox.id && id != endDropdown.id){
       endDiv.style.display = "none";
@@ -565,17 +565,17 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
     }
     return true;
   }
-  
+
   function _updateEndTime(previousStartTime){
     //make sure the duration stays constant
     //skip this if the end time is currently null
-    //or if the start time was previously null or is currently null 
+    //or if the start time was previously null or is currently null
     if(this.endTime != null && previousStartTime != null && this.startTime != null){
       this.endTime = new Date(this.endTime.valueOf() + this.startTime.valueOf()-previousStartTime);
       endTextbox.value = getClockTime(this.endTime, null, i18n_time_labels.amPmDesignators);
     }
   }
-  
+
   function _setYearMonthDayFromDate(incomingDate){
     //PLEASE NOTE: This function expects the incoming date to be in LOCAL TIME
     if(this.startTime){
@@ -585,16 +585,16 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
       this.startTime = initialStartTime;
     }
     var previousStartTime =this.startTime.valueOf();
-    
+
     this.startTime.setUTCDate(incomingDate.getDate());
     this.startTime.setUTCMonth(incomingDate.getMonth());
     this.startTime.setUTCFullYear(incomingDate.getFullYear());
     this.updateEndTime(previousStartTime);
-    this.updateStartTimeDropdown(); 
-    this.updateEndTimeDropdown(); 
+    this.updateStartTimeDropdown();
+    this.updateEndTimeDropdown();
     this.date_and_time_modified = true;
   }
-  
+
   function _setYearMonthDayFromEndDate(incomingDate){
     //PLEASE NOTE: This function expects the incoming date to be in LOCAL TIME
 
@@ -605,11 +605,11 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
       this.endTime = initialEndTime;
     }
     var previousEndTime =this.endTime.valueOf();
-    this.endTime.setUTCDate(incomingDate.getDate());    
+    this.endTime.setUTCDate(incomingDate.getDate());
     this.endTime.setUTCMonth(incomingDate.getMonth());
     this.endTime.setUTCFullYear(incomingDate.getFullYear());
-    
-    this.updateEndTimeDropdown(); 
+
+    this.updateEndTimeDropdown();
     this.date_and_time_modified = true;
   }
 
@@ -715,7 +715,7 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
           }
 
           var selected = false;
-          
+
           $("#endTimeDropdownName")[0].options[i] = new Option(getClockTimeSpecialProfileTypes(tempDate, null, i18n_time_labels.amPmDesignators) + durationText, tempDate.valueOf(), selected, selected);
       }
 
@@ -776,7 +776,7 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
   }
 }
 </script>
-  
+
   <script type="text/javascript">
    slingshot.debug = false;
   </script>
@@ -785,8 +785,8 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
   <script type="text/javascript" src="http://assets.socialplan.com/Assets/js/jquery/jquery.fling.213l.js"></script>
   <script type="text/javascript" src="http://assets.socialplan.com/Assets/js/jquery/jquery.selectboxes.pack.213l.js"></script>
   <script type="text/javascript" src="http://assets.socialplan.com/Assets/js/jquery/jquery.uuid.213l.js"></script>
- 
- 
+
+
  <script type="text/javascript">
  	function loginToMyspaceAndComeBack(url) {
  		var encodedUrl = (typeof (url) == 'undefined') ? 'MIGmBgkrBgEEAYI3WAOggZgwgZUGCisGAQQBgjdYAwGggYYwgYMCAwIAAQICZgMCAgDABAhXUI5PjxBw2QQQiGEpyiSeP%2ftfmRHpnnH6gQRYylOQ27qHyJ7A7SoGm183e6CR29N8bCZSoo11xup4FEc6op8OWHo7N4%2fYqrKHqGBsZOpmjNDRS%2fUWg0YNFxlEfkZhR3EcM36bFet2aO%2fV30KAo2fu6HrTLg%3d%3d' : url;
@@ -802,9 +802,9 @@ function timeChooser(startDiv_,endDiv_,startDropdown_,endDropdown_,startTextbox_
  			html = message;
  		}
  		divAlert(html, document.getElementById(target), loginToMyspaceAndComeBack, url, "Do you want to login to MySpace?", "Skip This", "Login");
- 	} 
+ 	}
  </script>
- 
+
 
 
 

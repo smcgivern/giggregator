@@ -25,8 +25,10 @@ class Band < Sequel::Model
 
   capitalize :title
 
-  TIME_FORMAT = '%a, %d %B @ %H:%M'
-  TIME_FORMAT_ALT = '%a, %B %d @ %H:%M %p'
+  DATE_FORMAT = '%a, %B %d'
+  DATE_FORMAT_ALT = '%a, %d %B'
+  TIME_FORMAT = "#{DATE_FORMAT} @ %H:%M %p"
+  TIME_FORMAT_ALT = "#{DATE_FORMAT_ALT} @ %H:%M"
 
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
@@ -117,7 +119,19 @@ class Band < Sequel::Model
 
   def load_gigs!
     def to_time(d, &b); Time.parse(d.new_offset(0).to_s, &b); end
-    def human_date(t); t.strftime('%a, %d %B'); end
+    def human_date(t, f); t.strftime(f); end
+
+    def parse_time(time, alt_format=nil)
+      time_fmt, date_fmt = ['TIME', 'DATE'].map do |key|
+        Band.const_get("#{key}_FORMAT#{'_ALT' if alt_format}")
+      end
+
+      time = time.gsub(/\AToday/, human_date(Time.now, date_fmt))
+      time = time.gsub(/\ATomorrow/,
+                       human_date(Time.now + 24 * 60 * 60, date_fmt))
+
+      DateTime.strptime(time, time_fmt)
+    end
 
     pages = [parse(gig_page_uri)]
     page_div = pages.first.search(SELECTORS[:gig_list_pages])
@@ -139,15 +153,11 @@ class Band < Sequel::Model
         location, *address = place.split(', ')
         address = address.join(', ')
 
-        time = orig_time.gsub(/\AToday/, human_date(Time.now))
-        time = time.gsub(/\ATomorrow/,
-                         human_date(Time.now + 24 * 60 * 60))
-
-        begin
-          time = DateTime.strptime(time, TIME_FORMAT)
-        rescue
-          time = DateTime.strptime(time, TIME_FORMAT_ALT)
-        end
+        time = begin
+                 parse_time(orig_time)
+               rescue
+                 parse_time(orig_time, true)
+               end
 
         time = to_time(time) do |year|
           if (to_time(time) < Time.now and
