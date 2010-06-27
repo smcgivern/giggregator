@@ -207,6 +207,20 @@ describe 'GigList#gig_list' do
     gig_list.gig_list.length.should.equal 1
     gig_list.gig_list.first.location.should.equal 'Test Location'
   end
+
+  it 'should ignore other filters' do
+    gig_list = GigList.create
+    band = mock_band('gig_list_unknown_filter')
+    cols = [:title, :location, :address]
+
+    gig_list.filters[:other] = 'test unknown filter'
+    gig_list.add_band(band)
+
+    band.add_gig(Gig.create(:time => Time.now + 60))
+    band.add_gig(Gig.create(:time => Time.now + 120))
+
+    gig_list.gig_list.length.should.equal 2
+  end
 end
 
 describe 'GigList#days_filter' do
