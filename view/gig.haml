@@ -15,6 +15,6 @@
   %ol
     - @gig_list.by_time.delete_if {|g| g == @gig}[0..4].each do |gig|
       %li
-        %a{:href => gig_link(gig)}= rp(gig.title)
+        %a{:href => gig_link(gig)}= rp(gig.address)
         on
         = rp(gig.time_formatted)
