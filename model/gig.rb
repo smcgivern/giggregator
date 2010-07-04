@@ -40,8 +40,10 @@ class Gig < Sequel::Model
 
   def span_elements(elements)
     elements.map do |element|
-      "<span class=\"#{element[:title]}\">#{element[:text]}</span>"
-    end.join(' --- ')
+      unless element[:text].empty?
+        "<span class=\"#{element[:title]}\">#{element[:text]}</span>"
+      end
+    end.compact.join(' --- ')
   end
 
   def title_by_time_period
