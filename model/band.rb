@@ -150,9 +150,11 @@ class Band < Sequel::Model
         event_id = TEMPLATES[:gig_page].extract(event_id)['event_id']
 
         place = place.gsub("#{title}\302\240 at \302\240", '')
-        location, *address = place.split(', ')
+        location, *address = place.split(',')
 
-        address = address.delete_if {|x| x.gsub('.', '').empty?}.
+        address = address.
+          map {|x| x.strip}.
+          delete_if {|x| x.gsub('.', '').empty?}.
           join(', ')
 
         time = begin
