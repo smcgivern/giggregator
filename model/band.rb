@@ -64,7 +64,7 @@ class Band < Sequel::Model
       band = Band.find_or_create(params)
       band.load_band_info?
       band
-    rescue NotABandError, Timeout::Error
+    rescue NotABandError, Timeout::Error, OpenURI::HTTPError
       band.destroy if band
     end
   end
