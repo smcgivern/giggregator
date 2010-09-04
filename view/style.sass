@@ -1,7 +1,7 @@
 !body_colour = #000
 !body_background = #c2cdd2
-!header_colour = #b6c9d2
-!header_link = #c2cdd2
+!header_colour = #d1d5d6
+!header_link = #b6c9d2
 !header_background = #2d3132
 !main_colour = #2d3132
 !main_link = #011620
@@ -9,7 +9,7 @@
 !border_colour = #4f4b46
 !highlight_colour = #fffcc4
 
-h1, h2, h3
+h1, h2, h3, #subtitle
   font-family: helvetica, bitstream vera sans, arial, sans-serif
 
 body, li h3
@@ -64,15 +64,18 @@ div
 
   &#header
     h1
-      font-size: 400%
+      font-size: 500%
       font-weight: normal
-      padding: 0em 0.1em
+      letter-spacing: -0.05em
+      padding: 0em
+      margin: 0.1em 0.08em -0.1em 0.08em
       color= !header_colour
       background= !header_background
 
     p#subtitle
       font-size: 80%
-      padding: 0em 0.5em
+      padding: 0em
+      margin: 0em 0.5em 0.5em 0.5em
 
   &#main, &#main-wide, &#sidebar
     border:
