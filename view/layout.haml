@@ -11,9 +11,11 @@
       %script{:src => script, :type => CONTENT_TYPES[:js]}
   %body
     %div#header
-      %h1= rp(@page_title)
       - if @breadcrumbs
+        %h1= rp(@page_title)
         %p#subtitle= show_breadcrumbs(@breadcrumbs)
+      - else
+        %h1.homepage= rp(@page_title)
     = yield
     %div#footer
       %p
