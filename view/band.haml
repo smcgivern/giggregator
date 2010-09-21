@@ -1,7 +1,7 @@
 %div#main-wide
   %div#filter
     %h2 Filter
-    %form{:action => '/filter-gig-list/', :method => 'POST'}
+    %form{:action => r('/filter-gig-list/'), :method => 'POST'}
       %p
         %input{:type => 'text', :name => 'days', :size => 2,
                :value => h(@days)}

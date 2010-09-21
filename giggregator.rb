@@ -147,7 +147,7 @@ post '/update-gig-list/?' do
     end
   end
 
-  redirect "/gig-list/#{gig_list.link}/"
+  redirect r("/gig-list/#{gig_list.link}/")
 end
 
 post '/filter-gig-list/?' do

@@ -4,9 +4,9 @@
   - if @login_failure
     %p
       Login failed. Please
-      %a{:href => '/'} create a new gig list
+      %a{:href => r('/')} create a new gig list
       or try again.
-  %form{:action => '/openid-login/', :method => 'POST'}
+  %form{:action => r('/openid-login/'), :method => 'POST'}
     %p
       %input.openid{:type => 'text', :name => 'openid_uri',
                     :id => 'openid_uri', :value => @gig_list.openid}

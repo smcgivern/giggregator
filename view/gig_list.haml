@@ -4,7 +4,7 @@
 %div#sidebar
   %div#filter
     %h2 Filter
-    %form{:action => '/filter-gig-list/', :method => 'POST'}
+    %form{:action => r('/filter-gig-list/'), :method => 'POST'}
       %p
         %input{:type => 'text', :name => 'days', :size => 2,
                :value => h(@days)}
@@ -24,4 +24,4 @@
   %ol#bands
     - @gig_list.bands.sort_by {|b| b.title}.each do |band|
       %li
-        %a{:href => "/band/#{band.myspace_name}/"}= rp(band.title)
+        %a{:href => r("/band/#{band.myspace_name}/")}= rp(band.title)

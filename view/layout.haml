@@ -2,13 +2,13 @@
 %html
   %head
     %title= rp(@page_title)
-    %link{:href => '/ext/style.css', :rel => 'stylesheet',
+    %link{:href => r('/ext/style.css'), :rel => 'stylesheet',
           :type => CONTENT_TYPES[:css]}
     - if @page_feed
-      %link{:href => @page_feed, :rel => 'alternate',
+      %link{:href => r(@page_feed), :rel => 'alternate',
             :type => CONTENT_TYPES[:atom]}
     - (@scripts || []).each do |script|
-      %script{:src => script, :type => CONTENT_TYPES[:js]}
+      %script{:src => r(script), :type => CONTENT_TYPES[:js]}
   %body
     %div#header
       - if @breadcrumbs

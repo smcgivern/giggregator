@@ -14,21 +14,29 @@ before do
   @col = :time
 end
 
-helpers do
-  include Rack::Utils
-  alias_method :h, :escape_html
+module GiggregatorHelpers
+  def r(s)
+    (s =~ /^\// && !(s =~ /^\/#{ROOT}/)) ? "/#{ROOT}#{s}" : s
+  end
+  module_function :r
 
   def u(s); Addressable::URI.encode(s.gsub(' ', '+')); end
   def rp(s); RubyPants.new(s.gsub(' - ', ' -- ')).to_html; end
   def ts(s); u("#{s}#{'/' unless s =~ /\/$/}"); end
 
-  def self_base_uri; ts(self_uri.gsub(self_link, '')); end
   def self_uri; ts(request.url); end
   def self_link; ts(request.fullpath); end
-  def self_domain; self_base_uri.gsub(/(http\:|\/)/, ''); end
+
+  def self_base_uri
+    ts(self_uri.gsub(self_link, '')) + ("#{ROOT}/" if ROOT)
+  end
+
+  def self_domain
+    self_base_uri.gsub('http://', '').split('/').first
+  end
 
   def build_link(*parts)
-    "#{@feed ? self_base_uri : '/'}#{ts(parts.compact.join('/'))}"
+    r("#{@feed ? self_base_uri : '/'}#{ts(parts.compact.join('/'))}")
   end
 
   def updated_class?(gig, gig_list)
@@ -38,7 +46,7 @@ helpers do
   def atom_entry_id(gig_list)
     ['tag',
      "#{self_domain},#{gig_list.updated.strftime('%Y-%m-%d')}",
-     gig_list.link
+     self_link.gsub('/feed', '')
     ].join(':')
   end
 
@@ -52,7 +60,7 @@ helpers do
 
   def show_breadcrumbs(breadcrumbs)
     breadcrumbs.
-      map {|b| "<a href=\"#{b[:uri]}\">#{rp(b[:title])}</a>"}.
+      map {|b| "<a href=\"#{r(b[:uri])}\">#{rp(b[:title])}</a>"}.
       join(' / ')
   end
 
@@ -93,4 +101,15 @@ helpers do
   end
 
   def mappable; @scripts = [GOOGLE_MAPS_SCRIPT, '/ext/map.js']; end
+end
+
+helpers GiggregatorHelpers do
+  include Rack::Utils
+  alias_method :h, :escape_html
+end
+
+module Sass::Script::Functions
+  def r(s)
+    Sass::Script::String.new(GiggregatorHelpers.r(s.value))
+  end
 end

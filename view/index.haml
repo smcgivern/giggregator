@@ -1,7 +1,7 @@
 %div#main
   %h2 Create new gig list
   %p Enter a list of band links on MySpace:
-  %form{:action => '/update-gig-list/', :method => 'POST'}
+  %form{:action => r('/update-gig-list/'), :method => 'POST'}
     %p
       %input{:type => 'text', :name => 'title', :id => 'title'}
       %label{:for => 'title'} (list title)
@@ -20,7 +20,7 @@
       %li
         %h3= rp(gig.location)
         %p
-          %a{:href => "/band/#{gig.band.myspace_name}/"}<
+          %a{:href => r("/band/#{gig.band.myspace_name}/")}<
             = rp(gig.band.title)
           on
           %a{:href => gig_link(gig)}= rp(gig.time_formatted)
