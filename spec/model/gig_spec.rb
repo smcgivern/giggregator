@@ -73,7 +73,7 @@ describe 'Gig#date_formatted' do
 end
 
 describe 'Gig#title_by_time_period' do
-  it 'should include the band title, the address, and the time' do
+  it 'should include the band title, the address, and the date' do
     gig = Gig.create(:address => 'Stow',
                      :time => Time.utc(2009, 1, 1, 0, 0, 0))
 
@@ -82,12 +82,12 @@ describe 'Gig#title_by_time_period' do
 
     gig.title_by_time_period.should.be including?('Honington')
     gig.title_by_time_period.should.be including?('Stow')
-    gig.title_by_time_period.should.be including?('12:00 AM')
+    gig.title_by_time_period.should.be including?('Jan 2009')
   end
 end
 
 describe 'Gig#title_by_band' do
-  it 'should include the address and the time' do
+  it 'should include the address and the date' do
     gig = Gig.create(:address => 'Edgehill',
                      :time => Time.utc(2009, 1, 1, 0, 0, 0))
 
@@ -96,7 +96,7 @@ describe 'Gig#title_by_band' do
 
     gig.title_by_band.should.be including?('Edgehill')
     gig.title_by_band.should.not.be including?('Compton Verney')
-    gig.title_by_band.should.be including?('12:00 AM')
+    gig.title_by_band.should.be including?('Jan 2009')
   end
 end
 
@@ -114,7 +114,8 @@ describe 'Gig#uri' do
   it 'should link to the gig page on Myspace' do
     gig = Gig.create(:event_id => 1, :title => 'Foo')
 
-    gig.uri.to_s.should.equal 'http://events.myspace.com/Event/1/Foo'
+    gig.uri.to_s.
+      should.equal 'http://www.myspace.com/events/View/1/Foo'
   end
 
   it 'should be nil when there is no event ID' do

@@ -4,7 +4,7 @@ require 'model/band'
 class Gig < Sequel::Model
   many_to_one :band
 
-  TIME_FORMAT = '%d %b %Y at %I:%M %p'
+  TIME_FORMAT = '%d %b %Y'
   DATE_FORMAT = '%d %b %Y'
 
   create_schema do
