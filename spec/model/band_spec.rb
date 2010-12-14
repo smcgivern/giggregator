@@ -18,13 +18,24 @@ class Band < Sequel::Model
   def self.using_replacement_template(key)
     templates = {
       :band => 'spec/fixture/{myspace_name}.html',
-      :gig_list => 'spec/fixture/{friend_id}_gigs_{p}.html',
+      :gig_list => 'spec/fixture/{myspace_name}_gigs.html',
     }
 
     original = TEMPLATES[key]
     TEMPLATES[key] = Addressable::Template.new(templates[key])
     yield
     TEMPLATES[key] = original
+  end
+
+  def self.using_replacement_selector(key)
+    selectors = {
+      :band_name => 'title',
+    }
+
+    original = SELECTORS[key]
+    SELECTORS[key] = selectors[key]
+    yield
+    SELECTORS[key] = original
   end
 
   def replacement_load_band_info!; 'Loaded band info'; end
@@ -116,6 +127,16 @@ describe 'Band#parse' do
   end
 end
 
+describe 'Band#element' do
+  it 'should pick the element using SELECTORS[s] from page p' do
+    Band.using_replacement_selector(:band_name) do
+      doc = Band.new.parse('spec/fixture/nokogiri.html')
+
+      Band.new.element(doc, :band_name).should.equal doc.at('title')
+    end
+  end
+end
+
 describe 'Band#load_band_info?' do
   it 'should run load_band_info! if the band info is expired' do
     Band.using_replacement_method(:load_band_info!) do
@@ -182,8 +203,8 @@ end
 
 describe 'Band#gig_page_uri' do
   before do
-    @band = Band.new(:friend_id => '181410567')
-    @gig_page_uri = 'http://events.myspace.com/181410567/Events/1'
+    @band = Band.new(:myspace_name => 'thenational')
+    @gig_page_uri = 'http://www.myspace.com/thenational/shows'
   end
 
   it "should be the the URI of the band's gig page" do

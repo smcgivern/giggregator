@@ -32,13 +32,14 @@ class Band < Sequel::Model
 
   TEMPLATES = {
     :band => 'http://www.myspace.com/{myspace_name}',
-    :gig_list => 'http://events.myspace.com/{friend_id}/Events/{p}',
-    :gig_page => 'http://events.myspace.com/Event/{event_id}/{title}',
+    :gig_list => 'http://www.myspace.com/{myspace_name}/shows',
+    :gig_page => 'http://www.myspace.com/events/View/{event_id}/{title}',
   }
 
   SELECTORS = {
-    :band_name => 'meta[property="myspace:profileType"]',
-    :gig_page => '#profile_bandschedule a.whitelink',
+    :band_name => 'section.sitesHeader a.userLink',
+    :friend_id => 'a.gapBlockUser',
+    :gig_page => 'li.last a',
     :gig_list_pages => 'div.paginateCenter a',
     :gig_info => 'div.event-info',
     :gig_info_title => '.event-title',
@@ -76,6 +77,7 @@ class Band < Sequel::Model
 
   def uri(s); Addressable::URI.parse(s); end
   def parse(s); Nokogiri::HTML(open(s).read); end
+  def element(p, s); p.at(SELECTORS[s]); end
 
   def load_band_info?; load_band_info! if expired?(:band_info); end
   def load_gigs?; load_gigs! if expired?(:gigs); end
@@ -95,20 +97,22 @@ class Band < Sequel::Model
     TEMPLATES[:band].expand('myspace_name' => myspace_name)
   end
 
-  def gig_page_uri(p=1)
-    TEMPLATES[:gig_list].expand('friend_id' => friend_id, 'p' => p)
+  def gig_page_uri
+    TEMPLATES[:gig_list].expand('myspace_name' => myspace_name)
   end
 
   def load_band_info!
     band_page = parse(page_uri)
-    gig_link = band_page.at(SELECTORS[:gig_page])
+    gig_link = element(band_page, :gig_page)
     params = {:band_info_updated => Time.now}
 
     if gig_link
       gig_link = TEMPLATES[:gig_list].extract(uri(gig_link['href']))
 
-      params[:title] = band_page.at(SELECTORS[:band_name])['about']
-      params[:friend_id] = gig_link['friend_id']
+      params[:title] = element(band_page, :band_name).inner_text
+
+      params[:friend_id] =
+        element(band_page, :friend_id)['data-friendid']
     else
       raise NotABandError unless friend_id
     end
@@ -142,11 +146,11 @@ class Band < Sequel::Model
     pages.each do |page|
       page.search(SELECTORS[:gig_info]).each do |gig_info|
         title, place, orig_time = [:title, :place, :time].map do |key|
-          gig_info.at(SELECTORS["gig_info_#{key}".to_sym]).inner_text.
+          element(gig_info, "gig_info_#{key}".to_sym).inner_text.
             strip
         end
 
-        event_id = gig_info.at(SELECTORS[:gig_info_title])['href']
+        event_id = element(gig_info, :gig_info_title)['href']
         event_id = TEMPLATES[:gig_page].extract(event_id)['event_id']
 
         place = place.gsub("#{title}\302\240 at \302\240", '')
