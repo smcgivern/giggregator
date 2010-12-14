@@ -28,7 +28,7 @@ module GiggregatorHelpers
   def self_link; ts(request.fullpath); end
 
   def self_base_uri
-    ts(self_uri.gsub(self_link, '')) + ("#{ROOT}/" if ROOT)
+    ts(self_uri.gsub(self_link, '')) + (ROOT ? "#{ROOT}/" : '')
   end
 
   def self_domain
