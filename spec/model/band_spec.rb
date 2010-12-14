@@ -247,7 +247,7 @@ end
 describe 'Band#load_gigs!' do
   Band.using_replacement_template(:gig_list) do
     before do
-      @band = Band.find_or_create(:friend_id => 6114901)
+      @band = Band.find_or_create(:myspace_name => 'cocorosie')
       @band.load_gigs?
 
       def strip_gig_times(gigs)
@@ -255,52 +255,25 @@ describe 'Band#load_gigs!' do
       end
     end
 
-    it 'should follow multiple pages, if they exist' do
-      band = Band.find_or_create(:friend_id => 65642225)
-      band.load_gigs!
-      band.gigs.length.should.equal 13
-    end
-
     it 'should extract the time, title, and location' do
-      @band.gigs.first.title.should.equal 'Asobi Seksu'
-      @band.gigs.first.location.should.equal 'Bkln Yard'
-      @band.gigs.first.time.strftime('20XX-%m-%dT%T%z').
-        should.equal '20XX-07-16T16:00:00+0000'
+      @band.gigs.first.title.should.equal 'Shibuya O-west'
+      @band.gigs.first.address.should.equal 'Tokyo, Japan'
+      @band.gigs.first.time.strftime('20XX-%m-%d').
+        should.equal '20XX-01-13'
     end
 
     it 'should treat times in the past as happening next year' do
-      band = Band.find_or_create(:friend_id => 111111111)
+      band = Band.find_or_create(:myspace_name => 'milkyjoe')
       band.load_gigs!
       band.gigs.each {|g| g.time.should.satisfy {|t| t >= Time.now}}
-    end
-
-    it "should parse the special dates 'today' and 'tomorrow'" do
-      band = Band.find_or_create(:friend_id => 61149013)
-      band.load_gigs!
-      band.gigs.each {|g| g.time.should.satisfy {|t| t >= Time.now}}
-      band.gigs.length.should.equal Time.now.utc.hour >= 20 ? 1 : 2
     end
 
     it 'should extract the address as a comma-separated list' do
-      @band.gigs.first.address.should.equal 'Brooklyn, New York'
-    end
-
-    it 'should remove trailing commas from the address' do
-      @band.gigs.last.address.should.equal 'Philadelphia, Pennsylvan'
+      @band.gigs.first.address.should.equal 'Tokyo, Japan'
     end
 
     it "should return the band's gigs" do
       @band.load_gigs!.should.equal @band.gigs
-    end
-
-    it 'should use an alternative time format if required' do
-      band = Band.find_or_create(:friend_id => 60520888)
-      band.load_gigs!
-
-      band.gigs.length.should.equal 3
-      band.gigs.first.time.strftime('%T').should.equal '20:00:00'
-      band.gigs.last.time.strftime('20XX-%m-%dT%T%z').
-        should.equal '20XX-10-16T20:00:00+0000'
     end
 
     it 'should not duplicate gigs' do
@@ -309,7 +282,7 @@ describe 'Band#load_gigs!' do
     end
 
     it 'should overwrite duplicate gigs with the new title' do
-      @band.friend_id = 61149011
+      @band.myspace_name = 'cocorosieandjim'
       gig_updated = @band.gigs.first.updated
 
       @band.load_gigs!
