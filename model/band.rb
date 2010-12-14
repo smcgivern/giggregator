@@ -133,6 +133,12 @@ class Band < Sequel::Model
 
       location = title
       now = Time.now
+
+      address = address.split(', ').
+        map {|x| x.strip}.
+        delete_if {|x| x.gsub('.', '').empty?}.
+        join(', ')
+
       time = DateTime.strptime("#{day} #{month} #{now.year} 23:59:59",
                                '%d %b %Y %H:%M:%S')
 
