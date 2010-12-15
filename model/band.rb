@@ -136,7 +136,7 @@ class Band < Sequel::Model
 
       address = address.split(', ').
         map {|x| x.strip}.
-        delete_if {|x| x.gsub('.', '').empty?}.
+        delete_if {|x| x.gsub(/[-\.]/, '').empty?}.
         join(', ')
 
       time = DateTime.strptime("#{day} #{month} #{now.year} 23:59:59",

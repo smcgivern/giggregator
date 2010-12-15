@@ -272,6 +272,11 @@ describe 'Band#load_gigs!' do
       @band.gigs.first.address.should.equal 'Tokyo, Japan'
     end
 
+    it 'should remove punctuation-only address components' do
+      @band.gigs.last.address.
+        should.equal 'Melbourne, Melbourne, Australia'
+    end
+
     it "should return the band's gigs" do
       @band.load_gigs!.should.equal @band.gigs
     end
