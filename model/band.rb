@@ -130,10 +130,9 @@ class Band < Sequel::Model
       event_id = TEMPLATES[:gig_page].extract(event_id)['event_id']
 
       location = title
-      now = Time.now
-      time = Time.parse("#{day} #{month} #{now.year} 23:59:59Z")
 
-      time = Time.parse(time.to_s) {|y| y + 1} if time < now
+      time = Time.parse("#{day} #{month} #{Time.now.year} 23:59:59Z")
+      time = Time.parse(time.to_s) {|y| y + 1} if time < Time.now
 
       address = address.split(', ').
         map {|x| x.strip}.
