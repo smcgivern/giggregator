@@ -1,6 +1,6 @@
 require 'lib/model'
 
-require 'date'
+require 'time'
 require 'open-uri'
 require 'timeout'
 
@@ -119,8 +119,6 @@ class Band < Sequel::Model
   end
 
   def load_gigs!
-    def to_time(d, &b); Time.parse(d.new_offset(0).to_s, &b); end
-
     page = parse(gig_page_uri)
     page.search(SELECTORS[:gig_info]).each do |gig_info|
       title, address, month, day =
@@ -133,16 +131,14 @@ class Band < Sequel::Model
 
       location = title
       now = Time.now
+      time = Time.parse("#{day} #{month} #{now.year} 23:59:59Z")
+
+      time = Time.parse(time.to_s) {|y| y + 1} if time < now
 
       address = address.split(', ').
         map {|x| x.strip}.
         delete_if {|x| x.gsub(/[-\.]/, '').empty?}.
         join(', ')
-
-      time = DateTime.strptime("#{day} #{month} #{now.year} 23:59:59",
-                               '%d %b %Y %H:%M:%S')
-
-      time = to_time(time) {|y| y + (to_time(time) < now ? 1 : 0)}
 
       gig = Gig.find_or_create(:time => time, :band_id => id)
       cols = {:title => title, :location => location,
