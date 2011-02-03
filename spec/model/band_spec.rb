@@ -4,6 +4,7 @@ require 'model/band'
 require 'model/bands_gig_list'
 require 'model/gig'
 require 'model/gig_list'
+require 'yaml'
 
 def type(t); lambda {|x| t === x}; end
 
@@ -251,7 +252,7 @@ describe 'Band#load_gigs!' do
       @band.load_gigs?
 
       def strip_gig_times(gigs)
-        gigs.map {|g| g.to_yaml.gsub(/\n  :updated: .*?\n/, "\n")}
+        gigs.map {|g| g.values.to_yaml.gsub(/\n:updated: .*?\n/, "\n")}
       end
     end
 
