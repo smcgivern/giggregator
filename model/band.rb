@@ -126,7 +126,7 @@ class Band < Sequel::Model
           element(gig_info, "gig_info_#{key}".to_sym).inner_text.strip
         end
 
-      event_id = BASE_URL + element(gig_info, :gig_info_title)['href']
+      event_id = element(gig_info, :gig_info_title)['href']
       event_id = TEMPLATES[:gig_page].extract(event_id)['event_id']
 
       location = title
