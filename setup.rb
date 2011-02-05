@@ -15,8 +15,8 @@ def acquire(dir); Dir["#{dir}/*.rb"].each {|f| require f}; end
 acquire 'lib'
 
 GOOGLE_MAPS_API_KEY = File.open('.gmaps').read.strip
-ROOT = (File.exist?('.subfolder') ?
-        File.open('.subfolder').read.strip : nil)
+ROOT = (File.exist?('.root') ?
+        File.open('.root').read.strip : nil)
 
 GOOGLE_MAPS_PREFIX = 'http://maps.google.com/maps?file=api&v=2.x&key='
 GOOGLE_MAPS_SCRIPT = GOOGLE_MAPS_PREFIX + GOOGLE_MAPS_API_KEY
