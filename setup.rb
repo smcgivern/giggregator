@@ -48,6 +48,7 @@ TIME_PERIODS =
    TimePeriod.new('Earlier', lambda {|t| Between(t, nil, 0)}),
   ]
 
+Sequel.default_timezone = :utc
 DB = Sequel.sqlite(DB_SQLITE)
 
 [FEED_DIR, LOG_DIR].each do |dir|
