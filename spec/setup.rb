@@ -1,4 +1,4 @@
-require 'vendor/bundler_gems/environment'
+require 'bundler'
 require 'bacon'
 require 'sequel'
 
