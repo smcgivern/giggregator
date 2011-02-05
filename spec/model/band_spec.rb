@@ -248,7 +248,7 @@ end
 describe 'Band#load_gigs!' do
   Band.using_replacement_template(:gig_list) do
     before do
-      @band = Band.find_or_create(:myspace_name => 'cocorosie')
+      @band = Band.find_or_create(:myspace_name => 'anebrun')
       @band.load_gigs?
 
       def strip_gig_times(gigs)
@@ -257,25 +257,25 @@ describe 'Band#load_gigs!' do
     end
 
     it 'should extract the time, title, and location' do
-      @band.gigs.first.title.should.equal 'Shibuya O-west'
-      @band.gigs.first.address.should.equal 'Tokyo, Japan'
+      @band.gigs.first.title.should.equal 'Tavastia'
+      @band.gigs.first.address.should.equal 'Tavastia, Helsinki, Finland'
       @band.gigs.first.time.strftime('20XX-%m-%d').
-        should.equal '20XX-01-13'
+        should.equal '20XX-10-01'
     end
 
     it 'should treat times in the past as happening next year' do
-      band = Band.find_or_create(:myspace_name => 'milkyjoe')
+      band = Band.find_or_create(:myspace_name => 'anebrun-jan')
       band.load_gigs!
       band.gigs.each {|g| g.time.should.satisfy {|t| t >= Time.now}}
     end
 
     it 'should extract the address as a comma-separated list' do
-      @band.gigs.first.address.should.equal 'Tokyo, Japan'
+      @band.gigs.first.address.should.equal 'Tavastia, Helsinki, Finland'
     end
 
     it 'should remove punctuation-only address components' do
       @band.gigs.last.address.
-        should.equal 'Melbourne, Melbourne, Australia'
+        should.equal 'Scala, Gb'
     end
 
     it "should return the band's gigs" do
@@ -283,18 +283,25 @@ describe 'Band#load_gigs!' do
     end
 
     it 'should not duplicate gigs' do
+      open('a', 'w').puts(strip_gig_times(@band.gigs))
+      open('b', 'w').puts(strip_gig_times(@band.load_gigs!))
+
+      @band.gigs.length.should.equal @band.load_gigs!.length
+
       strip_gig_times(@band.gigs).
         should.equal strip_gig_times(@band.load_gigs!)
     end
 
     it 'should overwrite duplicate gigs with the new title' do
-      @band.myspace_name = 'cocorosieandjim'
-      gig_updated = @band.gigs.first.updated
+      band = Band.find_or_create(:myspace_name => 'anebrun')
+      band.load_gigs!
 
-      @band.load_gigs!
+      gig_updated = band.gigs.first.updated
+      band.myspace_name = 'anebrun-duplicate'
+      band.load_gigs!
 
-      @band.gigs.first.title.should.satisfy {|t| t =~ /\ADuplicate/}
-      @band.gigs.first.updated.should.satisfy {|t| t > gig_updated}
+      band.gigs.first.title.should.satisfy {|t| t =~ /\ADuplicate/}
+      band.gigs.first.updated.should.satisfy {|t| t > gig_updated}
     end
 
     it 'should remove old gigs' do

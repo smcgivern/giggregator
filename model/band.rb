@@ -39,7 +39,7 @@ class Band < Sequel::Model
     :gig_page => 'li.last a',
     :gig_info => 'li.event',
     :gig_info_title => 'div.details h4 a',
-    :gig_info_address => 'div.details p',
+    :gig_info_address => 'div.details span.location',
     :gig_info_month => 'div.entryDate span.month',
     :gig_info_day => 'div.entryDate span.day',
   }
@@ -120,6 +120,7 @@ class Band < Sequel::Model
 
   def load_gigs!
     page = parse(gig_page_uri)
+
     page.search(SELECTORS[:gig_info]).each do |gig_info|
       title, address, month, day =
         [:title, :address, :month, :day].map do |key|
@@ -134,7 +135,7 @@ class Band < Sequel::Model
       time = Time.parse("#{day} #{month} #{Time.now.year} 23:59:59Z")
       time = Time.parse(time.to_s) {|y| y + 1} if time < Time.now
 
-      address = address.split(', ').
+      address = address.gsub(',', '').split("\n").
         map {|x| x.strip}.
         delete_if {|x| x.gsub(/[-\.]/, '').empty?}.
         join(', ')
