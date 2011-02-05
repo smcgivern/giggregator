@@ -1,3 +1,5 @@
+source :rubygems
+
 gem 'feedtools', :require => 'feed_tools'
 gem 'haml'
 gem 'sequel'
