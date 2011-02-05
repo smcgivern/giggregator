@@ -37,11 +37,19 @@ end
 
 def deploy(target, exclude=nil)
   exclude ||= [
-               '.git', '.gitignore', 'vendor/*', 'spec', 'tmp/*.db',
-               'tmp/feed/*', 'tmp/cov', 'tmp/openid', 'tmp/flog',
+               '.git', '.gitignore', 'tmp/*.db', 'tmp/feed/*',
+               'tmp/cov', 'tmp/openid', 'tmp/flog',
               ].join(' --exclude=')
 
+  commands = [
+              'cd domains/giggregator',
+              '~/.gems/bin/bundle install --deployment',
+              'touch tmp/restart.txt',
+              'echo Restarted\ successfully',
+             ].join('; ')
+
   puts `rsync -rv --exclude=#{exclude} . #{target}`
+  puts `ssh dreamhost '#{commands}'`
 end
 
 desc 'Deploy to Dreamhost'
