@@ -1,4 +1,5 @@
 GEM
+  remote: http://rubygems.org/
   specs:
     activemodel (3.0.3)
       activesupport (= 3.0.3)
@@ -26,6 +27,7 @@ GEM
     sinatra (1.1.2)
       rack (~> 1.1)
       tilt (~> 1.2)
+    sqlite3-ruby (1.2.5)
     tilt (1.2.2)
     tzinfo (0.3.24)
     uuidtools (2.1.2)
@@ -41,4 +43,5 @@ DEPENDENCIES
   ruby-openid
   sequel
   sinatra
+  sqlite3-ruby (= 1.2.5)
   uuidtools
