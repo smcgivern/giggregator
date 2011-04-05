@@ -283,9 +283,6 @@ describe 'Band#load_gigs!' do
     end
 
     it 'should not duplicate gigs' do
-      open('a', 'w').puts(strip_gig_times(@band.gigs))
-      open('b', 'w').puts(strip_gig_times(@band.load_gigs!))
-
       @band.gigs.length.should.equal @band.load_gigs!.length
 
       strip_gig_times(@band.gigs).
