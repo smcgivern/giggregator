@@ -8,6 +8,7 @@ gem 'sinatra'
 gem 'uuidtools'
 
 gem 'addressable'
+gem 'json'
 gem 'nokogiri'
 
 gem 'ruby-openid', :require => 'openid'

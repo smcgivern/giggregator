@@ -20,6 +20,7 @@ GEM
       uuidtools (>= 1.0.0)
     haml (3.0.25)
     i18n (0.5.0)
+    json (1.5.1)
     nokogiri (1.4.4)
     rack (1.2.1)
     ruby-openid (2.1.8)
@@ -39,6 +40,7 @@ DEPENDENCIES
   addressable
   feedtools
   haml
+  json
   nokogiri
   ruby-openid
   sequel
