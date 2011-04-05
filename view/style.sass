@@ -1,13 +1,13 @@
-!body_colour = #000
-!body_background = #c2cdd2
-!header_colour = #d1d5d6
-!header_link = #b6c9d2
-!header_background = #2d3132
-!main_colour = #2d3132
-!main_link = #033e59
-!main_background = #fff
-!border_colour = #4f4b46
-!highlight_colour = #fffcc4
+$body_colour: black
+$body_background: #c2cdd2
+$header_colour: #d1d5d6
+$header_link: #b6c9d2
+$header_background: #2d3132
+$main_colour: #2d3132
+$main_link: #033e59
+$main_background: white
+$border_colour: #4f4b46
+$highlight_colour: #fffcc4
 
 h1, h2, h3, #subtitle
   font-family: helvetica, bitstream vera sans, arial, sans-serif
@@ -16,8 +16,8 @@ body, li h3
   font-family: georgia, times, serif
 
 body
-  color= !body_colour
-  background= !body_background
+  color: $body_colour
+  background: $body_background
   max-width: 57em
   margin: 0em auto
   padding: 0em
@@ -32,20 +32,17 @@ div
     border:
       width: 1px
       style: solid
-      color= !border_colour
-    color= !header_colour
-    background= !header_background
+      color: $border_colour
+    color: $header_colour
+    background: $header_background
     a:link, a:visited, a:hover, a:active
-      color= !header_link
+      color: $header_link
       background: transparent
-
   &#map-container
     margin-bottom: 1em
-
     ol#map-options
       text-align: center
       list-style-type: none
-
       li
         display: inline
         margin:
@@ -57,11 +54,9 @@ div
         border:
           width: 1px
           style: solid
-          color= !border_colour
-
+          color: $border_colour
         &.inactive
           cursor: pointer
-
   &#header
     h1
       font-size: 500%
@@ -69,122 +64,97 @@ div
       letter-spacing: -0.05em
       padding: 0em
       margin: 0.1em 0.08em -0.1em 0.08em
-      color= !header_colour
-      background= !header_background
-
+      color: $header_colour
+      background: $header_background
     h1.homepage
       margin: 0.1em 0.08em 0em 0.08em
-
     p#subtitle
       font-size: 80%
       padding: 0em
       margin: 0em 0.5em 0.5em 0.5em
-
   &#main, &#main-wide, &#sidebar
     border:
       width: 1px
       style: solid
-      color= !border_colour
-    color= !main_colour
-    background= !main_background
+      color: $border_colour
+    color: $main_colour
+    background: $main_background
     a:link, a:visited, a:hover, a:active
-      color= !main_link
+      color: $main_link
       background: transparent
       font-weight: bold
     a:link, a:visited, a:hover, a:active
       text-decoration: none
     a:hover, a:active
       text-decoration: underline
-
   &#main, &#main-wide
     float: left
     padding: 0.2em
     margin: 0.5em 0em
-
     ol
       margin-bottom: 0.5em
-
     li
       margin-bottom: 0.4em
-
     div#map
       margin: auto
       width: 35em
       height: 20em
       overflow: hidden
-
     dl
       width: auto
-
     dt
       width: 5em
       float: left
       font-weight: bold
-
     dd
       width: auto
-
     input
       width: 15em
-
     input.openid
-      background-image = url(r("/ext/openid.png"))
+      background-image: url(r("/ext/openid.png"))
       background-repeat: no-repeat
       background-position: 0 50%
       padding-left: 1.5em
       width: 13.5em
-
     input.submit
       width: auto
-
     textarea
       width: 90%
-
   &#main
     width: 39em
-
   &#main-wide
     width: 56.5em
-
     div#filter
       border-bottom:
         width: 1px
         style: solid
-        color= !border_colour
+        color: $border_colour
       margin-bottom: 1em
-
       input
         width: auto
-
   &#sidebar
     width: 16.5em
     float: right
     padding: 0.2em
     margin: 0.5em 0em
-
     ol#upcoming-gigs li, div#filter
       border-bottom:
         width: 1px
         style: solid
-        color= !border_colour
-
+        color: $border_colour
     div#filter
       padding-bottom: 0.5em
       margin-bottom: 0.5em
-
     li
       padding: 0.4em 0.1em
       margin: 0em
-
     h3
       margin-bottom: 0.3em
       font-size: 100%
       font-weight: bold
-
     p
       font-size: 80%
       margin: 0em
-
   &#footer
     clear: both
     text-align: right
@@ -198,9 +168,9 @@ ol
   padding: 0.1em
 
 input, textarea
-  color= !main_colour
-  background= !main_background
+  color: $main_colour
+  background: $main_background
 
 .updated, .active
   color: inherit
-  background= !highlight_colour
+  background: $highlight_colour
