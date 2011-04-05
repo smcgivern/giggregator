@@ -31,11 +31,12 @@ class Band < Sequel::Model
     :band => "#{BASE_URL}/{myspace_name}",
     :gig_list => "#{BASE_URL}/{myspace_name}/shows",
     :gig_page => "#{BASE_URL}/events/View/{event_id}/{title}",
+    :friend_id => '/Modules/PageEditor/Handlers/Profiles/ProfileCss.ashx?userId={friend_id}',
   }
 
   SELECTORS = {
     :band_name => 'section.sitesHeader a.userLink',
-    :friend_id => 'a.gapBlockUser',
+    :friend_id => 'link[@title="UserStyle"]',
     :gig_page => 'li.last a',
     :gig_info => 'li.event',
     :gig_info_title => 'div.details h4 a',
@@ -105,11 +106,12 @@ class Band < Sequel::Model
 
     if gig_link
       gig_link = TEMPLATES[:gig_list].extract(uri(gig_link['href']))
+      user_style = element(band_page, :friend_id)
 
       params[:title] = element(band_page, :band_name).inner_text
 
       params[:friend_id] =
-        element(band_page, :friend_id)['data-friendid']
+        TEMPLATES[:friend_id].extract(user_style['href'])['friend_id']
     else
       raise NotABandError unless friend_id
     end
