@@ -2,7 +2,7 @@ require 'lib/model'
 
 class GigList < Sequel::Model
   many_to_many :bands
-  attr_accessor :filters
+  attr_writer :filters
 
   create_schema do
     primary_key(:id)
@@ -14,6 +14,7 @@ class GigList < Sequel::Model
   end
 
   def initialize(*args); @filters ||= {}; super(*args); end
+  def filters; @filters || {}; end
 
   def validate
     if title =~ /\A__/ and !system
@@ -65,7 +66,7 @@ class GigList < Sequel::Model
       flatten.
       delete_if {|g| g.time <= Time.now}
 
-    @filters.each do |type, value|
+    filters.each do |type, value|
       next unless value
 
       @gig_list =
