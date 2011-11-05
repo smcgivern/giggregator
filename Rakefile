@@ -12,6 +12,11 @@ begin
 rescue LoadError
 end
 
+desc 'Start the rack webserver using bundled gems'
+task :rackup do
+  `bundle exec rackup`
+end
+
 desc 'Remove duplicates from the database'
 task :remove_duplicates do
   require 'setup'

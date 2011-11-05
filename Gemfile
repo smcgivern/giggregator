@@ -1,7 +1,9 @@
 source :rubygems
 
+gem 'rack', '1.2.1'
 gem 'feedtools', :require => 'feed_tools'
 gem 'haml'
+gem 'sass'
 gem 'sequel'
 gem 'sqlite3-ruby', '1.2.5'
 gem 'sinatra'
