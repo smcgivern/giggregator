@@ -124,7 +124,7 @@ function loadTimePeriods() {
 function addMarker(location, address, band, time, center, href, r) {
     var place = r ? t(address) : t(location) + ', ' + t(address);
     var band = '<strong>' + t(band) + '</strong>';
-	var time = t(time);
+    var time = t(time);
 
     var callback = function(point) {
         if (point) {
@@ -145,10 +145,10 @@ function addMarker(location, address, band, time, center, href, r) {
                 }
             );
         } else {
-			addMarker(
-				location, address, band, time, center, href, true
-			);
-		}
+            addMarker(
+                location, address, band, time, center, href, true
+            );
+        }
     };
 
     geocoder.getLatLng(place, callback);
