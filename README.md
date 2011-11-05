@@ -1,4 +1,5 @@
 The [Giggregator][giggregator] is a small project to:
+
 1. take a load of MySpace links for bands;
 2. find out when those band have gigs;
 3. display them all in one place.
