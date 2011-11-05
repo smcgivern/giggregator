@@ -1,4 +1,24 @@
 %div#main
+  %h2 About
+  %p
+    This is a site to take multiple bands&#8217; MySpace pages, pull
+    the gigs from them, and put them all in one place, so that
+    it&#8217;s easier to keep track of them all and when they are
+    coming to a particular area. It also supports
+    %a{:href => 'http://openidexplained.com/',
+       :title => 'OpenID Explained'} OpenID
+    if you want to stop anyone else from editing your list &#8212; and
+    know how to use OpenID.
+  %p
+    For an example, see
+    = succeed '.' do
+      %a{:href => r('/gig-list/seans-list'),
+         :title => 'Sean’s gig list'} my gig list
+    Unfortunately, not so many people use MySpace these days, so it
+    might not be as useful as it once would have been. If you have a
+    %a{:href => 'http://last.fm/'} Last.fm
+    account, they have a similar service based on your listening
+    habits.
   %h2 Create new gig list
   %p Enter a list of band links on MySpace:
   %form{:action => r('/update-gig-list/'), :method => 'POST'}

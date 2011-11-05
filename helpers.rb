@@ -55,7 +55,7 @@ module GiggregatorHelpers
   end
 
   def default_breadcrumbs
-    [{:uri => '/', :title => 'Giggregator'}]
+    [{:uri => '/', :title => 'Home / about'}]
   end
 
   def show_breadcrumbs(breadcrumbs)
