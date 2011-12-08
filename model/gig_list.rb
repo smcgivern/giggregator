@@ -49,7 +49,7 @@ class GigList < Sequel::Model
   def updated
     latest = (gig_list.map {|g| g.updated} + [accessed]).compact.max
 
-    if latest < Days(-7)
+    if (latest || Days(-8)) < Days(-7)
       latest = Time.now
       set(:accessed => latest)
       save
