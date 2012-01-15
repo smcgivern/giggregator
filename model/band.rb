@@ -74,7 +74,16 @@ class Band < Sequel::Model
   end
 
   def uri(s); Addressable::URI.parse(s); end
-  def parse(s); Nokogiri::HTML(open(s).read); end
+
+  def parse(s)
+    begin
+      Nokogiri::HTML(open(s).read)
+    rescue OpenURI::HTTPError
+      # The band used to exist, but doesn't now
+      nil
+    end
+  end
+
   def element(p, s); p.at(SELECTORS[s]); end
 
   def load_band_info?; load_band_info! if expired?(:band_info); end
@@ -101,6 +110,9 @@ class Band < Sequel::Model
 
   def load_band_info!
     band_page = parse(page_uri)
+
+    return unless band_page
+
     gig_link = element(band_page, :gig_page)
     params = {:band_info_updated => Time.now}
 
@@ -121,6 +133,8 @@ class Band < Sequel::Model
 
   def load_gigs!
     page = parse(gig_page_uri)
+
+    return unless page
 
     page.search(SELECTORS[:gig_info]).each do |gig_info|
       title, address, month, day =
