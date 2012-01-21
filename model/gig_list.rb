@@ -14,7 +14,7 @@ class GigList < Sequel::Model
   end
 
   def initialize(*args); @filters ||= {}; super(*args); end
-  def filters; @filters || {}; end
+  def filters; @filters ||= {}; end
 
   def validate
     if title =~ /\A__/ and !system
