@@ -4,6 +4,7 @@
     %title= rp(@page_title)
     %link{:href => r('/ext/style.css'), :rel => 'stylesheet',
           :type => CONTENT_TYPES[:css]}
+    %link{:href => r('/ext/app-icon.png'), :rel => 'apple-touch-icon'}
     - if @page_feed
       %link{:href => r(@page_feed), :rel => 'alternate',
             :type => CONTENT_TYPES[:atom]}
