@@ -51,6 +51,9 @@ get filterable('band') do
   mappable
 
   @band = Band.from_myspace(@link)
+
+  redirect r('/') unless @band.title
+
   @gig_list = @band.gig_list
   @page_title = @band.title
   @page_feed = "#{self_link}feed/"
@@ -79,6 +82,9 @@ get '/band/:myspace_name/gig/:gig_id/?' do |myspace_name, gig_id|
   mappable
 
   @gig = Gig.find(:id => gig_id)
+
+  redirect r("/band/#{myspace_name}/") unless @gig
+
   @gig_list = @gig.band.gig_list
   @page_title = @gig.band.title
   @breadcrumbs = default_breadcrumbs +
