@@ -26,7 +26,7 @@ class Band < Sequel::Model
 
   capitalize :title
 
-  BASE_URL = 'http://www.myspace.com'
+  BASE_URL = 'https://www.myspace.com'
 
   TEMPLATES = {
     :band => "#{BASE_URL}/{myspace_name}",
