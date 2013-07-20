@@ -58,7 +58,10 @@ end
 DB.logger = Logger.new(File.join(LOG_DIR, LOG_SQLITE))
 SINATRA_LOG = File.new(File.join(LOG_DIR, LOG_SINATRA), 'a')
 
-$stdout.reopen(SINATRA_LOG)
-$stderr.reopen(SINATRA_LOG)
+configure do
+  SINATRA_LOG.sync = true
+
+  use Rack::CommonLogger, SINATRA_LOG
+end
 
 acquire 'model'
