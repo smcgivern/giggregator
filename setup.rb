@@ -1,7 +1,7 @@
 require 'fileutils'
 require 'logger'
 require 'timeout'
-require 'vendor/rubypants'
+require 'rubypants'
 
 require 'haml'
 require 'openid'
@@ -10,7 +10,9 @@ require 'sass'
 require 'sequel'
 require 'sinatra'
 
-def acquire(dir); Dir["#{dir}/*.rb"].each {|f| require f}; end
+Encoding.default_external = Encoding::UTF_8
+
+def acquire(dir); Dir["#{dir}/*.rb"].each {|f| require "./#{f}"}; end
 
 acquire 'lib'
 

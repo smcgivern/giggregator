@@ -7,9 +7,9 @@ class Sequel::Model
 
   def self.capitalize(*methods)
     methods.each do |method|
-      define_method method do
-        if super
-          super.split.
+      define_method method do |*args|
+        if (sup = super(*args))
+          sup.split.
             map {|w| w.capitalize}.join(' ').
             gsub(/(\A\W|\W\W)[a-z]/u) {|l| l.upcase}
         end

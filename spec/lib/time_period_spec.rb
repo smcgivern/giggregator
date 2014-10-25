@@ -1,5 +1,5 @@
-require 'spec/setup'
-require 'lib/time_period'
+require './spec/setup'
+require './lib/time_period'
 
 describe 'TimePeriod.new' do
   it 'should require title and criteria' do

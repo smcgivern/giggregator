@@ -1,5 +1,5 @@
-require 'spec/setup'
-require 'lib/model'
+require './spec/setup'
+require './lib/model'
 
 describe 'Sequel::Model.create_schema' do
   it 'should create the table with the schema if no table exists' do

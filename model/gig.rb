@@ -1,5 +1,5 @@
-require 'lib/model'
-require 'model/band'
+require './lib/model'
+require './model/band'
 
 class Gig < Sequel::Model
   many_to_one :band

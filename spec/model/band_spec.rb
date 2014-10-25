@@ -1,9 +1,9 @@
-require 'spec/setup'
+require './spec/setup'
 
-require 'model/band'
-require 'model/bands_gig_list'
-require 'model/gig'
-require 'model/gig_list'
+require './model/band'
+require './model/bands_gig_list'
+require './model/gig'
+require './model/gig_list'
 require 'yaml'
 
 def type(t); lambda {|x| t === x}; end
@@ -52,10 +52,10 @@ describe 'Band.from_myspace' do
     Band.create(:myspace_name => 'from_uri',
                 :band_info_updated => Time.now)
 
-    Band.from_myspace('http://www.myspace.com/from_uri').myspace_name.
+    Band.from_myspace('https://www.myspace.com/from_uri').myspace_name.
       should.equal 'from_uri'
 
-    Band.from_myspace('http://myspace.com/from_uri').myspace_name.
+    Band.from_myspace('https://myspace.com/from_uri').myspace_name.
       should.equal 'from_uri'
   end
 
@@ -198,14 +198,14 @@ end
 describe 'Band#page_uri' do
   it "should be the URI of the band's MySpace page" do
     Band.new(:myspace_name => 'anebrun').page_uri.
-      should.equal Band.new.uri('http://www.myspace.com/anebrun')
+      should.equal Band.new.uri('https://www.myspace.com/anebrun')
   end
 end
 
 describe 'Band#gig_page_uri' do
   before do
     @band = Band.new(:myspace_name => 'thenational')
-    @gig_page_uri = 'http://www.myspace.com/thenational/shows'
+    @gig_page_uri = 'https://www.myspace.com/thenational/shows'
   end
 
   it "should be the the URI of the band's gig page" do

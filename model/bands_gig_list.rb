@@ -1,4 +1,4 @@
-require 'lib/model'
+require './lib/model'
 
 class BandsGigList < Sequel::Model
   create_schema do

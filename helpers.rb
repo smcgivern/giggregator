@@ -4,9 +4,12 @@ enable :sessions
 
 before do
   request_type = case request.env['REQUEST_URI']
-                 when /\.css$/ : :css
-                 when /\/feed\/?$/ : :atom
-                 else :html
+                 when /\.css$/
+                   :css
+                 when /\/feed\/?$/
+                   :atom
+                 else
+                   :html
                  end
 
   content_type CONTENT_TYPES[request_type], :charset => 'utf-8'
@@ -68,11 +71,16 @@ module GiggregatorHelpers
     if (captures = params[:captures])
       captures.compact.each do |capture|
         case capture
-        when /^\/=([\d]+)/: @days = capture.gsub(/^\/=/, '')
-        when /^\/=/: @location = capture.gsub(/^\/=/, '')
-        when '/freshness': @col = :updated; @freshness = true
-        when '/feed': @feed = true
-        else @link = capture
+        when /^\/=([\d]+)/
+          @days = capture.gsub(/^\/=/, '')
+        when /^\/=/
+          @location = capture.gsub(/^\/=/, '')
+        when '/freshness'
+          @col = :updated; @freshness = true
+        when '/feed'
+          @feed = true
+        else
+          @link = capture
         end
       end
     end

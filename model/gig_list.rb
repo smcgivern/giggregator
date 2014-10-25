@@ -1,4 +1,4 @@
-require 'lib/model'
+require './lib/model'
 
 class GigList < Sequel::Model
   many_to_many :bands
@@ -71,9 +71,12 @@ class GigList < Sequel::Model
 
       @gig_list =
         case type
-        when :days: days_filter(value.to_i)
-        when :location: location_filter(value)
-        else @gig_list
+        when :days
+          days_filter(value.to_i)
+        when :location
+          location_filter(value)
+        else
+          @gig_list
         end
     end
 

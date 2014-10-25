@@ -1,4 +1,4 @@
-require 'lib/model'
+require './lib/model'
 
 require 'time'
 require 'open-uri'

@@ -1,13 +1,14 @@
-source :rubygems
-
-gem 'rack', '1.2.1'
+gem 'rack'
 gem 'feedtools', :require => 'feed_tools'
 gem 'haml'
 gem 'sass'
 gem 'sequel'
-gem 'sqlite3-ruby', '1.2.5'
+gem 'sqlite3-ruby'
 gem 'sinatra'
 gem 'uuidtools'
+gem 'rake'
+gem 'bacon'
+gem 'rubypants'
 
 gem 'addressable'
 gem 'json'

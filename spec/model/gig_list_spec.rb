@@ -1,11 +1,11 @@
-require 'spec/setup'
+require './spec/setup'
 
-require 'model/band'
-require 'model/bands_gig_list'
-require 'model/gig'
-require 'model/gig_list'
+require './model/band'
+require './model/bands_gig_list'
+require './model/gig'
+require './model/gig_list'
 
-require 'spec/time_periods'
+require './spec/time_periods'
 
 def mock_band(myspace_name, time=Time.now)
   Band.create(:myspace_name => myspace_name, :gigs_updated => time)
@@ -61,7 +61,7 @@ describe 'GigList#myspace_uris' do
   it 'should be a list of MySpace URIs, one per line' do
     gig_list = GigList.create
     myspace_names = ['lorem', 'ipsum', 'dolor', 'sit', 'amet']
-    exp = myspace_names.map {|m| "http://www.myspace.com/#{m}"}.sort
+    exp = myspace_names.map {|m| "https://www.myspace.com/#{m}"}.sort
 
     myspace_names.each {|m| gig_list.add_band(mock_band(m))}
 

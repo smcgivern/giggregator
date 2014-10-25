@@ -1,4 +1,4 @@
-require 'lib/time_period'
+require './lib/time_period'
 
 TIME_PERIODS =
   [

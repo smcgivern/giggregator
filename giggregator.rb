@@ -1,4 +1,4 @@
-require 'helpers'
+require './helpers'
 
 def filterable(root)
   %r{^/#{root}/([^/?&#]+)(/=[\d]+)?(/=[^/?&#]+)?(/freshness)?(/feed)?/?$}

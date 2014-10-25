@@ -1,9 +1,9 @@
-require 'spec/setup'
+require './spec/setup'
 require 'time'
 
-require 'model/gig'
+require './model/gig'
 
-require 'spec/time_periods'
+require './spec/time_periods'
 
 def including?(t); lambda {|s| s.include?(t)}; end
 
@@ -115,7 +115,7 @@ describe 'Gig#uri' do
     gig = Gig.create(:event_id => 1, :title => 'Foo')
 
     gig.uri.to_s.
-      should.equal 'http://www.myspace.com/events/View/1/Foo'
+      should.equal 'https://www.myspace.com/events/View/1/Foo'
   end
 
   it 'should be nil when there is no event ID' do
