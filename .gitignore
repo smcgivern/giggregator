@@ -3,3 +3,10 @@ plan.org
 .gmaps
 .subdomain
 .sass-cache
+log/
+public/
+tmp/cov/
+tmp/feed/*.atom
+tmp/flog/
+tmp/openid/
+tmp/*.db
