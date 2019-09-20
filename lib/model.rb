@@ -10,7 +10,7 @@ class Sequel::Model
       define_method method do |*args|
         if (sup = super(*args))
           sup.split.
-            map {|w| w.capitalize}.join(' ').
+            map {|w| w.capitalize.force_encoding(Encoding::UTF_8)}.join(' ').
             gsub(/(\A\W|\W\W)[a-z]/u) {|l| l.upcase}
         end
       end
